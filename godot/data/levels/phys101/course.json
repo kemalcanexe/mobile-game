@@ -1,0 +1,19 @@
+{
+  "id": "phys101",
+  "code": "PHYS 101",
+  "title": "Physics I",
+  "nickname": "Yerçekimine Karşı",
+  "credits": 4,
+  "paper": "millimeter",
+  "patternFiles": [
+    "common/patterns.json",
+    "phys101/patterns.json"
+  ],
+  "levels": {
+    "quiz1": "phys101/quiz1.json",
+    "midterm": "phys101/midterm.json",
+    "quiz2": "phys101/quiz2.json",
+    "project": "phys101/project.json",
+    "final": "phys101/final.json"
+  }
+}

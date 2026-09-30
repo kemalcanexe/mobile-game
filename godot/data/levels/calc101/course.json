@@ -1,0 +1,19 @@
+{
+  "id": "calc101",
+  "code": "CALC 101",
+  "title": "Calculus I",
+  "nickname": "Limitsiz Acı",
+  "credits": 4,
+  "paper": "grid",
+  "patternFiles": [
+    "common/patterns.json",
+    "calc101/patterns.json"
+  ],
+  "levels": {
+    "quiz1": "calc101/quiz1.json",
+    "midterm": "calc101/midterm.json",
+    "quiz2": "calc101/quiz2.json",
+    "project": "calc101/project.json",
+    "final": "calc101/final.json"
+  }
+}

@@ -7,9 +7,20 @@
 | **Caveat** (değişken ağırlık) | SIL Open Font License 1.1 | https://github.com/googlefonts/caveat · google/fonts `ofl/caveat` | `assets/fonts/Caveat-Variable.ttf`, lisans: `assets/fonts/OFL-Caveat.txt` |
 | **Patrick Hand** | SIL Open Font License 1.1 | google/fonts `ofl/patrickhand` | `assets/fonts/PatrickHand-Regular.ttf`, lisans: `assets/fonts/OFL-PatrickHand.txt` |
 
-## Görseller
+## 3D sürüm (godot/)
 
-Oyundaki bütün çizimler (Tüki, nesneler, kağıt dokusu, damgalar) `lib/game/doodle/` altında
+| Varlık | Lisans | Kaynak |
+|---|---|---|
+| City Kit (Roads), City Kit (Commercial), City Kit (Suburban), Nature Kit, Furniture Kit, Food Kit | CC0 1.0 | Kenney, https://kenney.nl (`godot/assets/models/`) |
+| **Baloo 2** (değişken ağırlık) | SIL OFL 1.1 | google/fonts `ofl/baloo2` (`godot/assets/fonts/Baloo2.ttf`) |
+| **Noto Sans Symbols 2** (sembol yedeği) | SIL OFL 1.1 | google/fonts `ofl/notosanssymbols2` |
+| Godot Engine 4.7.2 | MIT | https://godotengine.org |
+
+Tüki'nin 3D modeli, nesnelerin çoğu ve efektler `godot/scripts/game/` altında kodla üretilir.
+
+## 2D sürüm (Flutter, eski)
+
+Bütün çizimler (Tüki, nesneler, kağıt dokusu, damgalar) `lib/game/doodle/` altında
 programatik olarak üretilir. Harici görsel asset kullanılmaz.
 
 ## Paketler

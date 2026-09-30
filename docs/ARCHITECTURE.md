@@ -1,4 +1,36 @@
-# Mimari (ADIM 1)
+# Mimari
+
+> **Güncel sürüm Godot (godot/).** Aşağıda önce 3D sürüm, sonra Flutter (2D) sürümün mimarisi var.
+
+## Godot 3D sürüm
+
+```
+godot/
+  project.godot, export_presets.cfg
+  data/                      # oyun verisi (JSON): config/, levels/ (Flutter ile aynı format)
+    config/world3d.json      # 3D ölçek, oyuncu fiziği, kamera, ders temaları
+  assets/models/             # Kenney CC0 GLB modelleri
+  assets/fonts/              # Baloo 2 + Noto Sans Symbols 2
+  scripts/
+    domain/                  # saf kurallar: LetterGrade, GradeScale, GradingRules, Gpa, CourseRecord,
+                             # Transcript, AcademicStanding, CourseRun, SemesterState, EnrollmentRules,
+                             # LevelScore, InkState
+    data/                    # Content (JSON yükleme), LevelValidator, SpeedCurve, LevelGenerator, Progress (kayıt)
+    autoload/game.gd         # Game: içerik + ilerleme + sahne geçişi
+    game/                    # RunScene (koşu), Tuki + TukiModel, Campus (chunk'lı dünya), LaneObject,
+                             # ItemFactory, InkTrail, SwipeDetector, EffectState, Fx, Models
+    ui/                      # UiKit, T (metinler), RunHud, MenuScreen + 6 ekran
+  scenes/                    # main, enrollment, course, run, course_result, semester_report, transcript
+  tests/                     # headless test koşucusu + 36 test (domain, veri, gerçek fizikli koşu, derleme)
+  tools/                     # xvfb ekran görüntüsü aracı, model ölçüm aracı
+```
+
+- **Koordinatlar:** Tüki `-z` yönünde koşar, şeritler `x = (şerit-1) × 2,6 m`. Level verisi 2D piksel; `unitsPerPixel` ile metreye çevrilir.
+- **Fizik:** Tüki `CharacterBody3D` (kapsül), yer `WorldBoundaryShape3D`. Nesneler `Area3D`; Tüki'nin hitbox'ı ile örtüşünce kural uygulanır. Kayarken kapsül 0,7 m'ye iner.
+- **Dünya:** 30 m'lik parçalar önde üretilir, arkada silinir; içerik parça indeksine göre seed'li.
+- **Kayıt:** `user://save.json` (sürüm 3; eski kayıtlar taşınır).
+
+## Flutter 2D sürüm (Faz 1-2)
 
 ## Paketler (pub.dev'den doğrulandı, 30.09.2026)
 

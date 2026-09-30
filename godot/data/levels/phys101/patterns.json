@@ -1,0 +1,52 @@
+{
+  "_comment": "PHYS 101'e özgü desenler: fizik formülleri (F=ma), sarkaç ve eğik atış rotaları.",
+  "patterns": {
+    "pendulum": {
+      "rows": [
+        "fp .. ..",
+        ".. fp ..",
+        ".. .. fp",
+        ".. fp ..",
+        "fp .. .."
+      ]
+    },
+    "gravity_well": {
+      "mirror": false,
+      "rows": [
+        "og .. og",
+        ".. fp ..",
+        "oa .. oa",
+        ".. fp .."
+      ]
+    },
+    "projectile": {
+      "rows": [
+        ".. .. fp",
+        ".. fp ..",
+        "fp .. ..",
+        "ob .. ..",
+        ".. nt .."
+      ]
+    },
+    "lab_bench": {
+      "rows": [
+        "ow ow ..",
+        ".. .. fp",
+        ".. .. ..",
+        "ow .. ..",
+        ".. fp .."
+      ]
+    },
+    "momentum_ramp": {
+      "mirror": false,
+      "rows": [
+        ".. hl ..",
+        ".. fp ..",
+        ".. fp ..",
+        "os .. os",
+        ".. fp ..",
+        ".. fp .."
+      ]
+    }
+  }
+}

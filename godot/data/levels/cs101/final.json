@@ -1,0 +1,131 @@
+{
+  "id": "cs101.final",
+  "assessment": "final",
+  "durationSeconds": 90,
+  "speed": {
+    "start": 1.3,
+    "end": 1.75,
+    "curve": "easeIn"
+  },
+  "seed": 103005,
+  "gapRows": {
+    "min": 1,
+    "max": 2
+  },
+  "script": [
+    {
+      "at": 0.0,
+      "pattern": "cards_center"
+    },
+    {
+      "at": 0.33,
+      "pattern": "ground_row"
+    },
+    {
+      "at": 0.66,
+      "pattern": "air_row"
+    },
+    {
+      "at": 0.9,
+      "pattern": "ground_row"
+    },
+    {
+      "at": 0.93,
+      "pattern": "air_row"
+    }
+  ],
+  "pool": [
+    {
+      "pattern": "cards_zigzag",
+      "weight": 2
+    },
+    {
+      "pattern": "notes_scatter",
+      "weight": 2
+    },
+    {
+      "pattern": "triple_choice",
+      "weight": 2
+    },
+    {
+      "pattern": "loop",
+      "weight": 3
+    },
+    {
+      "pattern": "if_else",
+      "weight": 2
+    },
+    {
+      "pattern": "bug_swarm",
+      "weight": 2
+    },
+    {
+      "pattern": "stack_trace",
+      "weight": 2
+    },
+    {
+      "pattern": "book_behind_spill",
+      "weight": 2
+    },
+    {
+      "pattern": "book_under_plane",
+      "weight": 2
+    },
+    {
+      "pattern": "book_gate",
+      "weight": 1
+    },
+    {
+      "pattern": "mixed_hurdles",
+      "weight": 3
+    },
+    {
+      "pattern": "wall_slalom",
+      "weight": 2
+    },
+    {
+      "pattern": "ruler_barrier",
+      "weight": 2
+    },
+    {
+      "pattern": "ruler_center_gap",
+      "weight": 2
+    },
+    {
+      "pattern": "phone_bait",
+      "weight": 2
+    },
+    {
+      "pattern": "console_trap",
+      "weight": 2
+    },
+    {
+      "pattern": "distraction_row",
+      "weight": 2
+    },
+    {
+      "pattern": "friend_block",
+      "weight": 2
+    },
+    {
+      "pattern": "coffee_break",
+      "weight": 2
+    },
+    {
+      "pattern": "cartridge_gate",
+      "weight": 1
+    },
+    {
+      "pattern": "cartridge_risky",
+      "weight": 1
+    },
+    {
+      "pattern": "highlighter_run",
+      "weight": 1
+    },
+    {
+      "pattern": "bonus_question",
+      "weight": 1
+    }
+  ]
+}

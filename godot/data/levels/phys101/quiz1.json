@@ -1,0 +1,103 @@
+{
+  "id": "phys101.quiz1",
+  "assessment": "quiz1",
+  "durationSeconds": 60,
+  "speed": {
+    "start": 1.0,
+    "end": 1.25,
+    "curve": "easeInOut"
+  },
+  "seed": 102001,
+  "gapRows": {
+    "min": 2,
+    "max": 4
+  },
+  "script": [
+    {
+      "at": 0.0,
+      "pattern": "cards_center"
+    },
+    {
+      "at": 0.06,
+      "pattern": "cards_line"
+    },
+    {
+      "at": 0.12,
+      "pattern": "jump_intro"
+    },
+    {
+      "at": 0.2,
+      "pattern": "duck_intro"
+    },
+    {
+      "at": 0.28,
+      "pattern": "wall_intro"
+    },
+    {
+      "at": 0.36,
+      "pattern": "phone_bait"
+    },
+    {
+      "at": 0.5,
+      "pattern": "highlighter_run"
+    }
+  ],
+  "pool": [
+    {
+      "pattern": "cards_line",
+      "weight": 4
+    },
+    {
+      "pattern": "cards_zigzag",
+      "weight": 3
+    },
+    {
+      "pattern": "cards_then_note",
+      "weight": 3
+    },
+    {
+      "pattern": "notes_scatter",
+      "weight": 3
+    },
+    {
+      "pattern": "notes_pair",
+      "weight": 2
+    },
+    {
+      "pattern": "pendulum",
+      "weight": 2
+    },
+    {
+      "pattern": "jump_intro",
+      "weight": 2
+    },
+    {
+      "pattern": "duck_intro",
+      "weight": 2
+    },
+    {
+      "pattern": "book_behind_spill",
+      "weight": 1,
+      "from": 0.4
+    },
+    {
+      "pattern": "phone_bait",
+      "weight": 1
+    },
+    {
+      "pattern": "friend_corner",
+      "weight": 1,
+      "from": 0.5
+    },
+    {
+      "pattern": "cartridge_risky",
+      "weight": 1,
+      "from": 0.4
+    },
+    {
+      "pattern": "coffee_break",
+      "weight": 1,
+      "from": 0.6
+    }
+  ]
+}

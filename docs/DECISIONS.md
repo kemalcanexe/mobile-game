@@ -75,3 +75,16 @@ Yüklenen Markdown'da `%XX` kalıpları URL-decode edilerek bozulmuştu (`%10` �
 7. **Kağıt temaları:** CALC 101 kareli, PHYS 101 turuncu milimetrik, CS 101 koyu "terminal" (fosfor yeşili mürekkep izi, açık renkli HUD). Temalar `lib/app/paper_theme.dart` içinde; oyun ve menü aynı temayı kullanır.
 8. **Yeni derslerin toplanabilirleri:** PHYS 101'de `F=ma` kartı (`fp`), CS 101'de `{ }` kartı (`fk`); ikisi de CALC'taki formül kartı gibi 15 puan. Ders tema mekanikleri (yerçekimi terslenmesi, bug'lar vb.) Faz 3'te.
 9. **Kredi:** CALC 101 ve PHYS 101 4 kredi, CS 101 3 kredi.
+
+## Faz 3 kararları (3D yenileme)
+
+1. **Motor: Godot 4.7.2** (kullanıcı seçimi). Renderer: GL Compatibility; hem Android'de hem web'de aynı görünüm, düşük donanımda da çalışır. Fizik: Jolt.
+2. **Dünya: kampüs** (kullanıcı seçimi). Her ders kendi bölgesi: CALC 101 güneşli Matematik Bölümü, PHYS 101 gün batımında Fizik Laboratuvarı, CS 101 gece ve neon lambalarla Bilgisayar Laboratuvarı. Temalar `godot/data/config/world3d.json` içinde.
+3. **Oyun kuralları birebir taşındı** (GDScript): notlandırma, GPA, retake, dönem, ders seçimi, level skoru. Level verisi ve desenler aynı JSON; 2D piksel birimi `unitsPerPixel = 0.05` ile metreye çevrilir (300 px/s → 15 m/s, satır 3,6 m).
+4. **Çarpışma kuralları fizikten doğar:** yer engelleri 1 m yüksekliğinde; gerçek yerçekimli zıplama (tepe 2,1 m, havada 0,62 sn) üstünden geçirir. Hava afişleri 1,2 m'nin üstünde; kayan Tüki (0,7 m) altından geçer. Toplanabilirler ve dikkat dağıtıcılar şerit boyu yüksek, zıplarken de temas edilir. Duvar (ansiklopedi yığını) her durumda çarpar.
+5. **Çarpılan nesneler savrulur:** çarpışmada nesne Jolt fizik gövdesine dönüşür, ileri ve yola dışarı doğru uçar.
+6. **Tüki 3D modeli kodla üretildi:** kapaklı tükenmez gövde, iri gözler, yanaklar, kollar, spor ayakkabılı bacaklar; koşu, zıplama, kayma, sendeleme animasyonları prosedürel. Arkasında yere mürekkep izi çizer, zıplarken iz kesilir.
+7. **Çevre modelleri Kenney'nin CC0 kitleri:** binalar, lambalar, ağaçlar, banklar, bariyerler, koniler, kahve bardağı, kitaplar.
+8. **Arayüz yeniden tasarlandı:** Baloo 2 fontu, tombul butonlar, yuvarlak kartlar; her menü ekranının arkasında canlı 3D kampüs ve Tüki. Sınav başında kamera Tüki'nin önündedir, "Başla"ya basınca arkasına süzülür.
+9. **Test linki:** Godot web motoru 39,5 MB olduğu için 3 parçaya bölünüp sayfada birleştirilir (yayın sayfasının dosya başı 16 MB sınırı). Oyunun kendisi değişmeden çalışır.
+10. **Android:** release APK (arm64 + armv7, 55 MB) şimdilik hata ayıklama anahtarıyla imzalı; mağaza için gerçek bir yükleme anahtarı gerekir.

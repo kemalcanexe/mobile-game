@@ -1,0 +1,50 @@
+{
+  "_comment": "CS 101'e özgü desenler: kod parçaları ({ }), döngüler ve if/else kapıları.",
+  "patterns": {
+    "loop": {
+      "mirror": false,
+      "rows": [
+        ".. fk ..",
+        ".. fk ..",
+        "os .. os",
+        ".. fk ..",
+        ".. fk .."
+      ]
+    },
+    "if_else": {
+      "rows": [
+        "ow fk ..",
+        ".. .. ..",
+        ".. ow fk"
+      ]
+    },
+    "bug_swarm": {
+      "rows": [
+        "gc .. ..",
+        ".. fk ..",
+        ".. .. gc",
+        ".. fk .."
+      ]
+    },
+    "stack_trace": {
+      "rows": [
+        "fk .. ..",
+        "fk .. ..",
+        ".. .. ..",
+        "ow ow ..",
+        ".. .. fk"
+      ]
+    },
+    "commit_push": {
+      "mirror": false,
+      "rows": [
+        ".. hl ..",
+        ".. fk ..",
+        ".. fk ..",
+        "oa .. oa",
+        ".. fk ..",
+        ".. bk .."
+      ]
+    }
+  }
+}

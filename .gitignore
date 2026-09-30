@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+/build_godot/
+
+# Godot
+/godot/.godot/
+/build_godot/

@@ -1,0 +1,7 @@
+{
+  "_comment": "Her dönemde sunulan dersler. Tanımlanmamış dönemlerde yalnızca retake dersleri sunulur.",
+  "requiredSemesters": 8,
+  "semesters": [
+    { "index": 1, "offered": ["calc101", "phys101", "cs101"] }
+  ]
+}

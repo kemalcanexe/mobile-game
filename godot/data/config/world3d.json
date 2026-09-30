@@ -1,0 +1,109 @@
+{
+  "_comment": "3D dünya ayarları. Level verileri 2D piksel biriminde yazılı; unitsPerPixel onları metreye çevirir (300 px/s → 15 m/s, satır 72 px → 3.6 m).",
+  "unitsPerPixel": 0.05,
+  "laneWidth": 2.6,
+  "player": {
+    "jumpHeight": 2.1,
+    "jumpAirTime": 0.62,
+    "slideTime": 0.65,
+    "laneChangeTime": 0.13,
+    "fastFallSpeed": 32,
+    "radius": 0.38,
+    "height": 1.7,
+    "slideHeight": 0.7,
+    "stumbleTime": 0.4
+  },
+  "camera": {
+    "height": 5.6,
+    "distance": 7.8,
+    "lookAhead": 5.5,
+    "fov": 62,
+    "fovSpeedBoost": 10,
+    "followSharpness": 9,
+    "shakeTime": 0.25,
+    "shakeAmount": 0.25
+  },
+  "world": {
+    "chunkLength": 30,
+    "chunksAhead": 5,
+    "spawnAhead": 80,
+    "despawnBehind": 14,
+    "sidewalkWidth": 3.0,
+    "buildingSetback": 21.0
+  },
+  "input": {
+    "minSwipeDistance": 28,
+    "minFlingVelocity": 380,
+    "bufferSeconds": 0.12
+  },
+  "modelScale": {
+    "roads": 10,
+    "commercial": 12,
+    "suburban": 9,
+    "nature": 4.2,
+    "furniture": 4.5,
+    "food": 5
+  },
+  "themes": {
+    "calc101": {
+      "name": "Matematik Bölümü",
+      "sign": "MATEMATİK",
+      "skyTop": "#3F8CFF",
+      "skyHorizon": "#CFE6FF",
+      "ground": "#6DB24F",
+      "path": "#B8AD99",
+      "accent": "#2E6BFF",
+      "sunColor": "#FFF4E0",
+      "sunEnergy": 0.85,
+      "sunPitch": -48,
+      "fog": "#DCEBFF",
+      "ambient": 0.32,
+      "lamps": false,
+      "trees": [
+        "tree_oak",
+        "tree_default",
+        "tree_fat"
+      ]
+    },
+    "phys101": {
+      "name": "Fizik Laboratuvarı",
+      "sign": "FİZİK",
+      "skyTop": "#FF9A62",
+      "skyHorizon": "#FFE7C9",
+      "ground": "#8FC255",
+      "path": "#D2C4AB",
+      "accent": "#FF6A2B",
+      "sunColor": "#FFE2C0",
+      "sunEnergy": 0.85,
+      "sunPitch": -22,
+      "fog": "#FFEAD3",
+      "ambient": 0.3,
+      "lamps": false,
+      "trees": [
+        "tree_pineRoundA",
+        "tree_detailed",
+        "tree_default"
+      ]
+    },
+    "cs101": {
+      "name": "Bilgisayar Laboratuvarı",
+      "sign": "BİLGİSAYAR",
+      "skyTop": "#141B3D",
+      "skyHorizon": "#5B3F8C",
+      "ground": "#3E7D5A",
+      "path": "#5E6378",
+      "accent": "#35E6A0",
+      "sunColor": "#AFC3FF",
+      "sunEnergy": 0.45,
+      "sunPitch": -35,
+      "fog": "#2A2550",
+      "ambient": 0.32,
+      "lamps": true,
+      "trees": [
+        "tree_pineRoundA",
+        "tree_fat",
+        "tree_oak"
+      ]
+    }
+  }
+}

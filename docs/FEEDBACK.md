@@ -4,7 +4,8 @@
 
 > "Bu tasarımı hiç beğenmedim, 3 boyutlu ve eğlenceli bir şey istiyorum."
 
-**Durum:** Kayda alındı, ileriki bir fazda ele alınacak (kullanıcı talebi). Faz 2 mevcut görsellerle ilerliyor.
+**Durum:** Faz 3'te ele alındı. Kullanıcının seçimleri: motor **Godot 4**, dünya **kampüste koşan 3D Tüki**.
+Oyun `godot/` altında sıfırdan 3D olarak yeniden yazıldı; Flutter sürümü eski (referans) olarak duruyor.
 
 **Etkisi:**
 - Proposal §16'daki (2D defter doodle'ı, tükenmez çizgisi) görsel yönle **çelişiyor**. Kullanıcının sözü esas alınır; §16 yeniden yazılmalı.

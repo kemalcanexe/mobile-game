@@ -1,0 +1,109 @@
+{
+  "id": "phys101.midterm",
+  "assessment": "midterm",
+  "durationSeconds": 80,
+  "speed": {
+    "start": 1.1,
+    "end": 1.45,
+    "curve": "easeInOut"
+  },
+  "seed": 102002,
+  "gapRows": {
+    "min": 1,
+    "max": 3
+  },
+  "script": [
+    {
+      "at": 0.0,
+      "pattern": "cards_zigzag"
+    },
+    {
+      "at": 0.3,
+      "pattern": "ground_row"
+    },
+    {
+      "at": 0.6,
+      "pattern": "air_row"
+    },
+    {
+      "at": 0.88,
+      "pattern": "bonus_question"
+    }
+  ],
+  "pool": [
+    {
+      "pattern": "cards_line",
+      "weight": 3
+    },
+    {
+      "pattern": "cards_zigzag",
+      "weight": 3
+    },
+    {
+      "pattern": "notes_scatter",
+      "weight": 3
+    },
+    {
+      "pattern": "triple_choice",
+      "weight": 2
+    },
+    {
+      "pattern": "pendulum",
+      "weight": 3
+    },
+    {
+      "pattern": "gravity_well",
+      "weight": 2
+    },
+    {
+      "pattern": "book_behind_spill",
+      "weight": 2
+    },
+    {
+      "pattern": "book_under_plane",
+      "weight": 2
+    },
+    {
+      "pattern": "mixed_hurdles",
+      "weight": 2
+    },
+    {
+      "pattern": "wall_slalom",
+      "weight": 2
+    },
+    {
+      "pattern": "ruler_barrier",
+      "weight": 1,
+      "from": 0.3
+    },
+    {
+      "pattern": "phone_bait",
+      "weight": 2
+    },
+    {
+      "pattern": "console_trap",
+      "weight": 2
+    },
+    {
+      "pattern": "friend_block",
+      "weight": 1
+    },
+    {
+      "pattern": "highlighter_run",
+      "weight": 1
+    },
+    {
+      "pattern": "coffee_break",
+      "weight": 1
+    },
+    {
+      "pattern": "cartridge_gate",
+      "weight": 1
+    },
+    {
+      "pattern": "bonus_question",
+      "weight": 1,
+      "from": 0.5
+    }
+  ]
+}

@@ -2,51 +2,52 @@
 
 > *"Mürekkebin bitebilir, hırsın bitmez."*
 
-Bir tükenmez kalem (Tüki) olarak defter sayfasında 3 şeritli koşu. Her level bir sınav, 5 sınav bir ders,
-her ders sonunda karneye bir harf notu ve 4.0 skalasında GPA. Her dönem ders seçilir, dönem sonunda karne
-gelir (Dean's List / Probation), F alınan ders tekrar alınır. Flutter + Flame.
+Kampüste koşan 3D bir tükenmez kalem: **Tüki**. Her koşu bir sınav, 5 sınav bir ders, her ders sonunda
+karneye harf notu ve 4.0 skalasında GPA. Her dönem ders seçilir, dönem sonunda karne gelir
+(Dean's List / Probation), F alınan ders tekrar alınır.
 
-**Durum:** Faz 2 tamam: CALC 101, PHYS 101, CS 101; dönem, ders seçimi, karne, transkript.
-Görsel yön için kullanıcı geri bildirimi (3D, daha eğlenceli): [`docs/FEEDBACK.md`](docs/FEEDBACK.md)
+**Güncel sürüm: `godot/` (Godot 4.7.2, 3D).** Kökteki Flutter projesi (`lib/`, `test/`) 2D ilk sürümdür ve
+referans olarak duruyor.
+
+| Menü | Sınav başı | Koşu | Ders sonucu | Karne |
+|---|---|---|---|---|
+| ![](docs/screenshots/3d/01_menu.png) | ![](docs/screenshots/3d/04_start.png) | ![](docs/screenshots/3d/05_run_collect.png) | ![](docs/screenshots/3d/09_course_result.png) | ![](docs/screenshots/3d/10_term_report.png) |
+
+| Engeller | CS 101 gece | İzlence | Sınav sonu | Transkript |
+|---|---|---|---|---|
+| ![](docs/screenshots/3d/06_run_walls.png) | ![](docs/screenshots/3d/07_cs101_night.png) | ![](docs/screenshots/3d/03_syllabus.png) | ![](docs/screenshots/3d/08_exam_summary.png) | ![](docs/screenshots/3d/11_transcript.png) |
 
 - Tasarım dokümanı: [`GAME_PROPOSAL.md`](GAME_PROPOSAL.md)
-- Mimari ve JSON şemaları: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- Kararlar ve varsayımlar: [`docs/DECISIONS.md`](docs/DECISIONS.md)
+- Kararlar: [`docs/DECISIONS.md`](docs/DECISIONS.md) · Mimari: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- Kullanıcı geri bildirimi: [`docs/FEEDBACK.md`](docs/FEEDBACK.md)
 
-| Menü | İzlence | Oyun | Level sonu | Ders sonu |
-|---|---|---|---|---|
-| ![](docs/screenshots/01_menu.png) | ![](docs/screenshots/02_syllabus.png) | ![](docs/screenshots/04_gameplay.png) | ![](docs/screenshots/06_level_summary.png) | ![](docs/screenshots/07_course_result.png) |
+## Çalıştırma (3D)
 
-| Ders seçimi | Karne | Transkript | CS 101 | PHYS 101 |
-|---|---|---|---|---|
-| ![](docs/screenshots/09_enrollment.png) | ![](docs/screenshots/10_term_report_deans.png) | ![](docs/screenshots/12_transcript.png) | ![](docs/screenshots/13_cs101_terminal.png) | ![](docs/screenshots/14_phys101_millimeter.png) |
-
-## Çalıştırma
+1. [Godot 4.7.2](https://godotengine.org/download) indir.
+2. `godot/project.godot` dosyasını aç, **F5** ile çalıştır. Bilgisayarda klavye: ← → şerit, ↑ zıpla, ↓ kay.
 
 ```bash
-flutter pub get
-flutter run            # bağlı cihaz veya emülatör/simülatör
-flutter run -d chrome  # hızlı deneme (fare sürüklemesi = swipe)
+# Testler (headless, gerçek fizikle)
+godot --headless --fixed-fps 60 --path godot -s res://tests/run_tests.gd
+
+# Android APK / Web
+godot --headless --path godot --export-release "Android" ../build_godot/android/tukenmez.apk
+godot --headless --path godot --export-release "Web" ../build_godot/web/index.html
 ```
+
+Android release imzası için `GODOT_ANDROID_KEYSTORE_RELEASE_PATH/USER/PASSWORD` ortam değişkenleri kullanılır
+(anahtar repoda tutulmaz).
 
 ## Kontroller
 
 | Swipe | Aksiyon |
 |---|---|
-| ← → | Satır atla (şerit değiştir) |
-| ↑ | Kalem kaldır (zıpla, yer engellerini aşar) |
-| ↓ | Yatık yazı (eğil, hava engellerinin altından geçer). Havadayken hızla iner. |
-
-## Test
-
-```bash
-flutter analyze
-flutter test           # domain + data + flame_test + widget testleri
-```
+| ← → | Şerit değiştir |
+| ↑ | Zıpla (bariyer ve konilerin üstünden) |
+| ↓ | Kay (afişlerin altından); havadayken hızla in |
 
 ## İçerik ekleme
 
-Yeni bir ders eklemek için kod değil veri eklenir: `assets/levels/<ders>/` altına `course.json`, 5 level
-JSON'u ve isteğe bağlı bir `patterns.json` koy, ardından `assets/levels/courses.json`'a ekle ve
-`pubspec.yaml`'daki `assets:` listesine klasörü yaz. Yükleme sırasında veri doğrulanır ve hatalar
-satır satır raporlanır. Oyun sabitleri `assets/config/` altındadır.
+Yeni ders = veri: `godot/data/levels/<ders>/` altına `course.json`, 5 level JSON'u ve `patterns.json`;
+`courses.json` ve `curriculum.json`'a ekle; `world3d.json → themes` altına dersin kampüs temasını yaz.
+Yükleme sırasında veri doğrulanır.

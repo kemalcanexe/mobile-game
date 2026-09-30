@@ -1,0 +1,37 @@
+{
+  "_comment": "code: level desenlerinde kullanılan 2 harfli kısaltma. points/ink: toplandığında/çarpıldığında uygulanan değişim.",
+  "items": [
+    { "code": "fc", "id": "flashcard", "kind": "collectible", "points": 5, "art": "flashcard" },
+    { "code": "nt", "id": "note", "kind": "collectible", "points": 10, "art": "note" },
+    { "code": "fx", "id": "formula", "kind": "collectible", "points": 15, "art": "formula" },
+    { "code": "bk", "id": "book", "kind": "collectible", "points": 25, "art": "book" },
+    { "code": "fp", "id": "formula_physics", "kind": "collectible", "points": 15, "art": "physics" },
+    { "code": "fk", "id": "formula_code", "kind": "collectible", "points": 15, "art": "code" },
+    { "code": "bq", "id": "bonus_question", "kind": "bonus", "extraCredit": 3, "art": "bonus" },
+
+    { "code": "hl", "id": "highlighter", "kind": "powerUp", "art": "highlighter",
+      "effect": { "type": "scoreMultiplier", "value": 2, "duration": 6 } },
+    { "code": "cf", "id": "coffee", "kind": "powerUp", "art": "coffee",
+      "effect": { "type": "slowMotion", "value": 0.3, "duration": 4 } },
+    { "code": "ik", "id": "ink_cartridge", "kind": "powerUp", "art": "cartridge",
+      "effect": { "type": "ink", "value": 25 } },
+
+    { "code": "ph", "id": "phone", "kind": "distraction", "points": -5, "ink": -10, "art": "phone",
+      "effect": { "type": "notification", "duration": 2 } },
+    { "code": "gc", "id": "console", "kind": "distraction", "points": -15, "ink": -15, "art": "console",
+      "effect": { "type": "reverseControls", "duration": 3 } },
+    { "code": "fr", "id": "friend_canteen", "kind": "distraction", "points": -15, "ink": -15, "art": "friend",
+      "effect": { "type": "pullLane" } },
+
+    { "code": "og", "id": "coffee_spill", "kind": "groundObstacle", "points": -5, "ink": -10, "art": "spill",
+      "effect": { "type": "stumble" } },
+    { "code": "os", "id": "staples", "kind": "groundObstacle", "points": -5, "ink": -10, "art": "staples",
+      "effect": { "type": "stumble" } },
+    { "code": "oa", "id": "paper_plane", "kind": "airObstacle", "points": -5, "ink": -10, "art": "plane",
+      "effect": { "type": "stumble" } },
+    { "code": "ob", "id": "paper_ball", "kind": "airObstacle", "points": -5, "ink": -10, "art": "paperBall",
+      "effect": { "type": "stumble" } },
+    { "code": "ow", "id": "encyclopedia", "kind": "wall", "points": -5, "ink": -10, "art": "encyclopedia",
+      "effect": { "type": "stumble" } }
+  ]
+}

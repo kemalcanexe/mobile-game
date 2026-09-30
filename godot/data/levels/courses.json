@@ -1,0 +1,7 @@
+{
+  "courses": [
+    "calc101/course.json",
+    "phys101/course.json",
+    "cs101/course.json"
+  ]
+}
