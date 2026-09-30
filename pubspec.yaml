@@ -31,6 +31,8 @@ flutter:
     - assets/levels/
     - assets/levels/common/
     - assets/levels/calc101/
+    - assets/levels/phys101/
+    - assets/levels/cs101/
 
   fonts:
     - family: Caveat

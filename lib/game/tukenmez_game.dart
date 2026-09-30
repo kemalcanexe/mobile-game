@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 
 import '../app/palette.dart';
+import '../app/paper_theme.dart';
 import '../domain/scoring/ink_state.dart';
 import '../domain/scoring/level_score.dart';
 import 'components/effects/floating_text.dart';
@@ -131,7 +132,7 @@ class TukenmezGame extends FlameGame with HasCollisionDetection, DragCallbacks {
   double yForDistance(double d) => penY - (d - distance);
 
   @override
-  Color backgroundColor() => Palette.paperShade;
+  Color backgroundColor() => PaperTheme.of(setup.paper).endShade;
 
   @override
   Future<void> onLoad() async {
@@ -334,13 +335,18 @@ class TukenmezGame extends FlameGame with HasCollisionDetection, DragCallbacks {
     }
   }
 
+  /// (+) popup rengi: koyu kağıtta mürekkep mavisi okunmaz.
+  late final Color _positive = PaperTheme.of(setup.paper).isDark
+      ? PaperTheme.of(setup.paper).trail
+      : Palette.ink;
+
   void _collect(ItemDef def, Vector2 at) {
     final strings = setup.strings;
     switch (def.kind) {
       case ItemKind.collectible:
         final mult = effects.scoreMultiplier;
         tracker.collect(def.points, multiplier: mult);
-        _popup('+${(def.points * mult).round()}', at, Palette.ink);
+        _popup('+${(def.points * mult).round()}', at, _positive);
       case ItemKind.bonus:
         tracker.addExtraCredit(def.extraCredit);
         _popup(
@@ -353,7 +359,7 @@ class TukenmezGame extends FlameGame with HasCollisionDetection, DragCallbacks {
         switch (e.type) {
           case EffectType.scoreMultiplier:
             effects.startMultiplier(e.value, e.duration);
-            _popup(strings.doublePoints, at, Palette.ink);
+            _popup(strings.doublePoints, at, _positive);
           case EffectType.slowMotion:
             effects.startSlow(e.value, e.duration);
             _popup(strings.focusMode, at, Palette.coffee);

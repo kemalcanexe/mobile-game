@@ -286,12 +286,6 @@ abstract class AppLocalizations {
   /// **'Sınava gir: {name}'**
   String startAssessment(String name);
 
-  /// No description provided for @retakeCourse.
-  ///
-  /// In tr, this message translates to:
-  /// **'Dersi tekrar al'**
-  String get retakeCourse;
-
   /// No description provided for @retakeQuip.
   ///
   /// In tr, this message translates to:
@@ -543,6 +537,216 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'— sayfa sonu —'**
   String get gamePageEnd;
+
+  /// No description provided for @statusNotEnrolled.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönem alınmadı'**
+  String get statusNotEnrolled;
+
+  /// No description provided for @failedNextTerm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir sonraki dönemin ders seçiminde tekrar alınacak.'**
+  String get failedNextTerm;
+
+  /// No description provided for @menuThisTerm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemin dersleri'**
+  String get menuThisTerm;
+
+  /// No description provided for @menuEnrollCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ders seçimine git'**
+  String get menuEnrollCta;
+
+  /// No description provided for @menuEnrollHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n}. dönem başlıyor. Önce derslerini seç.'**
+  String menuEnrollHint(int n);
+
+  /// No description provided for @menuNoCourses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönem için yeni ders yok. Yeni dersler yakında!'**
+  String get menuNoCourses;
+
+  /// No description provided for @menuTermReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönem karnesini gör'**
+  String get menuTermReport;
+
+  /// No description provided for @menuTranscript.
+  ///
+  /// In tr, this message translates to:
+  /// **'Transkript'**
+  String get menuTranscript;
+
+  /// No description provided for @probationBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'Academic Probation'**
+  String get probationBadge;
+
+  /// No description provided for @probationHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'CGPA 2.00\'ın altında, bir dönemde en fazla {n} ders alabilirsin.'**
+  String probationHint(int n);
+
+  /// No description provided for @enrollTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ders Seçimi'**
+  String get enrollTitle;
+
+  /// No description provided for @enrollSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n}. dönem · Ekle-Bırak haftası'**
+  String enrollSubtitle(int n);
+
+  /// No description provided for @enrollCounter.
+  ///
+  /// In tr, this message translates to:
+  /// **'{selected} ders seçildi · en az {min}, en fazla {max}'**
+  String enrollCounter(int selected, int min, int max);
+
+  /// No description provided for @enrollRetakeTag.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar (zorunlu)'**
+  String get enrollRetakeTag;
+
+  /// No description provided for @enrollConfirm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydımı yap'**
+  String get enrollConfirm;
+
+  /// No description provided for @enrollNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçilebilecek ders yok.'**
+  String get enrollNone;
+
+  /// No description provided for @termReportTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönem Karnesi'**
+  String get termReportTitle;
+
+  /// No description provided for @termReportSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n}. dönem'**
+  String termReportSubtitle(int n);
+
+  /// No description provided for @colCourse.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ders'**
+  String get colCourse;
+
+  /// No description provided for @colCredits.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kredi'**
+  String get colCredits;
+
+  /// No description provided for @colLetter.
+  ///
+  /// In tr, this message translates to:
+  /// **'Not'**
+  String get colLetter;
+
+  /// No description provided for @semesterGpa.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönem GPA'**
+  String get semesterGpa;
+
+  /// No description provided for @deansList.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dean\'s List'**
+  String get deansList;
+
+  /// No description provided for @deansListHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönem GPA\'in 3.50 ve üstü: defter kapağına altın yıldız!'**
+  String get deansListHint;
+
+  /// No description provided for @probationStamp.
+  ///
+  /// In tr, this message translates to:
+  /// **'PROBATION'**
+  String get probationStamp;
+
+  /// No description provided for @nextTerm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sonraki döneme geç'**
+  String get nextTerm;
+
+  /// No description provided for @seeTermReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dönem karnesini gör'**
+  String get seeTermReport;
+
+  /// No description provided for @transcriptTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Transkript'**
+  String get transcriptTitle;
+
+  /// No description provided for @transcriptEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz tamamlanmış ders yok.'**
+  String get transcriptEmpty;
+
+  /// No description provided for @transcriptReplaced.
+  ///
+  /// In tr, this message translates to:
+  /// **'R: tekrar alındı, CGPA\'e girmez'**
+  String get transcriptReplaced;
+
+  /// No description provided for @honorCandidate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onur derecesi adayı: {honor}'**
+  String honorCandidate(String honor);
+
+  /// No description provided for @honorCum.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cum Laude'**
+  String get honorCum;
+
+  /// No description provided for @honorMagna.
+  ///
+  /// In tr, this message translates to:
+  /// **'Magna Cum Laude'**
+  String get honorMagna;
+
+  /// No description provided for @honorSumma.
+  ///
+  /// In tr, this message translates to:
+  /// **'Summa Cum Laude'**
+  String get honorSumma;
+
+  /// No description provided for @requiredSemesters.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mezuniyet: {done}/{total} dönem'**
+  String requiredSemesters(int done, int total);
 }
 
 class _AppLocalizationsDelegate

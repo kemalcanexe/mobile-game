@@ -138,7 +138,6 @@ class CourseDefinition {
     required this.title,
     required this.nickname,
     required this.credits,
-    required this.semester,
     required this.paper,
     required this.levels,
     required this.patterns,
@@ -149,7 +148,6 @@ class CourseDefinition {
   final String title;
   final String nickname;
   final int credits;
-  final int semester;
   final String paper;
   final Map<AssessmentType, LevelDefinition> levels;
   final Map<String, PatternDef> patterns;

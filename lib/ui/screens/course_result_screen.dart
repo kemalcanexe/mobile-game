@@ -14,6 +14,7 @@ import '../widgets/grade_stamp.dart';
 import '../widgets/paper_backdrop.dart';
 import '../widgets/post_it_button.dart';
 import '../widgets/torn_card.dart';
+import 'semester_result_screen.dart';
 
 /// Ders sonu: izlence tablosu dolar, ağırlıklar toplanır, harf damgası vurulur
 /// ve GPA sayacı değişir.
@@ -169,10 +170,25 @@ class _CourseResultScreenState extends ConsumerState<CourseResultScreen>
                         const SizedBox(height: 22),
                         IgnorePointer(
                           ignoring: gpa < 1,
-                          child: PostItButton(
-                            label: l.backToCourse,
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
+                          child: c.semesterComplete
+                              ? PostItButton(
+                                  label: l.seeTermReport,
+                                  color: Palette.postItBlue,
+                                  onPressed: () =>
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) => SemesterResultScreen(
+                                            semester: ref
+                                                .read(progressProvider.notifier)
+                                                .semesterIndex,
+                                          ),
+                                        ),
+                                      ),
+                                )
+                              : PostItButton(
+                                  label: l.backToCourse,
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
                         ),
                       ],
                     ),

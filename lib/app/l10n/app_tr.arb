@@ -5,34 +5,63 @@
   "tagline": "Mürekkebin bitebilir, hırsın bitmez.",
   "loading": "Defter açılıyor…",
   "loadError": "Veriler yüklenemedi:\n{error}",
-  "@loadError": { "placeholders": { "error": { "type": "String" } } },
-
+  "@loadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "menuCourses": "Dersler",
   "menuCgpa": "Kümülatif GPA",
   "menuSemester": "{n}. dönem",
-  "@menuSemester": { "placeholders": { "n": { "type": "int" } } },
+  "@menuSemester": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "menuReset": "İlerlemeyi sıfırla",
   "resetTitle": "Her şey silinsin mi?",
   "resetBody": "Transkript ve yarım kalan sınavlar silinir. Geri alınamaz.",
   "cancel": "Vazgeç",
   "resetConfirm": "Sıfırla",
-
   "credits": "{n} kredi",
-  "@credits": { "placeholders": { "n": { "type": "int" } } },
+  "@credits": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "statusNotStarted": "Başlanmadı",
   "statusInProgress": "{done}/{total} sınav bitti",
-  "@statusInProgress": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } } },
+  "@statusInProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "statusPassed": "Geçti",
   "statusFailed": "Kaldı: tekrar alınmalı",
   "attempt": "{n}. deneme",
-  "@attempt": { "placeholders": { "n": { "type": "int" } } },
-
+  "@attempt": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "assessmentQuiz1": "Quiz 1",
   "assessmentMidterm": "Midterm",
   "assessmentQuiz2": "Quiz 2",
   "assessmentProject": "Proje / Lab",
   "assessmentFinal": "Final",
-
   "syllabus": "İzlence",
   "colAssessment": "Sınav",
   "colWeight": "Ağırlık",
@@ -40,31 +69,44 @@
   "colScore": "Skor",
   "colContribution": "Katkı",
   "seconds": "{n} sn",
-  "@seconds": { "placeholders": { "n": { "type": "int" } } },
+  "@seconds": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "startAssessment": "Sınava gir: {name}",
-  "@startAssessment": { "placeholders": { "name": { "type": "String" } } },
-  "retakeCourse": "Dersi tekrar al",
+  "@startAssessment": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "retakeQuip": "Herkes bir dersi iki kere alır. Bazıları üç.",
   "courseDone": "Ders tamamlandı",
-
   "readyTitle": "{name}",
-  "@readyTitle": { "placeholders": { "name": { "type": "String" } } },
+  "@readyTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "readyHintLanes": "Sola/sağa kaydır: satır atla",
   "readyHintJump": "Yukarı kaydır: kalemi kaldır (zıpla)",
   "readyHintDuck": "Aşağı kaydır: yatık yazı (eğil)",
   "readyHintInk": "Dikkat dağıtıcılar mürekkebini bitirir!",
   "start": "Başla",
-
   "hudPause": "Duraklat",
   "effectDouble": "x2",
   "effectFocus": "Odak",
   "effectReversed": "Ters!",
-
   "pauseTitle": "Mola",
   "resume": "Devam",
   "quitAssessment": "Sınavdan çık",
   "quitWarning": "Çıkarsan bu sınav baştan başlar.",
-
   "summaryPageEnd": "Sayfa sonu!",
   "summaryInkOut": "Mürekkep bitti!",
   "rowCollected": "Toplanan puan",
@@ -77,22 +119,125 @@
   "rowLevelScore": "Level skoru",
   "continueButton": "Devam",
   "seeCourseResult": "Ders sonucunu gör",
-
   "courseResult": "Ders Sonucu",
   "total": "Toplam",
   "gpaLabel": "GPA",
   "backToCourse": "Derse dön",
   "backToMenu": "Ana menü",
-
   "gameFinalStretch": "SON 5 DAKİKA",
   "gameNotificationTitle": "Ayşe",
   "gameNotificationBody": "hikaye paylaştı",
   "gameFriendBubble": "Kantin?",
   "gameExtraCredit": "+{n} ekstra kredi",
-  "@gameExtraCredit": { "placeholders": { "n": { "type": "String" } } },
+  "@gameExtraCredit": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
   "gameDoublePoints": "Fosforlu x2!",
   "gameFocusMode": "Odak modu",
   "gameInkRefill": "+{n} mürekkep",
-  "@gameInkRefill": { "placeholders": { "n": { "type": "String" } } },
-  "gamePageEnd": "— sayfa sonu —"
+  "@gameInkRefill": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "gamePageEnd": "— sayfa sonu —",
+  "statusNotEnrolled": "Bu dönem alınmadı",
+  "failedNextTerm": "Bir sonraki dönemin ders seçiminde tekrar alınacak.",
+  "menuThisTerm": "Bu dönemin dersleri",
+  "menuEnrollCta": "Ders seçimine git",
+  "menuEnrollHint": "{n}. dönem başlıyor. Önce derslerini seç.",
+  "@menuEnrollHint": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "menuNoCourses": "Bu dönem için yeni ders yok. Yeni dersler yakında!",
+  "menuTermReport": "Dönem karnesini gör",
+  "menuTranscript": "Transkript",
+  "probationBadge": "Academic Probation",
+  "probationHint": "CGPA 2.00'ın altında, bir dönemde en fazla {n} ders alabilirsin.",
+  "@probationHint": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "enrollTitle": "Ders Seçimi",
+  "enrollSubtitle": "{n}. dönem · Ekle-Bırak haftası",
+  "@enrollSubtitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "enrollCounter": "{selected} ders seçildi · en az {min}, en fazla {max}",
+  "@enrollCounter": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      },
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "enrollRetakeTag": "Tekrar (zorunlu)",
+  "enrollConfirm": "Kaydımı yap",
+  "enrollNone": "Seçilebilecek ders yok.",
+  "termReportTitle": "Dönem Karnesi",
+  "termReportSubtitle": "{n}. dönem",
+  "@termReportSubtitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "colCourse": "Ders",
+  "colCredits": "Kredi",
+  "colLetter": "Not",
+  "semesterGpa": "Dönem GPA",
+  "deansList": "Dean's List",
+  "deansListHint": "Dönem GPA'in 3.50 ve üstü: defter kapağına altın yıldız!",
+  "probationStamp": "PROBATION",
+  "nextTerm": "Sonraki döneme geç",
+  "seeTermReport": "Dönem karnesini gör",
+  "transcriptTitle": "Transkript",
+  "transcriptEmpty": "Henüz tamamlanmış ders yok.",
+  "transcriptReplaced": "R: tekrar alındı, CGPA'e girmez",
+  "honorCandidate": "Onur derecesi adayı: {honor}",
+  "@honorCandidate": {
+    "placeholders": {
+      "honor": {
+        "type": "String"
+      }
+    }
+  },
+  "honorCum": "Cum Laude",
+  "honorMagna": "Magna Cum Laude",
+  "honorSumma": "Summa Cum Laude",
+  "requiredSemesters": "Mezuniyet: {done}/{total} dönem",
+  "@requiredSemesters": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

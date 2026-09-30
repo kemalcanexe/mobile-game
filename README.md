@@ -3,7 +3,11 @@
 > *"Mürekkebin bitebilir, hırsın bitmez."*
 
 Bir tükenmez kalem (Tüki) olarak defter sayfasında 3 şeritli koşu. Her level bir sınav, 5 sınav bir ders,
-her ders sonunda karneye bir harf notu ve 4.0 skalasında GPA. Flutter + Flame.
+her ders sonunda karneye bir harf notu ve 4.0 skalasında GPA. Her dönem ders seçilir, dönem sonunda karne
+gelir (Dean's List / Probation), F alınan ders tekrar alınır. Flutter + Flame.
+
+**Durum:** Faz 2 tamam: CALC 101, PHYS 101, CS 101; dönem, ders seçimi, karne, transkript.
+Görsel yön için kullanıcı geri bildirimi (3D, daha eğlenceli): [`docs/FEEDBACK.md`](docs/FEEDBACK.md)
 
 - Tasarım dokümanı: [`GAME_PROPOSAL.md`](GAME_PROPOSAL.md)
 - Mimari ve JSON şemaları: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
@@ -12,6 +16,10 @@ her ders sonunda karneye bir harf notu ve 4.0 skalasında GPA. Flutter + Flame.
 | Menü | İzlence | Oyun | Level sonu | Ders sonu |
 |---|---|---|---|---|
 | ![](docs/screenshots/01_menu.png) | ![](docs/screenshots/02_syllabus.png) | ![](docs/screenshots/04_gameplay.png) | ![](docs/screenshots/06_level_summary.png) | ![](docs/screenshots/07_course_result.png) |
+
+| Ders seçimi | Karne | Transkript | CS 101 | PHYS 101 |
+|---|---|---|---|---|
+| ![](docs/screenshots/09_enrollment.png) | ![](docs/screenshots/10_term_report_deans.png) | ![](docs/screenshots/12_transcript.png) | ![](docs/screenshots/13_cs101_terminal.png) | ![](docs/screenshots/14_phys101_millimeter.png) |
 
 ## Çalıştırma
 

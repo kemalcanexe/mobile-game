@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 
-import '../../app/palette.dart';
+import '../../app/paper_theme.dart';
 import '../systems/collision_rules.dart';
 import '../tukenmez_game.dart';
 
@@ -19,7 +19,8 @@ class InkTrail extends Component with HasGameReference<TukenmezGame> {
   int _count = 0;
   double _lastD = double.negativeInfinity;
 
-  static const _lowInk = Color(0x731F3A93);
+  late final Color _ink = PaperTheme.of(game.setup.paper).trail;
+  late final Color _lowInk = _ink.withValues(alpha: 0.45);
 
   final Path _path = Path();
   final Path _dashPath = Path();
@@ -36,13 +37,13 @@ class InkTrail extends Component with HasGameReference<TukenmezGame> {
     _d = Float64List(_cap);
     _flags = Uint8List(_cap);
     _paint = Paint()
-      ..color = Palette.ink
+      ..color = _ink
       ..style = PaintingStyle.stroke
       ..strokeWidth = c.trailStrokeWidth
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
     _dashPaint = Paint()
-      ..color = Palette.inkLight
+      ..color = _ink.withValues(alpha: 0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = c.trailStrokeWidth * 0.7
       ..strokeCap = StrokeCap.round;
@@ -74,7 +75,7 @@ class InkTrail extends Component with HasGameReference<TukenmezGame> {
     if (_count < 2) return;
     final g = game;
     final low = g.ink.isLow;
-    _paint.color = low ? _lowInk : Palette.ink;
+    _paint.color = low ? _lowInk : _ink;
     _path.reset();
     _dashPath.reset();
     var penDown = false;

@@ -13,6 +13,7 @@ void main() {
   final config = loadGameConfig();
   final catalog = loadCatalog();
   late List<CourseDefinition> courses;
+  late CourseDefinition calc;
 
   setUpAll(() async {
     courses = await LevelRepository(
@@ -20,17 +21,26 @@ void main() {
       catalog: catalog,
       laneCount: config.laneCount,
     ).loadCourses();
+    calc = courses.firstWhere((c) => c.id == 'calc101');
+  });
+
+  test('bütün dersler yüklenir; kağıt temaları farklı', () {
+    expect(courses.map((c) => c.id), ['calc101', 'phys101', 'cs101']);
+    expect(courses.map((c) => c.paper).toSet(), {
+      'grid',
+      'millimeter',
+      'terminal',
+    });
+    expect(courses.firstWhere((c) => c.id == 'cs101').credits, 3);
   });
 
   test('CALC 101 yüklenir ve doğrulanır', () {
-    final calc = courses.single;
     expect(calc.code, 'CALC 101');
     expect(calc.credits, 4);
     expect(calc.levels.keys, containsAll(AssessmentType.values));
   });
 
   test('level süreleri ve hızları proposal ile aynı', () {
-    final calc = courses.single;
     final expected = {
       AssessmentType.quiz1: (60.0, 1.00, 1.25),
       AssessmentType.midterm: (80.0, 1.10, 1.45),
@@ -47,7 +57,6 @@ void main() {
   });
 
   test('her level\'ın başlangıç hızı bir öncekinden yüksek', () {
-    final calc = courses.single;
     final starts = [
       for (final t in AssessmentType.values) calc.level(t).speed.start,
     ];
@@ -63,7 +72,6 @@ void main() {
     final generator = LevelGenerator(config: config, catalog: catalog);
 
     test('aynı seed aynı planı üretir', () {
-      final calc = courses.single;
       final level = calc.level(AssessmentType.midterm);
       final a = generator.generate(level, calc.patterns);
       final b = generator.generate(level, calc.patterns);
@@ -76,32 +84,32 @@ void main() {
     });
 
     test('her level toplanabilir içerir ve hiçbir satır geçilmez değildir', () {
-      final calc = courses.single;
-      for (final type in AssessmentType.values) {
-        final plan = generator.generate(calc.level(type), calc.patterns);
-        final maxPoints = plan.events
-            .map((e) => catalog[e.code])
-            .where((d) => d.countsTowardMax)
-            .fold<double>(0, (a, d) => a + d.points);
-        expect(maxPoints, greaterThan(300), reason: type.key);
-        final walls = <double, int>{};
-        for (final e in plan.events) {
-          if (catalog[e.code].kind == ItemKind.wall) {
-            walls[e.distance] = (walls[e.distance] ?? 0) + 1;
+      for (final course in courses) {
+        for (final type in AssessmentType.values) {
+          final plan = generator.generate(course.level(type), course.patterns);
+          final maxPoints = plan.events
+              .map((e) => catalog[e.code])
+              .where((d) => d.countsTowardMax)
+              .fold<double>(0, (a, d) => a + d.points);
+          expect(maxPoints, greaterThan(300), reason: type.key);
+          final walls = <double, int>{};
+          for (final e in plan.events) {
+            if (catalog[e.code].kind == ItemKind.wall) {
+              walls[e.distance] = (walls[e.distance] ?? 0) + 1;
+            }
+            expect(e.distance, lessThanOrEqualTo(plan.totalDistance));
+            expect(e.lane, inInclusiveRange(0, config.laneCount - 1));
           }
-          expect(e.distance, lessThanOrEqualTo(plan.totalDistance));
-          expect(e.lane, inInclusiveRange(0, config.laneCount - 1));
+          expect(
+            walls.values.every((n) => n < config.laneCount),
+            isTrue,
+            reason: '${course.id}.${type.key}: aynı satırda 3 duvar',
+          );
         }
-        expect(
-          walls.values.every((n) => n < config.laneCount),
-          isTrue,
-          reason: '${type.key}: aynı satırda 3 duvar',
-        );
       }
     });
 
     test('olaylar mesafeye göre sıralı', () {
-      final calc = courses.single;
       final plan = generator.generate(
         calc.level(AssessmentType.finalExam),
         calc.patterns,
@@ -155,14 +163,12 @@ void main() {
 
   group('LevelValidator', () {
     CourseDefinition broken() {
-      final calc = courses.single;
       return CourseDefinition(
         id: 'x',
         code: 'X',
         title: 'X',
         nickname: 'X',
         credits: 3,
-        semester: 1,
         paper: 'grid',
         levels: {
           AssessmentType.quiz1: LevelDefinition(

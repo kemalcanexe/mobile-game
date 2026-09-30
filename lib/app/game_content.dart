@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../data/comment_bank.dart';
 import '../data/level_repository.dart';
+import '../data/models/curriculum.dart';
 import '../data/models/level_definition.dart';
 import '../domain/grading/grading_rules.dart';
 import '../game/config/game_config.dart';
@@ -16,6 +17,7 @@ class GameContent {
     required this.catalog,
     required this.grading,
     required this.courses,
+    required this.curriculum,
     required this.comments,
   });
 
@@ -23,6 +25,7 @@ class GameContent {
   final ItemCatalog catalog;
   final GradingRules grading;
   final List<CourseDefinition> courses;
+  final Curriculum curriculum;
   final CommentBank comments;
 
   CourseDefinition course(String id) => courses.firstWhere((c) => c.id == id);
@@ -45,16 +48,19 @@ class GameContent {
       await json('assets/config/comments.json'),
       locale,
     );
-    final courses = await LevelRepository(
+    final repo = LevelRepository(
       bundle: bundle,
       catalog: catalog,
       laneCount: config.laneCount,
-    ).loadCourses();
+    );
+    final courses = await repo.loadCourses();
+    final curriculum = await repo.loadCurriculum(courses.map((c) => c.id));
     return GameContent(
       config: config,
       catalog: catalog,
       grading: grading,
       courses: courses,
+      curriculum: curriculum,
       comments: comments,
     );
   }

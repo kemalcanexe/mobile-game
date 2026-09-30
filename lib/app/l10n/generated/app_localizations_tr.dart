@@ -121,9 +121,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get retakeCourse => 'Dersi tekrar al';
-
-  @override
   String get retakeQuip => 'Herkes bir dersi iki kere alır. Bazıları üç.';
 
   @override
@@ -254,4 +251,126 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get gamePageEnd => '— sayfa sonu —';
+
+  @override
+  String get statusNotEnrolled => 'Bu dönem alınmadı';
+
+  @override
+  String get failedNextTerm =>
+      'Bir sonraki dönemin ders seçiminde tekrar alınacak.';
+
+  @override
+  String get menuThisTerm => 'Bu dönemin dersleri';
+
+  @override
+  String get menuEnrollCta => 'Ders seçimine git';
+
+  @override
+  String menuEnrollHint(int n) {
+    return '$n. dönem başlıyor. Önce derslerini seç.';
+  }
+
+  @override
+  String get menuNoCourses =>
+      'Bu dönem için yeni ders yok. Yeni dersler yakında!';
+
+  @override
+  String get menuTermReport => 'Dönem karnesini gör';
+
+  @override
+  String get menuTranscript => 'Transkript';
+
+  @override
+  String get probationBadge => 'Academic Probation';
+
+  @override
+  String probationHint(int n) {
+    return 'CGPA 2.00\'ın altında, bir dönemde en fazla $n ders alabilirsin.';
+  }
+
+  @override
+  String get enrollTitle => 'Ders Seçimi';
+
+  @override
+  String enrollSubtitle(int n) {
+    return '$n. dönem · Ekle-Bırak haftası';
+  }
+
+  @override
+  String enrollCounter(int selected, int min, int max) {
+    return '$selected ders seçildi · en az $min, en fazla $max';
+  }
+
+  @override
+  String get enrollRetakeTag => 'Tekrar (zorunlu)';
+
+  @override
+  String get enrollConfirm => 'Kaydımı yap';
+
+  @override
+  String get enrollNone => 'Seçilebilecek ders yok.';
+
+  @override
+  String get termReportTitle => 'Dönem Karnesi';
+
+  @override
+  String termReportSubtitle(int n) {
+    return '$n. dönem';
+  }
+
+  @override
+  String get colCourse => 'Ders';
+
+  @override
+  String get colCredits => 'Kredi';
+
+  @override
+  String get colLetter => 'Not';
+
+  @override
+  String get semesterGpa => 'Dönem GPA';
+
+  @override
+  String get deansList => 'Dean\'s List';
+
+  @override
+  String get deansListHint =>
+      'Dönem GPA\'in 3.50 ve üstü: defter kapağına altın yıldız!';
+
+  @override
+  String get probationStamp => 'PROBATION';
+
+  @override
+  String get nextTerm => 'Sonraki döneme geç';
+
+  @override
+  String get seeTermReport => 'Dönem karnesini gör';
+
+  @override
+  String get transcriptTitle => 'Transkript';
+
+  @override
+  String get transcriptEmpty => 'Henüz tamamlanmış ders yok.';
+
+  @override
+  String get transcriptReplaced => 'R: tekrar alındı, CGPA\'e girmez';
+
+  @override
+  String honorCandidate(String honor) {
+    return 'Onur derecesi adayı: $honor';
+  }
+
+  @override
+  String get honorCum => 'Cum Laude';
+
+  @override
+  String get honorMagna => 'Magna Cum Laude';
+
+  @override
+  String get honorSumma => 'Summa Cum Laude';
+
+  @override
+  String requiredSemesters(int done, int total) {
+    return 'Mezuniyet: $done/$total dönem';
+  }
 }

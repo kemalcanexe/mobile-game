@@ -1,3 +1,4 @@
+import '../progression/enrollment_rules.dart';
 import 'assessment.dart';
 import 'letter_grade.dart';
 
@@ -66,6 +67,7 @@ class GradingRules {
     required this.scale,
     required this.levelScore,
     required this.standing,
+    required this.enrollment,
     required Set<String> retakeableLetters,
   }) : weights = Map.unmodifiable(weights),
        retakeableLetters = Set.unmodifiable(retakeableLetters) {
@@ -93,6 +95,9 @@ class GradingRules {
       json['levelScore'] as Map<String, dynamic>,
     ),
     standing: StandingRules.fromJson(json['standing'] as Map<String, dynamic>),
+    enrollment: EnrollmentRules.fromJson(
+      json['enrollment'] as Map<String, dynamic>,
+    ),
     retakeableLetters: {
       ...((json['retake'] as Map<String, dynamic>)['retakeableLetters'] as List)
           .cast<String>(),
@@ -103,5 +108,6 @@ class GradingRules {
   final GradeScale scale;
   final LevelScoreRules levelScore;
   final StandingRules standing;
+  final EnrollmentRules enrollment;
   final Set<String> retakeableLetters;
 }

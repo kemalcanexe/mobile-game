@@ -1,0 +1,19 @@
+{
+  "id": "cs101",
+  "code": "CS 101",
+  "title": "Intro to Computer Science",
+  "nickname": "Hello, Bug",
+  "credits": 3,
+  "paper": "terminal",
+  "patternFiles": [
+    "common/patterns.json",
+    "cs101/patterns.json"
+  ],
+  "levels": {
+    "quiz1": "cs101/quiz1.json",
+    "midterm": "cs101/midterm.json",
+    "quiz2": "cs101/quiz2.json",
+    "project": "cs101/project.json",
+    "final": "cs101/final.json"
+  }
+}

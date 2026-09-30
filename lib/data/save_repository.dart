@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/progression/course_run.dart';
+import '../domain/progression/semester_state.dart';
 import '../domain/progression/transcript.dart';
 
 /// Basit anahtar-değer deposu; testlerde bellek içi sürümü kullanılır.
@@ -41,36 +42,65 @@ class MemoryStore implements KeyValueStore {
 
 /// Kalıcı oyuncu ilerlemesi.
 class SaveData {
-  SaveData({Transcript? transcript, Map<String, CourseRun> runs = const {}})
-    : transcript = transcript ?? Transcript(),
-      runs = Map.unmodifiable(runs);
+  SaveData({
+    Transcript? transcript,
+    Map<String, CourseRun> runs = const {},
+    SemesterState? semester,
+  }) : transcript = transcript ?? Transcript(),
+       runs = Map.unmodifiable(runs),
+       semester = semester ?? SemesterState();
 
-  factory SaveData.fromJson(Map<String, dynamic> json) => SaveData(
-    transcript: Transcript.fromJson(json['transcript'] as List? ?? const []),
-    runs: {
+  /// v1 kayıtlarında dönem bilgisi yoktur: ilk dönem ve alınmış dersler
+  /// kayıtlı sayılır, böylece eski ilerleme kaybolmaz.
+  factory SaveData.fromJson(Map<String, dynamic> json) {
+    final transcript = Transcript.fromJson(
+      json['transcript'] as List? ?? const [],
+    );
+    final runs = {
       for (final e
           in (json['runs'] as Map<String, dynamic>? ?? const {}).entries)
         e.key: CourseRun.fromJson(e.value as Map<String, dynamic>),
-    },
-  );
+    };
+    final semesterJson = json['semester'] as Map<String, dynamic>?;
+    return SaveData(
+      transcript: transcript,
+      runs: runs,
+      semester: semesterJson != null
+          ? SemesterState.fromJson(semesterJson)
+          : SemesterState(
+              enrolled: {
+                ...transcript.records.map((r) => r.courseId),
+                ...runs.keys,
+              }.toList(),
+            ),
+    );
+  }
 
-  static const version = 1;
+  static const version = 2;
 
   final Transcript transcript;
 
   /// Devam eden ders denemeleri (ders kimliğine göre).
   final Map<String, CourseRun> runs;
 
-  SaveData copyWith({Transcript? transcript, Map<String, CourseRun>? runs}) =>
-      SaveData(
-        transcript: transcript ?? this.transcript,
-        runs: runs ?? this.runs,
-      );
+  /// İçinde bulunulan dönem ve kayıtlı dersler.
+  final SemesterState semester;
+
+  SaveData copyWith({
+    Transcript? transcript,
+    Map<String, CourseRun>? runs,
+    SemesterState? semester,
+  }) => SaveData(
+    transcript: transcript ?? this.transcript,
+    runs: runs ?? this.runs,
+    semester: semester ?? this.semester,
+  );
 
   Map<String, dynamic> toJson() => {
     'version': version,
     'transcript': transcript.toJson(),
     'runs': {for (final e in runs.entries) e.key: e.value.toJson()},
+    'semester': semester.toJson(),
   };
 }
 

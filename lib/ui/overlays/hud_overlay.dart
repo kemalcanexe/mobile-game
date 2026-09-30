@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/l10n/generated/app_localizations.dart';
 import '../../app/palette.dart';
+import '../../app/paper_theme.dart';
 import '../../app/theme.dart';
 import '../../game/tukenmez_game.dart';
 import '../widgets/ink_meter.dart';
@@ -16,6 +17,10 @@ class HudOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final hud = game.hud;
+    final paper = PaperTheme.of(game.setup.paper);
+    // koyu kağıtta (CS 101) HUD açık renkli
+    final fg = paper.isDark ? paper.trail : Palette.ink;
+    final muted = paper.isDark ? paper.endText : Palette.pencil;
     return SafeArea(
       child: Stack(
         children: [
@@ -38,13 +43,11 @@ class HudOverlay extends StatelessWidget {
               builder: (_, s, _) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$s', style: AppTheme.hand(36)),
+                  Text('$s', style: AppTheme.hand(36, color: fg)),
                   ValueListenableBuilder<int>(
                     valueListenable: hud.livePercent,
-                    builder: (_, pct, _) => Text(
-                      '%$pct',
-                      style: AppTheme.ui(14, color: Palette.pencil),
-                    ),
+                    builder: (_, pct, _) =>
+                        Text('%$pct', style: AppTheme.ui(14, color: muted)),
                   ),
                 ],
               ),
@@ -57,7 +60,7 @@ class HudOverlay extends StatelessWidget {
             child: IconButton(
               tooltip: l.hudPause,
               iconSize: 32,
-              icon: const Icon(Icons.pause_circle_outline, color: Palette.ink),
+              icon: Icon(Icons.pause_circle_outline, color: fg),
               onPressed: game.pauseGame,
             ),
           ),

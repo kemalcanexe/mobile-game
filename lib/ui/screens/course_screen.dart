@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/l10n/generated/app_localizations.dart';
 import '../../app/palette.dart';
+import '../../app/paper_theme.dart';
 import '../../app/progress_controller.dart';
 import '../../app/providers.dart';
 import '../../app/theme.dart';
@@ -37,12 +38,16 @@ class CourseScreen extends ConsumerWidget {
     // Devam eden denemede o denemenin, biten derste transkriptin skorları.
     double? scoreOf(AssessmentType t) =>
         run != null ? run.scores[t] : record?.assessmentScores[t.key];
+    final paper = PaperTheme.of(course.paper);
+    // koyu kağıtta (CS 101 terminali) başlıklar açık renkli
+    final headColor = paper.isDark ? paper.trail : Palette.ink;
+    final subColor = paper.isDark ? paper.endText : Palette.pencil;
     final weights = content.grading.weights;
     final scale = content.grading.scale;
 
     return Scaffold(
       body: PaperBackdrop(
-        grid: course.paper == 'grid',
+        paper: course.paper,
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(40, 8, 20, 32),
@@ -50,21 +55,24 @@ class CourseScreen extends ConsumerWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Palette.ink),
+                  icon: Icon(Icons.arrow_back, color: headColor),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-              Text(course.code, style: AppTheme.hand(52)),
+              Text(course.code, style: AppTheme.hand(52, color: headColor)),
               Text(
                 '"${course.nickname}" · ${course.title}',
-                style: AppTheme.ui(17, color: Palette.pencil),
+                style: AppTheme.ui(17, color: subColor),
               ),
               Text(
                 [
                   l.credits(course.credits),
                   if (run != null && run.attempt > 1) l.attempt(run.attempt),
                 ].join(' · '),
-                style: AppTheme.ui(16),
+                style: AppTheme.ui(
+                  16,
+                  color: paper.isDark ? subColor : Palette.darkText,
+                ),
               ),
               const SizedBox(height: 18),
               TornCard(
@@ -122,22 +130,33 @@ class CourseScreen extends ConsumerWidget {
                   textAlign: TextAlign.center,
                   style: AppTheme.hand(26, color: Palette.teacherRed),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
+                Text(
+                  l.failedNextTerm,
+                  textAlign: TextAlign.center,
+                  style: AppTheme.ui(16, color: subColor),
+                ),
+              ] else if (status == CourseStatus.notEnrolled &&
+                  record == null) ...[
                 Center(
-                  child: PostItButton(
-                    label: l.retakeCourse,
-                    color: Palette.postItPink,
-                    onPressed: () => controller.retake(course, content.grading),
+                  child: Text(
+                    l.statusNotEnrolled,
+                    style: AppTheme.hand(28, color: headColor),
                   ),
                 ),
               ] else if (record != null) ...[
                 Center(child: GradeStamp(letter: record.letter, size: 120)),
                 const SizedBox(height: 10),
-                Center(child: Text(l.courseDone, style: AppTheme.hand(30))),
+                Center(
+                  child: Text(
+                    l.courseDone,
+                    style: AppTheme.hand(30, color: headColor),
+                  ),
+                ),
                 Center(
                   child: Text(
                     formatScore(record.score),
-                    style: AppTheme.ui(18, color: Palette.pencil),
+                    style: AppTheme.ui(18, color: subColor),
                   ),
                 ),
               ],

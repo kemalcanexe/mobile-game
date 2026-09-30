@@ -24,7 +24,8 @@ lib/
     grading/                     # AssessmentType, LetterGrade/GradeScale, GradingRules,
                                  # GradeCalculator, GpaCalculator
     progression/                 # CourseRecord, Transcript, RetakePolicy,
-                                 # AcademicStanding, CourseRun
+                                 # AcademicStanding, CourseRun, SemesterState,
+                                 # EnrollmentRules
     scoring/                     # InkState, LevelScoreTracker, LevelScoreResult
   data/
     models/level_definition.dart # LevelDefinition, PatternDef, CourseDefinition…
@@ -44,7 +45,8 @@ lib/
       effects/                   # FloatingText, PaperDecal, NotificationBubble, Stamp
     hud_state.dart, page_map.dart
   ui/
-    screens/                     # MainMenu, Course (izlence), Game, CourseResult
+    screens/                     # MainMenu, Enrollment, Course (izlence), Game,
+                                 # CourseResult, SemesterResult (karne), Transcript
     overlays/                    # Start, HUD, Pause, LevelSummary
     widgets/                     # PostItButton, TornCard, GradeStamp, InkMeter, PageMapView…
 assets/
@@ -109,6 +111,12 @@ CourseScreen ─► GameScreen ─► LevelSetup ─► TukenmezGame ┘
 - Toplam mesafe `D = T · v0 / ∫₀¹ dp / m(p)` ile hesaplanır. `m(p)`, mesafe ilerlemesine göre hız çarpanıdır.
 - Üretici önce `script` girdilerini `at` ilerlemesinde yerleştirir. Aradaki boşlukları `pool`'dan ağırlıklı ve seed'li seçimle doldurur (`from`/`to` ilerleme aralığına bakar).
 
+### Müfredat: `curriculum.json`
+```json
+{ "requiredSemesters": 8,
+  "semesters": [ { "index": 1, "offered": ["calc101", "phys101", "cs101"] } ] }
+```
+
 ### Nesne: `items.json`
 `code, id, kind (collectible|bonus|powerUp|distraction|groundObstacle|airObstacle|wall), art, points, ink, extraCredit, effect{type, value, duration}`
 
@@ -129,3 +137,15 @@ CourseScreen ─► GameScreen ─► LevelSetup ─► TukenmezGame ┘
 | domain unit testleri | ✅ |
 | flame_test bileşen testleri | ✅ |
 | `flutter analyze` temiz, `flutter test` yeşil, ekran görüntüleriyle doğrulama | ✅ (web build üzerinden) |
+
+## Faz 2 iş kırılımı ve durum
+
+| İş | Durum |
+|---|---|
+| Dönem modeli (`SemesterState`), ders seçme kuralları (`EnrollmentRules`), müfredat verisi | ✅ |
+| Ders seçimi ekranı (zorunlu retake, Probation sınırı, canlı doğrulama) | ✅ |
+| Transkript ekranı (dönem GPA, CGPA, "R", Dean's List yıldızı, onur adaylığı) | ✅ |
+| Dönem sonu karnesi (Dean's List / Probation damgası, sonraki dönem) | ✅ |
+| F sonrası retake akışı (sonraki dönemde zorunlu seçim) | ✅ |
+| 2 yeni ders: PHYS 101 (milimetrik) ve CS 101 (terminal), 5'er level + desenler | ✅ |
+| Kayıt formatı v2 ve v1'den otomatik taşıma | ✅ |

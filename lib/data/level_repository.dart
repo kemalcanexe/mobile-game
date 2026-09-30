@@ -6,6 +6,7 @@ import '../domain/grading/assessment.dart';
 import '../game/config/item_catalog.dart';
 import '../game/config/json_read.dart';
 import 'level_validator.dart';
+import 'models/curriculum.dart';
 import 'models/level_definition.dart';
 
 /// assets/levels altındaki ders ve level JSON'larını yükler ve doğrular.
@@ -25,6 +26,19 @@ class LevelRepository {
   Future<Map<String, dynamic>> _json(String path) async =>
       jsonDecode(await bundle.loadString('$root/$path'))
           as Map<String, dynamic>;
+
+  Future<Curriculum> loadCurriculum(Iterable<String> knownCourseIds) async {
+    final curriculum = Curriculum.fromJson(await _json('curriculum.json'));
+    final unknown = curriculum.allCourseIds
+        .where((id) => !knownCourseIds.contains(id))
+        .toList();
+    if (unknown.isNotEmpty) {
+      throw LevelFormatException([
+        'curriculum.json: tanımsız dersler $unknown',
+      ]);
+    }
+    return curriculum;
+  }
 
   Future<List<CourseDefinition>> loadCourses() async {
     final index = JsonReader(await _json('courses.json'), 'courses.json');
@@ -62,7 +76,6 @@ class LevelRepository {
       title: r.string('title'),
       nickname: r.string('nickname'),
       credits: r.integer('credits'),
-      semester: r.integer('semester'),
       paper: r.string('paper'),
       levels: levels,
       patterns: patterns,

@@ -5,6 +5,8 @@
     { "code": "nt", "id": "note", "kind": "collectible", "points": 10, "art": "note" },
     { "code": "fx", "id": "formula", "kind": "collectible", "points": 15, "art": "formula" },
     { "code": "bk", "id": "book", "kind": "collectible", "points": 25, "art": "book" },
+    { "code": "fp", "id": "formula_physics", "kind": "collectible", "points": 15, "art": "physics" },
+    { "code": "fk", "id": "formula_code", "kind": "collectible", "points": 15, "art": "code" },
     { "code": "bq", "id": "bonus_question", "kind": "bonus", "extraCredit": 3, "art": "bonus" },
 
     { "code": "hl", "id": "highlighter", "kind": "powerUp", "art": "highlighter",

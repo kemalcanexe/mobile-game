@@ -4,39 +4,43 @@ import 'package:flame/components.dart';
 import 'package:flutter/painting.dart'
     show TextPainter, TextSpan, TextStyle, TextDirection;
 
-import '../../app/palette.dart';
+import '../../app/paper_theme.dart';
 import '../tukenmez_game.dart';
 
-/// Sonsuz kayan defter sayfası: kareli/çizgili doku, spiral delikleri,
+/// Sonsuz kayan defter sayfası: dersin kağıt dokusu, spiral delikleri,
 /// şerit kılavuzları ve sayfa sonu (bitiş çizgisi).
 class PaperBackground extends Component with HasGameReference<TukenmezGame> {
   static const _gridStep = 24.0;
+  static const _mmStep = 8.0;
+  static const _mmMajor = 5; // her 5 küçük karede bir kalın çizgi
   static const _lineStep = 32.0;
   static const _holeStep = 44.0;
   static const _dash = 14.0;
+  static const _marginX = 28.0;
 
-  final Paint _paper = Paint()..color = Palette.paper;
-  final Paint _grid = Paint()
-    ..color = Palette.gridLine
+  late final PaperTheme theme = PaperTheme.of(game.setup.paper);
+  late final Paint _paper = Paint()..color = theme.background;
+  late final Paint _line = Paint()
+    ..color = theme.line
     ..strokeWidth = 1;
-  final Paint _line = Paint()
-    ..color = Palette.paperLine
+  late final Paint _lineStrong = Paint()
+    ..color = theme.lineStrong
     ..strokeWidth = 1.2;
-  final Paint _margin = Paint()
-    ..color = Palette.marginRed
+  late final Paint _margin = Paint()
+    ..color = theme.margin ?? theme.line
     ..strokeWidth = 1.4;
-  final Paint _hole = Paint()..color = Palette.hole;
-  final Paint _holeRim = Paint()
-    ..color = Palette.pencilLight
+  late final Paint _hole = Paint()..color = theme.hole;
+  late final Paint _holeRim = Paint()
+    ..color = theme.laneGuide
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1;
-  final Paint _lane = Paint()
-    ..color = Palette.pencilLight
+  late final Paint _lane = Paint()
+    ..color = theme.laneGuide
     ..strokeWidth = 1.6
     ..strokeCap = StrokeCap.round;
-  final Paint _endShade = Paint()..color = Palette.paperShade;
-  final Paint _endLine = Paint()
-    ..color = Palette.pencil
+  late final Paint _endShade = Paint()..color = theme.endShade;
+  late final Paint _endLine = Paint()
+    ..color = theme.endText
     ..strokeWidth = 2;
   TextPainter? _endLabel;
 
@@ -51,21 +55,21 @@ class PaperBackground extends Component with HasGameReference<TukenmezGame> {
 
     canvas.drawRect(Rect.fromLTRB(left, 0, right, h), _paper);
 
-    if (g.setup.paper == 'grid') {
-      final offset = d % _gridStep;
-      for (var y = offset - _gridStep; y < h; y += _gridStep) {
-        canvas.drawLine(Offset(left, y), Offset(right, y), _grid);
-      }
-      final startX = w / 2 - ((w / 2 - left) ~/ _gridStep + 1) * _gridStep;
-      for (var x = startX; x < right; x += _gridStep) {
-        canvas.drawLine(Offset(x, 0), Offset(x, h), _grid);
-      }
-    } else {
-      final offset = d % _lineStep;
-      for (var y = offset - _lineStep; y < h; y += _lineStep) {
-        canvas.drawLine(Offset(left, y), Offset(right, y), _line);
-      }
-      canvas.drawLine(const Offset(28, 0), Offset(28, h), _margin);
+    switch (theme.pattern) {
+      case PaperPattern.grid:
+        _grid(canvas, left, right, h, d, w, _gridStep, 0);
+      case PaperPattern.millimeter:
+        _grid(canvas, left, right, h, d, w, _mmStep, _mmMajor);
+      case PaperPattern.lined:
+        final offset = d % _lineStep;
+        for (var y = offset - _lineStep; y < h; y += _lineStep) {
+          canvas.drawLine(Offset(left, y), Offset(right, y), _line);
+        }
+        canvas.drawLine(
+          const Offset(_marginX, 0),
+          Offset(_marginX, h),
+          _margin,
+        );
     }
 
     // spiral delikleri
@@ -100,15 +104,51 @@ class PaperBackground extends Component with HasGameReference<TukenmezGame> {
       final label = _endLabel ??= TextPainter(
         text: TextSpan(
           text: g.setup.strings.pageEnd,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Caveat',
             fontSize: 22,
-            color: Palette.pencil,
+            color: theme.endText,
           ),
         ),
         textDirection: TextDirection.ltr,
       )..layout();
       label.paint(canvas, Offset(w / 2 - label.width / 2, endY - 34));
+    }
+  }
+
+  /// Kareli/milimetrik doku. [major] > 0 ise her [major] karede kalın çizgi.
+  void _grid(
+    Canvas canvas,
+    double left,
+    double right,
+    double h,
+    double d,
+    double w,
+    double step,
+    int major,
+  ) {
+    final majorStep = major > 0 ? step * major : 0.0;
+    final offset = d % step;
+    // kalın çizgilerin sayfayla birlikte kayması için mesafeye göre indeks
+    final firstIndex = (d / step).floor();
+    var i = 0;
+    for (var y = offset - step; y < h; y += step, i++) {
+      final isMajor = major > 0 && (firstIndex - i + 1) % major == 0;
+      canvas.drawLine(
+        Offset(left, y),
+        Offset(right, y),
+        isMajor ? _lineStrong : _line,
+      );
+    }
+    final startX = w / 2 - ((w / 2 - left) ~/ step + 1) * step;
+    for (var x = startX; x < right; x += step) {
+      final isMajor =
+          majorStep > 0 && ((x - w / 2) / step).round() % major == 0;
+      canvas.drawLine(
+        Offset(x, 0),
+        Offset(x, h),
+        isMajor ? _lineStrong : _line,
+      );
     }
   }
 

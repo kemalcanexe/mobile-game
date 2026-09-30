@@ -63,3 +63,15 @@ Yüklenen Markdown'da `%XX` kalıpları URL-decode edilerek bozulmuştu (`%10` �
 - **Hitbox'lar:** Flame `HasCollisionDetection` kullanılır. Kalem aktif, nesneler pasif hitbox'tır. Kurallar `CollisionRules` sınıfında saf Dart olarak durur.
 - **Performans:** nesneler havuzdan (object pool) gelir. Mürekkep izi sabit boyutlu bir halka tamponda (`Float64List`) tutulur. Çizimler `Picture` olarak önbelleğe alınır.
 - **HUD:** `ValueNotifier` kullanılır ve yalnızca görünür bir değişiklikte bildirim yapar.
+
+## Faz 2 kararları
+
+1. **Müfredat verisi:** `assets/levels/curriculum.json` her dönemde sunulan dersleri tanımlar. Şu an yalnızca 1. dönem tanımlı (CALC 101, PHYS 101, CS 101). Tanımsız dönemlerde yalnızca retake dersleri sunulur. Yeni ders gelene kadar menü "Yeni dersler yakında" gösterir.
+2. **Ders seçimi:** Bir dönemde 3-4 ders alınır, Probation'da en fazla 3 (`grading.json → enrollment`). Sunulan ders sayısı alt sınırdan azsa alt sınır o sayıya iner.
+3. **F alınan ders bir sonraki dönem zorunlu seçilir** (yer olduğu sürece) ve ders seçimi ekranında kilitli gelir. Faz 1'deki "Dersi tekrar al" butonu kaldırıldı; retake artık ders seçimiyle yapılır.
+4. **Retake notu, alındığı dönemin kaydına yazılır.** Eski kayıt "R" olur; ilk dönemin GPA'i tarihsel olarak değişmez.
+5. **Dönem, kayıtlı bütün dersler bitince tamamlanır.** Karne ekranından "Sonraki döneme geç" ile ilerlenir. Karnede Dean's List (dönem GPA ≥ 3.50) altın yıldız, Probation (CGPA < 2.00) kırmızı damga olarak gösterilir.
+6. **Kayıt formatı v2:** Kayıt dosyasına dönem bilgisi eklendi. v1 kayıtları otomatik taşınır: ilk dönem sayılır, alınmış dersler kayıtlı kabul edilir.
+7. **Kağıt temaları:** CALC 101 kareli, PHYS 101 turuncu milimetrik, CS 101 koyu "terminal" (fosfor yeşili mürekkep izi, açık renkli HUD). Temalar `lib/app/paper_theme.dart` içinde; oyun ve menü aynı temayı kullanır.
+8. **Yeni derslerin toplanabilirleri:** PHYS 101'de `F=ma` kartı (`fp`), CS 101'de `{ }` kartı (`fk`); ikisi de CALC'taki formül kartı gibi 15 puan. Ders tema mekanikleri (yerçekimi terslenmesi, bug'lar vb.) Faz 3'te.
+9. **Kredi:** CALC 101 ve PHYS 101 4 kredi, CS 101 3 kredi.

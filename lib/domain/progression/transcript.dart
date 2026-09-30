@@ -54,5 +54,22 @@ class Transcript {
 
   bool get hasUnresolvedFailure => active.any((r) => r.gradePoints == 0);
 
+  /// Henüz geçilmemiş (F ile kalınmış) derslerin kimlikleri.
+  List<String> get failedCourseIds => [
+    for (final r in active)
+      if (r.gradePoints == 0) r.courseId,
+  ];
+
+  /// Kayıt bulunan dönemler, artan sırada.
+  List<int> get semesters =>
+      (records.map((r) => r.semester).toSet().toList()..sort());
+
+  List<CourseRecord> recordsIn(int semester) =>
+      records.where((r) => r.semester == semester).toList();
+
+  /// O dönem bu dersin bir kaydı var mı (geçti ya da kaldı)?
+  bool hasRecordIn(String courseId, int semester) =>
+      records.any((r) => r.courseId == courseId && r.semester == semester);
+
   List<Map<String, dynamic>> toJson() => [for (final r in records) r.toJson()];
 }

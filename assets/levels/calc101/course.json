@@ -4,9 +4,11 @@
   "title": "Calculus I",
   "nickname": "Limitsiz Acı",
   "credits": 4,
-  "semester": 1,
   "paper": "grid",
-  "patternFiles": ["common/patterns.json", "calc101/patterns.json"],
+  "patternFiles": [
+    "common/patterns.json",
+    "calc101/patterns.json"
+  ],
   "levels": {
     "quiz1": "calc101/quiz1.json",
     "midterm": "calc101/midterm.json",

@@ -137,6 +137,32 @@ void _formula(Canvas c, double s, WobblyPen p, ArtText t) {
   _label(c, 'dx', Offset(s * 0.62, s * 0.56), s * 0.26, Palette.ink);
 }
 
+void _textCard(
+  Canvas c,
+  double s,
+  WobblyPen p,
+  String text,
+  Color fill,
+  double size,
+) {
+  final r = Rect.fromCenter(
+    center: Offset(s / 2, s / 2),
+    width: s * 0.74,
+    height: s * 0.6,
+  );
+  final path = Path()
+    ..addRRect(RRect.fromRectAndRadius(r, Radius.circular(s * 0.16)));
+  p.fill(c, path, fill);
+  c.drawPath(path, strokePaint(Palette.ink, _stroke));
+  _label(c, text, Offset(s / 2, s / 2), s * size, Palette.ink, rotation: -0.08);
+}
+
+void _physics(Canvas c, double s, WobblyPen p, ArtText t) =>
+    _textCard(c, s, p, 'F=ma', const Color(0xFFDDE7FF), 0.3);
+
+void _code(Canvas c, double s, WobblyPen p, ArtText t) =>
+    _textCard(c, s, p, '{ }', const Color(0xFFD8F5E3), 0.4);
+
 void _book(Canvas c, double s, WobblyPen p, ArtText t) {
   final r = Rect.fromLTWH(s * 0.18, s * 0.1, s * 0.64, s * 0.8);
   final path = p.rectPath(r);
@@ -516,6 +542,8 @@ const Map<String, ArtPainter> itemArt = {
   'flashcard': _flashcard,
   'note': _note,
   'formula': _formula,
+  'physics': _physics,
+  'code': _code,
   'book': _book,
   'bonus': _bonus,
   'highlighter': _highlighter,

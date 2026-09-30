@@ -36,6 +36,11 @@
       { "id": "cum_laude", "minCgpa": 3.50 }
     ]
   },
+  "enrollment": {
+    "minCourses": 3,
+    "maxCourses": 4,
+    "probationMaxCourses": 3
+  },
   "retake": {
     "retakeableLetters": ["F"]
   }
