@@ -1,0 +1,85 @@
+{
+  "_comment": "Soru Kapıları. answers[0] doğru cevaptır; oyunda şeritlere seed'li karıştırılarak dağıtılır.",
+  "questions": [
+    {
+      "q": "F = ?",
+      "answers": [
+        "m·a",
+        "m/a",
+        "m + a"
+      ]
+    },
+    {
+      "q": "Hızın SI birimi?",
+      "answers": [
+        "m/s",
+        "m/s²",
+        "N"
+      ]
+    },
+    {
+      "q": "Kinetik enerji = ?",
+      "answers": [
+        "½mv²",
+        "mv",
+        "mgh"
+      ]
+    },
+    {
+      "q": "g ≈ ? (m/s²)",
+      "answers": [
+        "9.8",
+        "3.0",
+        "98"
+      ]
+    },
+    {
+      "q": "İş = ?",
+      "answers": [
+        "F·d",
+        "F/d",
+        "m·v"
+      ]
+    },
+    {
+      "q": "Momentum = ?",
+      "answers": [
+        "m·v",
+        "m·a",
+        "F·t²"
+      ]
+    },
+    {
+      "q": "Kuvvetin birimi?",
+      "answers": [
+        "Newton",
+        "Joule",
+        "Watt"
+      ]
+    },
+    {
+      "q": "Güç = ?",
+      "answers": [
+        "İş / t",
+        "F·m",
+        "v / t"
+      ]
+    },
+    {
+      "q": "Serbest düşüşte ivme?",
+      "answers": [
+        "Sabit",
+        "Artar",
+        "Sıfır"
+      ]
+    },
+    {
+      "q": "Enerjinin birimi?",
+      "answers": [
+        "Joule",
+        "Pascal",
+        "Hertz"
+      ]
+    }
+  ]
+}

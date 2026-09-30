@@ -15,5 +15,6 @@
     "quiz2": "calc101/quiz2.json",
     "project": "calc101/project.json",
     "final": "calc101/final.json"
-  }
+  },
+  "questionFile": "calc101/questions.json"
 }

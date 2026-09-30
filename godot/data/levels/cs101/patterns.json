@@ -20,9 +20,9 @@
     },
     "bug_swarm": {
       "rows": [
-        "gc .. ..",
+        "bg .. ..",
         ".. fk ..",
-        ".. .. gc",
+        ".. .. bg",
         ".. fk .."
       ]
     },
@@ -44,6 +44,24 @@
         "oa .. oa",
         ".. fk ..",
         ".. bk .."
+      ]
+    },
+    "stack_overflow": {
+      "mirror": false,
+      "rows": [
+        ".. so ..",
+        ".. .. ..",
+        "ow .. ow",
+        ".. fk .."
+      ]
+    },
+    "bug_hunt": {
+      "mirror": false,
+      "rows": [
+        ".. bg ..",
+        "fk .. ..",
+        ".. .. ..",
+        "bg .. fk"
       ]
     }
   }

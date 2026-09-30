@@ -53,3 +53,17 @@ func test_murekkep() -> void:
 	near(ink.fraction(), 0.2, 1e-12)
 	ink.apply(-50)
 	check(ink.is_empty())
+
+
+func test_olay_puanlari_maksimuma_eklenmez() -> void:
+	var s := LevelScore.new()
+	s.register_spawn(100)
+	s.collect(60)
+	s.add_event_points(20)
+	s.add_event_penalty(-10)
+	eq(s.raw_points(), 70.0, "60 + 20 − 10")
+	var r := s.finish(rules(), 40.0, false)
+	eq(r["max"], 100.0, "maksimum değişmez")
+	eq(r["collected"], 60.0, "dökümde toplanan ayrı")
+	eq(r["events"], 10.0, "olaylar net +10")
+	eq(r["base"], 70.0)

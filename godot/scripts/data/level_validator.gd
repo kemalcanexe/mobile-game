@@ -1,6 +1,9 @@
 class_name LevelValidator
 ## Ders verisinin mantık kontrolleri. Boş liste = geçerli.
 
+const EVENT_TYPES := ["rollCall", "popQuiz", "groupProject", "officeHours", "questionGate"]
+const ZONE_TYPES := ["gravity", "ice"]
+
 
 static func validate(course: Dictionary, items: Dictionary, lane_count: int) -> Array[String]:
 	var errors: Array[String] = []
@@ -23,12 +26,16 @@ static func validate(course: Dictionary, items: Dictionary, lane_count: int) -> 
 					continue
 				if items[c]["kind"] == "wall":
 					walls += 1
-				if items[c]["kind"] == "collectible" and float(items[c].get("points", 0)) > 0:
+				if items[c]["kind"] == "collectible" and float(items[c].get("points", 0)) > 0 \
+						and bool(items[c].get("countsTowardMax", true)):
 					collectibles += 1
 			if walls >= lane_count:
 				errors.append('desen "%s" satır %d: bütün şeritler duvarla kapalı' % [id, i])
 			if collectibles > 1:
 				errors.append('desen "%s" satır %d: aynı satırda birden fazla toplanabilir' % [id, i])
+	for q in course.get("questions", []):
+		if q["answers"].size() != lane_count:
+			errors.append('%s: "%s" sorusunda %d şık olmalı' % [course["id"], q["q"], lane_count])
 	for key in Assessment.ORDER:
 		if not course["levels"].has(key):
 			errors.append('%s: "%s" level\'ı eksik' % [course["id"], key])
@@ -51,4 +58,12 @@ static func validate(course: Dictionary, items: Dictionary, lane_count: int) -> 
 		for e in lv["pool"]:
 			if float(e["weight"]) <= 0:
 				errors.append('%s: "%s" ağırlığı pozitif olmalı' % [where, e["pattern"]])
+		for e in lv.get("events", []):
+			if not e["type"] in EVENT_TYPES:
+				errors.append('%s: bilinmeyen olay "%s"' % [where, e["type"]])
+			if e["type"] == "questionGate" and course.get("questions", []).is_empty():
+				errors.append("%s: soru kapısı var ama soru bankası boş" % where)
+		for z in lv.get("zones", []):
+			if not z["type"] in ZONE_TYPES:
+				errors.append('%s: bilinmeyen bölge "%s"' % [where, z["type"]])
 	return errors

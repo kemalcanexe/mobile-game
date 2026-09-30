@@ -34,6 +34,40 @@
       "pattern": "air_row"
     }
   ],
+  "events": [
+    {
+      "at": 0.2,
+      "type": "rollCall"
+    },
+    {
+      "at": 0.45,
+      "type": "popQuiz"
+    },
+    {
+      "at": 0.6,
+      "type": "officeHours"
+    },
+    {
+      "at": 0.86,
+      "type": "questionGate"
+    },
+    {
+      "at": 0.9,
+      "type": "questionGate"
+    },
+    {
+      "at": 0.94,
+      "type": "questionGate"
+    }
+  ],
+  "boss": {
+    "phases": [
+      0.33,
+      0.66
+    ],
+    "speedStep": 0.08
+  },
+  "allNighter": true,
   "pool": [
     {
       "pattern": "cards_zigzag",
@@ -126,6 +160,51 @@
     {
       "pattern": "bonus_question",
       "weight": 1
+    },
+    {
+      "pattern": "stack_overflow",
+      "weight": 2
+    },
+    {
+      "pattern": "syllabus_preview",
+      "weight": 1
+    },
+    {
+      "pattern": "friday_bottle",
+      "weight": 1
+    },
+    {
+      "pattern": "tv_bait",
+      "weight": 1
+    },
+    {
+      "pattern": "party_row",
+      "weight": 1
+    },
+    {
+      "pattern": "pillow_trap",
+      "weight": 1
+    },
+    {
+      "pattern": "boss_x_side",
+      "weight": 3
+    },
+    {
+      "pattern": "boss_x_center",
+      "weight": 2
+    },
+    {
+      "pattern": "boss_line",
+      "weight": 2
+    },
+    {
+      "pattern": "boss_line_edges",
+      "weight": 1,
+      "from": 0.33
+    },
+    {
+      "pattern": "bug_hunt",
+      "weight": 2
     }
   ]
 }

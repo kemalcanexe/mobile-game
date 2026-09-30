@@ -42,6 +42,12 @@
       "pattern": "highlighter_run"
     }
   ],
+  "events": [
+    {
+      "at": 0.42,
+      "type": "rollCall"
+    }
+  ],
   "pool": [
     {
       "pattern": "cards_line",
@@ -98,6 +104,20 @@
       "pattern": "coffee_break",
       "weight": 1,
       "from": 0.6
+    },
+    {
+      "pattern": "study_group_spread",
+      "weight": 1,
+      "from": 0.5
+    },
+    {
+      "pattern": "pillow_trap",
+      "weight": 1,
+      "from": 0.5
+    },
+    {
+      "pattern": "bug_swarm",
+      "weight": 1
     }
   ]
 }

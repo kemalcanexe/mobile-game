@@ -12,13 +12,17 @@ var collected_points := 0.0
 ## Ceza (pozitif tutulur, çarpan uygulanmaz).
 var penalty_points := 0.0
 var extra_credit := 0.0
+## Özel olaylardan (yoklama, soru kapısı, ofis saati) gelen puan ve cezalar.
+## Maksimuma eklenmez: olaylar oyuncuya fırsat/risk olarak yansır.
+var event_points := 0.0
+var event_penalty := 0.0
 var collected_count := 0
 var hit_count := 0
 var bonus_count := 0
 
 
 func raw_points() -> float:
-	return collected_points - penalty_points
+	return collected_points + event_points - penalty_points - event_penalty
 
 
 func register_spawn(base_points: float) -> void:
@@ -35,6 +39,14 @@ func penalize(points: float) -> void:
 	hit_count += 1
 
 
+func add_event_points(points: float) -> void:
+	event_points += points
+
+
+func add_event_penalty(points: float) -> void:
+	event_penalty += absf(points)
+
+
 func add_extra_credit(credit: float) -> void:
 	extra_credit += credit
 	bonus_count += 1
@@ -42,7 +54,13 @@ func add_extra_credit(credit: float) -> void:
 
 ## Sonuç sözlüğü: şeffaf döküm için bütün ara değerler.
 func finish(rules: GradingRules, ink_remaining: float, ink_depleted: bool) -> Dictionary:
-	return compute(rules, max_points, collected_points, penalty_points, extra_credit, ink_remaining, ink_depleted)
+	var r := compute(rules, max_points, collected_points + event_points, penalty_points + event_penalty,
+		extra_credit, ink_remaining, ink_depleted)
+	# döküm için olaylar ayrı gösterilir; skor hesabı yukarıda birlikte yapıldı
+	r["collected"] = collected_points
+	r["penalty"] = penalty_points
+	r["events"] = event_points - event_penalty
+	return r
 
 
 static func compute(rules: GradingRules, maxp: float, collected: float, penalty: float, bonus: float,

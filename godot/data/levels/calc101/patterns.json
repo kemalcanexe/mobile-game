@@ -4,7 +4,8 @@
     "formula_diagonal":  { "rows": ["fx .. ..", ".. fx ..", ".. .. fx"] },
     "integral_gate":     { "mirror": false, "rows": ["ow fx ow", ".. .. .."] },
     "limit_squeeze":     { "mirror": false, "rows": ["os fx os", ".. fx .."] },
-    "derivative_ramp":   { "mirror": false, "rows": [".. hl ..", ".. fx ..", ".. fx ..", "og .. og", ".. fx ..", ".. fx .."] },
+    "derivative_ramp":   { "mirror": false, "rows": [".. dr ..", ".. fx ..", ".. fx ..", "og .. og", ".. fx ..", ".. fx .."] },
+    "ramp_over_spill":   { "rows": ["dr .. ..", ".. .. ..", "og .. ..", "fx .. ..", ".. .. .."] },
     "asymptote_column":  { "rows": ["ow .. ..", "ow nt ..", "ow nt ..", "ow .. fx"] }
   }
 }

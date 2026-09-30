@@ -8,8 +8,12 @@
 godot/
   project.godot, export_presets.cfg
   data/                      # oyun verisi (JSON): config/, levels/ (Flutter ile aynı format)
-    config/world3d.json      # 3D ölçek, oyuncu fiziği, kamera, ders temaları
+    config/world3d.json      # 3D ölçek, oyuncu fiziği, kamera, ders temaları, efekt ayarları
+    config/events.json       # özel olay ve boss kuralları
+    config/audio.json        # ses seviyeleri, müzik katmanları, titreşim
+    levels/<ders>/questions.json  # soru kapısı bankası
   assets/models/             # Kenney CC0 GLB modelleri
+  assets/audio/              # tools/gen_audio.py ile üretilen efekt ve müzikler (WAV)
   assets/fonts/              # Baloo 2 + Noto Sans Symbols 2
   scripts/
     domain/                  # saf kurallar: LetterGrade, GradeScale, GradingRules, Gpa, CourseRecord,
@@ -17,16 +21,20 @@ godot/
                              # LevelScore, InkState
     data/                    # Content (JSON yükleme), LevelValidator, SpeedCurve, LevelGenerator, Progress (kayıt)
     autoload/game.gd         # Game: içerik + ilerleme + sahne geçişi
+    autoload/audio.gd        # Sound: efekt havuzu, katmanlı müzik, kalem cızırtısı, titreşim, ayarlar
     game/                    # RunScene (koşu), Tuki + TukiModel, Campus (chunk'lı dünya), LaneObject,
-                             # ItemFactory, InkTrail, SwipeDetector, EffectState, Fx, Models
+                             # ItemFactory, InkTrail, SwipeDetector, EffectState, Fx, Models,
+                             # EventDirector (olaylar, bölgeler, all-nighter), ProfKirmizi (final boss)
     ui/                      # UiKit, T (metinler), RunHud, MenuScreen + 6 ekran
   scenes/                    # main, enrollment, course, run, course_result, semester_report, transcript
-  tests/                     # headless test koşucusu + 36 test (domain, veri, gerçek fizikli koşu, derleme)
-  tools/                     # xvfb ekran görüntüsü aracı, model ölçüm aracı
+  tests/                     # headless test koşucusu + 57 test (domain, veri, gerçek fizikli koşu, olaylar, derleme)
+  tools/                     # xvfb ekran görüntüsü aracı, ses üretici (gen_audio.py), denge botu (soak.gd)
 ```
 
 - **Koordinatlar:** Tüki `-z` yönünde koşar, şeritler `x = (şerit-1) × 2,6 m`. Level verisi 2D piksel; `unitsPerPixel` ile metreye çevrilir.
-- **Fizik:** Tüki `CharacterBody3D` (kapsül), yer `WorldBoundaryShape3D`. Nesneler `Area3D`; Tüki'nin hitbox'ı ile örtüşünce kural uygulanır. Kayarken kapsül 0,7 m'ye iner.
+- **Fizik:** Tüki `CharacterBody3D` (kapsül), yer `WorldBoundaryShape3D`. Jolt'ta bu düzlem ±1000 m ile sınırlı olduğu için zemin gövdesi her fizik adımında Tüki'nin z'sine taşınır. Nesneler `Area3D`; Tüki'nin hitbox'ı ile örtüşünce kural uygulanır. Kayarken kapsül 0,7 m'ye iner.
+- **Plan ve olaylar:** `LevelGenerator` `{total, events, specials}` üretir. `events` şeritteki nesneler; `specials` koşu sırasında `EventDirector`'ın işlediği olaylar (yoklama, pop quiz, grup ödevi, ofis saati, soru kapısı, yerçekimi/buz bölgesi, all-nighter, boss fazları). Boss saldırıları plandaki `telegraph` nesneleridir; `ProfKirmizi` onları gizler, telgraflar ve düşürür.
+- **Skor:** olay puanları `LevelScore.event_points / event_penalty` olarak ayrı tutulur ve maksimuma eklenmez.
 - **Dünya:** 30 m'lik parçalar önde üretilir, arkada silinir; içerik parça indeksine göre seed'li.
 - **Kayıt:** `user://save.json` (sürüm 3; eski kayıtlar taşınır).
 

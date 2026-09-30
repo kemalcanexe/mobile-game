@@ -1,0 +1,59 @@
+{
+ "_comment": "Özel olaylar (GAME_PROPOSAL §10) ve final boss (§11). Süreler saniye, mesafeler satır cinsinden.",
+ "rollCall": {
+  "holdSeconds": 2.0,
+  "windowSeconds": 3.4,
+  "leadRows": 3,
+  "points": 10,
+  "penalty": 5
+ },
+ "popQuiz": {
+  "seconds": 4.0,
+  "item": "nq",
+  "phone": "ph",
+  "phoneEvery": 5,
+  "leadRows": 2
+ },
+ "groupProject": {
+  "seconds": 8.0,
+  "share": 0.5,
+  "gateAfterRows": 8,
+  "gate": "gd"
+ },
+ "officeHours": {
+  "seconds": 3.0,
+  "gate": "oh",
+  "item": "nq",
+  "clearRows": 14
+ },
+ "questionGate": {
+  "correct": 20,
+  "wrong": 10,
+  "afterRows": 2,
+  "gate": "qg",
+  "leadSeconds": 2.4
+ },
+ "allNighter": {
+  "from": 0.12,
+  "fade": 2.5,
+  "sunEnergy": 0.05,
+  "ambient": 0.06,
+  "sky": "#070A1F",
+  "fog": "#0B1030",
+  "lanternEnergy": 2.6,
+  "lanternRange": 11.0,
+  "coffeeLight": 3.0
+ },
+ "boss": {
+  "distanceAhead": 19.0,
+  "height": 5.2,
+  "telegraphSeconds": 1.9,
+  "landSeconds": 1.0,
+  "shoutSeconds": 1.4,
+  "reactions": {
+   "nod": 85,
+   "eyebrow": 60
+  },
+  "scale": 1.45
+ }
+}

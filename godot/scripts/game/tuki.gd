@@ -31,6 +31,18 @@ var hit_shape: CollisionShape3D
 var stand_height := 1.7
 var slide_height := 0.7
 var radius := 0.38
+var shield_radius := 1.25
+
+## Tema bölgesi: "" | "gravity" (ay yerçekimi, kontroller ters) | "ice" (kayarak şerit değişimi).
+var zone := ""
+var gravity_scale := 1.0
+var ice_lane_factor := 2.6
+var zone_gravity_scale := 0.55
+var lantern: OmniLight3D
+
+var _shield: MeshInstance3D
+var _magnet_ring: MeshInstance3D
+var _status: Label3D
 
 
 func configure(cfg: Dictionary) -> void:
@@ -76,6 +88,80 @@ func _ready() -> void:
 	model = TukiModel.new()
 	add_child(model)
 	model.rotation.y = 0.0
+	_build_extras()
+
+
+## Kalkan balonu, mıknatıs halkası ve baş üstü durum yazısı.
+func _build_extras() -> void:
+	_shield = MeshInstance3D.new()
+	var sm := SphereMesh.new()
+	sm.radius = shield_radius
+	sm.height = shield_radius * 2.0
+	_shield.mesh = sm
+	var m := StandardMaterial3D.new()
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.albedo_color = Color(0.3, 0.85, 1.0, 0.22)
+	m.rim_enabled = true
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_shield.material_override = m
+	_shield.position.y = stand_height * 0.6
+	_shield.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_shield.visible = false
+	add_child(_shield)
+	_magnet_ring = MeshInstance3D.new()
+	var tm := TorusMesh.new()
+	tm.inner_radius = 0.9
+	tm.outer_radius = 1.05
+	_magnet_ring.mesh = tm
+	_magnet_ring.material_override = Models.mat(Color("#E23B3B"), 0.4, 1.2)
+	_magnet_ring.position.y = 0.08
+	_magnet_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_magnet_ring.visible = false
+	add_child(_magnet_ring)
+	_status = Models.label("", 64, Color.WHITE, Color(0.1, 0.1, 0.2, 0.8))
+	_status.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_status.position.y = stand_height + 0.9
+	_status.no_depth_test = true
+	add_child(_status)
+	lantern = OmniLight3D.new()
+	lantern.light_color = Color("#FFE2A8")
+	lantern.light_energy = 0.0
+	lantern.omni_range = 10.0
+	lantern.position = Vector3(0, 2.4, 0.6)
+	add_child(lantern)
+
+
+func set_zone(z: String) -> void:
+	zone = z
+	gravity_scale = zone_gravity_scale if z == "gravity" else 1.0
+
+
+## Rampadan fırlama: normal zıplamanın [param factor] katı hızla.
+func launch(factor: float) -> void:
+	_end_slide()
+	velocity.y = jump_velocity * factor
+	model.squash(0.35)
+
+
+func set_shield(on: bool) -> void:
+	_shield.visible = on
+	if on:
+		_shield.scale = Vector3.ONE * 0.2
+		create_tween().tween_property(_shield, "scale", Vector3.ONE, 0.25).set_trans(Tween.TRANS_BACK)
+
+
+func has_shield_visual() -> bool:
+	return _shield.visible
+
+
+func set_magnet(on: bool) -> void:
+	_magnet_ring.visible = on
+
+
+func set_status(text: String, color := Color.WHITE) -> void:
+	_status.text = text
+	_status.modulate = color
 
 
 func lane_x(i: int) -> float:
@@ -145,8 +231,13 @@ func _set_height(h: float) -> void:
 func _physics_process(delta: float) -> void:
 	# yatay: hedef şeride yumuşak geçiş (ease-out)
 	if _lane_t < 1.0:
-		_lane_t = minf(1.0, _lane_t + delta / lane_time)
+		var lt := lane_time * (ice_lane_factor if zone == "ice" else 1.0)
+		_lane_t = minf(1.0, _lane_t + delta / lt)
 		var t := 1.0 - pow(1.0 - _lane_t, 3.0)
+		if zone == "ice":
+			# buzda momentum: hedefi biraz geçip geri kayar
+			var c := 1.9
+			t = 1.0 + (c + 1.0) * pow(_lane_t - 1.0, 3.0) + c * pow(_lane_t - 1.0, 2.0)
 		position.x = lerpf(_from_x, lane_x(target_lane), t)
 		if _lane_t >= 1.0:
 			lane = target_lane
@@ -154,7 +245,7 @@ func _physics_process(delta: float) -> void:
 		position.x = lane_x(target_lane)
 	# dikey: yerçekimi
 	if not is_on_floor():
-		velocity.y -= gravity * delta
+		velocity.y -= gravity * gravity_scale * delta
 	velocity.x = 0.0
 	velocity.z = -forward_speed
 	move_and_slide()
@@ -168,6 +259,11 @@ func _physics_process(delta: float) -> void:
 			_end_slide()
 	if _stumble_left > 0.0:
 		_stumble_left -= delta
+	if _magnet_ring.visible:
+		_magnet_ring.rotate_y(delta * 6.0)
+		_magnet_ring.scale = Vector3.ONE * (1.0 + 0.08 * sin(Time.get_ticks_msec() * 0.01))
+	if _shield.visible:
+		_shield.rotate_y(delta * 1.5)
 	# animasyon pozu
 	model.run_speed = clampf(forward_speed / 15.0, 0.6, 1.8)
 	var dx := lane_x(target_lane) - position.x

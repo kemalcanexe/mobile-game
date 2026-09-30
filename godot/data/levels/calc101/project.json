@@ -11,6 +11,7 @@
     { "at": 0.55, "pattern": "asymptote_column" },
     { "at": 0.75, "pattern": "derivative_ramp" }
   ],
+  "events": [{"at": 0.3, "type": "groupProject"}, {"at": 0.55, "type": "rollCall"}, {"at": 0.75, "type": "groupProject"}],
   "pool": [
     { "pattern": "formula_diagonal", "weight": 4 },
     { "pattern": "integral_gate", "weight": 3 },
@@ -26,6 +27,12 @@
     { "pattern": "console_trap", "weight": 1 },
     { "pattern": "cartridge_gate", "weight": 1 },
     { "pattern": "coffee_break", "weight": 1 },
-    { "pattern": "bonus_question", "weight": 1 }
+    { "pattern": "bonus_question", "weight": 1 },
+    { "pattern": "shield_run", "weight": 1 },
+    { "pattern": "syllabus_preview", "weight": 1 },
+    { "pattern": "party_row", "weight": 1 },
+    { "pattern": "skip_friend", "weight": 1 },
+    { "pattern": "study_group_spread", "weight": 1 },
+    { "pattern": "ramp_over_spill", "weight": 3 }
   ]
 }

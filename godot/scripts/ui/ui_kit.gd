@@ -21,6 +21,14 @@ static var _bold: FontVariation
 static var _heavy: FontVariation
 
 
+## Ses autoload'u (Sound) üzerinden efekt çalar; statik bağlamdan erişim için.
+static func sfx(sfx_name: String) -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	var sound := tree.root.get_node_or_null("Sound") if tree else null
+	if sound:
+		sound.play(sfx_name)
+
+
 static func font() -> FontFile:
 	if _font == null:
 		_font = load("res://assets/fonts/Baloo2.ttf")
@@ -120,6 +128,7 @@ static func button(text: String, color := YELLOW, dark := YELLOW_DARK, text_colo
 	b.add_theme_stylebox_override("focus", hover)
 	b.add_theme_stylebox_override("disabled", disabled)
 	b.custom_minimum_size = Vector2(0, size * 2.3)
+	b.pressed.connect(func() -> void: sfx("click"))
 	return b
 
 
@@ -138,6 +147,7 @@ static func ghost(text: String, size := 28) -> Button:
 	b.add_theme_font_override("font", bold())
 	b.add_theme_font_size_override("font_size", size)
 	b.add_theme_color_override("font_color", MUTED)
+	b.pressed.connect(func() -> void: sfx("click"))
 	return b
 
 
@@ -227,6 +237,7 @@ static func tap_card(card: Control, on_tap: Callable) -> void:
 				start[0] = e.position
 			elif e.position.distance_to(start[0]) < 24.0:
 				card.pivot_offset = card.size / 2.0
+				sfx("click")
 				var tw := card.create_tween()
 				tw.tween_property(card, "scale", Vector2(0.97, 0.97), 0.05)
 				tw.tween_property(card, "scale", Vector2.ONE, 0.08)

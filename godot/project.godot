@@ -11,6 +11,7 @@ boot_splash/bg_color=Color(0.99, 0.97, 0.92, 1)
 
 [autoload]
 Game="*res://scripts/autoload/game.gd"
+Sound="*res://scripts/autoload/audio.gd"
 
 [display]
 window/size/viewport_width=720

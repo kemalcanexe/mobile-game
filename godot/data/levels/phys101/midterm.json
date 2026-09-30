@@ -30,6 +30,8 @@
       "pattern": "bonus_question"
     }
   ],
+  "events": [{"at": 0.25, "type": "rollCall"}, {"at": 0.45, "type": "questionGate"}, {"at": 0.6, "type": "officeHours"}, {"at": 0.75, "type": "questionGate"}],
+  "zones": [{"at": 0.35, "type": "ice", "rows": 12}, {"at": 0.68, "type": "gravity", "rows": 12}],
   "pool": [
     {
       "pattern": "cards_line",
@@ -104,6 +106,26 @@
       "pattern": "bonus_question",
       "weight": 1,
       "from": 0.5
+    },
+    {
+      "pattern": "shield_run",
+      "weight": 1
+    },
+    {
+      "pattern": "syllabus_preview",
+      "weight": 1
+    },
+    {
+      "pattern": "tv_bait",
+      "weight": 1
+    },
+    {
+      "pattern": "party_row",
+      "weight": 1
+    },
+    {
+      "pattern": "skip_friend",
+      "weight": 1
     }
   ]
 }

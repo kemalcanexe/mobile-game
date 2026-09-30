@@ -16,6 +16,10 @@ var start_panel: Control
 var pause_panel: Control
 var summary_panel: Control
 var banner: Label
+var vignette: TextureRect
+var confetti: CPUParticles2D
+var question_panel: PanelContainer
+var question_label: Label
 var _chip_nodes := {}
 
 
@@ -30,10 +34,12 @@ func _ready() -> void:
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
+	_build_overlays()
 	_build_top()
 	_build_ink()
 	_build_chips()
 	_build_notification()
+	_build_question()
 	banner = UiKit.outlined("", 64, UiKit.YELLOW, UiKit.RED_DARK)
 	banner.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
 	banner.position.y = 230
@@ -44,6 +50,8 @@ func _ready() -> void:
 	run.hud_update.connect(_refresh)
 	run.popup.connect(_popup)
 	run.effect_event.connect(_on_effect)
+	run.banner.connect(_flash_banner)
+	run.question.connect(_show_question)
 	run.finished.connect(_show_summary)
 	_set_playing_visible(false)
 
@@ -125,7 +133,12 @@ func _build_chips() -> void:
 	chips.position = Vector2(root.get_viewport_rect().size.x - 170, _top_margin() + 150)
 	chips.custom_minimum_size = Vector2(150, 0)
 	root.add_child(chips)
-	for k in [["scoreMultiplier", "effect_double", UiKit.YELLOW], ["slowMotion", "effect_focus", Color("#E8C9A0")], ["reverseControls", "effect_reverse", Color("#D9C2FF")]]:
+	for k in [["scoreMultiplier", "effect_double", UiKit.YELLOW], ["slowMotion", "effect_focus", Color("#E8C9A0")],
+			["reverseControls", "effect_reverse", Color("#D9C2FF")], ["shield", "effect_shield", Color("#BDEFFF")],
+			["magnet", "effect_magnet", Color("#FFC9C9")], ["preview", "effect_preview", Color("#C4F2DC")],
+			["wobble", "effect_wobble", Color("#D7F7C4")], ["sleep", "effect_sleep", Color("#E3DAFF")],
+			["group", "effect_group", Color("#E6D4FF")], ["office", "effect_office", Color("#FFE7A8")],
+			["gravity", "effect_gravity", Color("#D9C2FF")], ["ice", "effect_ice", Color("#CFF3FF")]]:
 		var p := UiKit.panel(k[2], 22)
 		var st := p.get_theme_stylebox("panel") as StyleBoxFlat
 		st.content_margin_top = 6
@@ -134,6 +147,79 @@ func _build_chips() -> void:
 		p.visible = false
 		chips.add_child(p)
 		_chip_nodes[k[0]] = p
+
+
+## Dizi maratonu (tünel görüş) ve parti (ekranı kaplayan konfeti) katmanları.
+func _build_overlays() -> void:
+	vignette = TextureRect.new()
+	var gt := GradientTexture2D.new()
+	gt.fill = GradientTexture2D.FILL_RADIAL
+	gt.fill_from = Vector2(0.5, 0.5)
+	gt.fill_to = Vector2(1.0, 0.5)
+	var g := Gradient.new()
+	g.set_color(0, Color(0, 0, 0, 0))
+	g.set_color(1, Color(0.02, 0.0, 0.06, 1))
+	g.add_point(0.45, Color(0, 0, 0, 0))
+	g.add_point(0.8, Color(0.03, 0.0, 0.08, 0.95))
+	gt.gradient = g
+	vignette.texture = gt
+	vignette.stretch_mode = TextureRect.STRETCH_SCALE
+	vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vignette.modulate.a = 0.0
+	root.add_child(vignette)
+	var vp := root.get_viewport_rect().size
+	confetti = CPUParticles2D.new()
+	confetti.emitting = false
+	confetti.amount = 260
+	confetti.lifetime = 2.2
+	confetti.position = Vector2(vp.x / 2.0, -20)
+	confetti.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	confetti.emission_rect_extents = Vector2(vp.x / 2.0, 10)
+	confetti.direction = Vector2(0, 1)
+	confetti.spread = 25
+	confetti.gravity = Vector2(0, 520)
+	confetti.initial_velocity_min = 180
+	confetti.initial_velocity_max = 420
+	confetti.angular_velocity_min = -540
+	confetti.angular_velocity_max = 540
+	confetti.scale_amount_min = 10
+	confetti.scale_amount_max = 22
+	var cr := Gradient.new()
+	cr.offsets = PackedFloat32Array([0.0, 0.25, 0.5, 0.75, 1.0])
+	cr.colors = PackedColorArray([UiKit.YELLOW, Color("#FF5FA2"), UiKit.BLUE, UiKit.GREEN, UiKit.PURPLE])
+	confetti.color_initial_ramp = cr
+	root.add_child(confetti)
+
+
+func _build_question() -> void:
+	question_panel = UiKit.panel(UiKit.INK, 26)
+	question_label = UiKit.label("", 44, Color.WHITE, UiKit.heavy(), HORIZONTAL_ALIGNMENT_CENTER)
+	question_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	question_panel.add_child(question_label)
+	question_panel.visible = false
+	question_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(question_panel)
+
+
+func _show_question(text: String) -> void:
+	if text == "":
+		if question_panel.visible:
+			var tw := create_tween()
+			tw.tween_property(question_panel, "modulate:a", 0.0, 0.2)
+			tw.tween_callback(func() -> void: question_panel.visible = false)
+		return
+	question_label.text = text
+	var vp := root.get_viewport_rect().size
+	question_panel.visible = true
+	question_panel.modulate.a = 1.0
+	question_panel.reset_size()
+	var w := maxf(question_panel.get_combined_minimum_size().x, 300.0)
+	question_panel.size = Vector2(w, question_panel.get_combined_minimum_size().y)
+	question_panel.position = Vector2((vp.x - w) / 2.0, _top_margin() + 96)
+	question_panel.pivot_offset = question_panel.size / 2.0
+	question_panel.scale = Vector2(0.6, 0.6)
+	create_tween().tween_property(question_panel, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
 
 
 func _build_notification() -> void:
@@ -171,6 +257,18 @@ func _refresh() -> void:
 	_chip_nodes["scoreMultiplier"].visible = e.multiplier_left > 0.0
 	_chip_nodes["slowMotion"].visible = e.slow_left > 0.0
 	_chip_nodes["reverseControls"].visible = e.reversed()
+	_chip_nodes["shield"].visible = e.shield > 0
+	_chip_nodes["magnet"].visible = e.magnet_left > 0.0
+	_chip_nodes["preview"].visible = e.preview_left > 0.0
+	_chip_nodes["wobble"].visible = e.wobbly()
+	_chip_nodes["sleep"].visible = e.asleep()
+	_chip_nodes["group"].visible = run.director.group_left > 0.0
+	_chip_nodes["office"].visible = run.director.office_left > 0.0
+	_chip_nodes["gravity"].visible = run.tuki.zone == "gravity"
+	_chip_nodes["ice"].visible = run.tuki.zone == "ice"
+	var tunnel_a := float(run.cfg["effects"]["tunnelAlpha"])
+	vignette.modulate.a = lerpf(vignette.modulate.a, tunnel_a if e.tunnel_left > 0.0 else 0.0, 0.12)
+	confetti.emitting = e.confetti_left > 0.0
 	if notif.visible and e.notification_left <= 0.0:
 		notif.visible = false
 
@@ -185,11 +283,12 @@ func _on_effect(kind: String) -> void:
 			notif.modulate.a = 0.0
 			create_tween().tween_property(notif, "modulate:a", 1.0, 0.15)
 		"finalStretch":
-			_flash_banner(T.t("final_stretch"))
+			_flash_banner(T.t("final_stretch"), UiKit.YELLOW)
 
 
-func _flash_banner(text: String) -> void:
+func _flash_banner(text: String, color: Color = UiKit.YELLOW) -> void:
 	banner.text = text
+	banner.add_theme_color_override("font_color", color)
 	banner.visible = true
 	banner.size.x = root.get_viewport_rect().size.x
 	banner.position.x = 0
@@ -290,12 +389,14 @@ func _pause() -> void:
 	if run.state != RunScene.State.RUNNING or get_tree().paused:
 		return
 	get_tree().paused = true
+	Sound.scratch(false)
 	pause_panel = _overlay(0.55)
 	var v := UiKit.vbox(18)
 	v.add_child(UiKit.label(T.t("pause"), 64, UiKit.INK, UiKit.heavy(), HORIZONTAL_ALIGNMENT_CENTER))
 	var resume := UiKit.primary(T.t("resume"))
 	resume.pressed.connect(func() -> void:
 		get_tree().paused = false
+		Sound.scratch(true)
 		pause_panel.queue_free())
 	v.add_child(resume)
 	var quit := UiKit.button(T.t("quit_exam"), UiKit.RED, UiKit.RED_DARK, Color.WHITE, 32)
@@ -327,6 +428,9 @@ func _show_summary(outcome: Dictionary) -> void:
 		[T.t("row_max"), _fmt(r["max"]), UiKit.INK],
 		[T.t("row_base"), _fmt(r["base"]), UiKit.INK],
 	]
+	if r.get("events", 0.0) != 0.0:
+		var ev := float(r["events"])
+		rows.append([T.t("row_events"), ("+%s" if ev > 0 else "−%s") % _fmt(absf(ev)), UiKit.GREEN_DARK if ev > 0 else UiKit.RED])
 	if r["bonus"] > 0:
 		rows.append([T.t("row_bonus"), "+%s" % _fmt(r["bonus"]), UiKit.GOLD])
 	if r["clean"] > 0:
@@ -352,6 +456,8 @@ func _show_summary(outcome: Dictionary) -> void:
 	v.add_child(big)
 	var seed := int(run.level["seed"]) + int(outcome["collected"])
 	v.add_child(UiKit.label("“%s”" % run.content.comment_for(letter, r["inkDepleted"], seed), 30, UiKit.RED, UiKit.bold()))
+	if outcome.has("bossReaction") and outcome["bossReaction"] != "":
+		v.add_child(UiKit.label(T.t("boss_" + outcome["bossReaction"]), 26, UiKit.RED_DARK, UiKit.heavy()))
 	v.add_child(UiKit.spacer(8))
 	var completion: Dictionary = outcome.get("completion", {})
 	var btn := UiKit.primary(T.t("see_course_result") if not completion.is_empty() else T.t("continue"))
@@ -369,7 +475,9 @@ func _show_summary(outcome: Dictionary) -> void:
 	tw.tween_interval(0.35)
 	tw.tween_property(badge, "modulate:a", 1.0, 0.05)
 	tw.parallel().tween_property(badge, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK)
-	tw.tween_callback(func() -> void: Input.vibrate_handheld(60))
+	tw.tween_callback(func() -> void:
+		Sound.play("stamp")
+		Sound.vibrate("stamp"))
 
 
 static func _fmt(v: float) -> String:

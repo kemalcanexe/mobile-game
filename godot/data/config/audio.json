@@ -1,0 +1,30 @@
+{
+  "_comment": "Ses seviyeleri dB cinsinden. Sesler tools/gen_audio.py ile üretilir. layers: müzik katmanının açıldığı level ilerlemesi.",
+  "voices": 10,
+  "bigPoints": 15,
+  "musicDb": -9.0,
+  "sfxDb": -3.0,
+  "crossfade": 0.8,
+  "layerFade": 1.5,
+  "leadLayerProgress": 0.45,
+  "nightCutoffHz": 900,
+  "dayCutoffHz": 20000,
+  "scratch": { "db": -20.0, "pitchMin": 0.85, "pitchMax": 1.35, "lowInkPitch": 0.7 },
+  "collectPitch": { "step": 0.04, "max": 1.5, "resetSeconds": 1.2 },
+  "tracks": {
+    "menu": "res://assets/audio/music/menu.wav",
+    "run": "res://assets/audio/music/lofi_base.wav",
+    "runLead": "res://assets/audio/music/lofi_lead.wav",
+    "final": "res://assets/audio/music/final_base.wav"
+  },
+  "sfx": {
+    "collect": -6, "collect_big": -5, "bonus": -3, "powerup": -4, "hit": -2, "jump": -9, "slide": -8,
+    "land": -10, "lane": -12, "phone": -5, "console": -9, "friend": -6, "pillow": -4, "tv": -9,
+    "party": -8, "bottle": -5, "shield": -5, "shield_break": -2, "magnet": -7, "page": -5,
+    "gate_ok": -3, "gate_wrong": -6, "rollcall": -4, "rollcall_ok": -4, "stamp": -1, "click": -8,
+    "boss_warn": -12, "boss_throw": -5, "boss_impact": -3, "boss_shout": -3, "ramp": -4, "zone": -6,
+    "bug": -10, "group_on": -5, "group_off": -5, "office": -4, "finish": -2, "fail": -4, "start": -9,
+    "ink_low": -8
+  },
+  "haptics": { "collect": 15, "hit": 45, "stamp": 90, "boss": 60 }
+}

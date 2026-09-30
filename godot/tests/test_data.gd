@@ -66,14 +66,15 @@ func test_uretici_deterministik_ve_adil() -> void:
 	for course in c().courses:
 		for key in Assessment.ORDER:
 			var lv: Dictionary = course["levels"][key]
-			var a := LevelGenerator.generate(lv, course["patterns"], c().game_cfg)
-			var b := LevelGenerator.generate(lv, course["patterns"], c().game_cfg)
+			var a := c().plan_for(course["id"], lv)
+			var b := c().plan_for(course["id"], lv)
 			eq(a["events"].size(), b["events"].size(), "deterministik")
+			eq(a["specials"].size(), b["specials"].size(), "deterministik olaylar")
 			var maxp := 0.0
 			var prev := -1.0
 			for e in a["events"]:
 				var it: Dictionary = c().items[e["code"]]
-				if it["kind"] == "collectible":
+				if it["kind"] == "collectible" and it.get("countsTowardMax", true):
 					maxp += float(it["points"])
 				check(e["d"] >= prev, "sıralı")
 				prev = e["d"]
@@ -150,3 +151,45 @@ func test_eski_ve_bozuk_kayit() -> void:
 	f.close()
 	p.load_save()
 	eq(p.transcript.records.size(), 0)
+
+
+func test_olaylar_plana_yerlesir() -> void:
+	var calc: Dictionary = c().course("calc101")
+	var mid := c().plan_for("calc101", calc["levels"]["midterm"])
+	var types := (mid["specials"] as Array).map(func(sp) -> String: return sp["type"])
+	check(types.has("rollCall"), "yoklama")
+	eq(types.count("questionGate"), 2, "iki soru kapısı")
+	check(types.has("officeHours"), "ofis saati")
+	# her soru kapısı: 3 şık, tam bir doğru, soru bankasından
+	for sp in mid["specials"]:
+		if sp["type"] != "questionGate":
+			continue
+		var gates := (mid["events"] as Array).filter(func(e) -> bool: return e["code"] == "qg" and e.get("gate", -1) == sp["id"])
+		eq(gates.size(), 3, "üç şık")
+		eq(gates.filter(func(e) -> bool: return e["correct"]).size(), 1, "tek doğru")
+		var q: Dictionary = calc["questions"].filter(func(x) -> bool: return x["q"] == sp["q"])[0]
+		var right: Dictionary = gates.filter(func(e) -> bool: return e["correct"])[0]
+		eq(right["text"], q["answers"][0], "doğru şık bankadaki ilk cevap")
+		eq(right["lane"], sp["correct"])
+	var fin := c().plan_for("calc101", calc["levels"]["final"])
+	var ft := (fin["specials"] as Array).map(func(sp) -> String: return sp["type"])
+	eq(ft.count("bossPhase"), 2, "boss fazları")
+	check(ft.has("boss") and ft.has("allNighter") and ft.has("popQuiz"))
+	eq(ft.count("questionGate"), 3, "finalde soru kapısı yağmuru")
+	var phys := c().plan_for("phys101", c().course("phys101")["levels"]["project"])
+	var zones := (phys["specials"] as Array).filter(func(sp) -> bool: return sp["type"] == "zone")
+	eq(zones.size(), 2, "yerçekimi ve buz bölgeleri")
+
+
+func test_pop_quiz_notlari_maksimuma_eklenmez() -> void:
+	var q2 := c().plan_for("calc101", c().course("calc101")["levels"]["quiz2"])
+	var nq := (q2["events"] as Array).filter(func(e) -> bool: return e["code"] == "nq")
+	check(nq.size() >= 9, "not yağmuru")
+	eq(c().items["nq"].get("countsTowardMax", true), false)
+
+
+func test_boss_hiz_kademesi() -> void:
+	var s := SpeedCurve.from_dict({"start": 1.0, "end": 1.0, "curve": "linear"}, 1.0, {"phases": [0.33, 0.66], "speedStep": 0.1})
+	near(s.multiplier_at(0.2), 1.0, 1e-9)
+	near(s.multiplier_at(0.5), 1.1, 1e-9)
+	near(s.multiplier_at(0.9), 1.2, 1e-9)

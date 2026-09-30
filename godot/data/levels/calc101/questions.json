@@ -1,0 +1,85 @@
+{
+  "_comment": "Soru Kapıları. answers[0] doğru cevaptır; oyunda şeritlere seed'li karıştırılarak dağıtılır.",
+  "questions": [
+    {
+      "q": "d/dx x² = ?",
+      "answers": [
+        "2x",
+        "x",
+        "x³"
+      ]
+    },
+    {
+      "q": "∫ 2x dx = ?",
+      "answers": [
+        "x² + C",
+        "2x² + C",
+        "x + C"
+      ]
+    },
+    {
+      "q": "lim x→0 sin x / x = ?",
+      "answers": [
+        "1",
+        "0",
+        "∞"
+      ]
+    },
+    {
+      "q": "d/dx sin x = ?",
+      "answers": [
+        "cos x",
+        "−cos x",
+        "tan x"
+      ]
+    },
+    {
+      "q": "d/dx eˣ = ?",
+      "answers": [
+        "eˣ",
+        "x·eˣ⁻¹",
+        "ln x"
+      ]
+    },
+    {
+      "q": "d/dx ln x = ?",
+      "answers": [
+        "1/x",
+        "ln x",
+        "eˣ"
+      ]
+    },
+    {
+      "q": "∫ cos x dx = ?",
+      "answers": [
+        "sin x + C",
+        "−sin x + C",
+        "cos x + C"
+      ]
+    },
+    {
+      "q": "lim x→∞ 1/x = ?",
+      "answers": [
+        "0",
+        "1",
+        "∞"
+      ]
+    },
+    {
+      "q": "d/dx (3x + 5) = ?",
+      "answers": [
+        "3",
+        "5",
+        "3x"
+      ]
+    },
+    {
+      "q": "f(x) = x³ ⇒ f''(x) = ?",
+      "answers": [
+        "6x",
+        "3x²",
+        "6"
+      ]
+    }
+  ]
+}

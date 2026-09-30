@@ -44,7 +44,9 @@ func build(v: VBoxContainer) -> void:
 			stamp.scale = Vector2(2.2, 2.2))
 		tw.tween_property(stamp, "modulate:a", 1.0, 0.05)
 		tw.parallel().tween_property(stamp, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK)
-		tw.tween_callback(func() -> void: Input.vibrate_handheld(80))
+		tw.tween_callback(func() -> void:
+			Sound.play("stamp")
+			Sound.vibrate("stamp"))
 	if p.semester.index == semester and p.is_semester_complete():
 		var nxt := UiKit.primary(T.t("next_term"), 44)
 		nxt.pressed.connect(func() -> void:

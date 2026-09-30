@@ -62,6 +62,7 @@ func build(v: VBoxContainer) -> void:
 			v.add_child(rep)
 
 	v.add_child(UiKit.spacer(10))
+	v.add_child(_settings_row())
 	var reset := UiKit.ghost(T.t("reset"), 24)
 	reset.add_theme_color_override("font_color", Color.WHITE)
 	var armed := [false]
@@ -108,3 +109,29 @@ func _course_card(id: String) -> Control:
 	card.add_child(h)
 	UiKit.tap_card(card, func() -> void: Game.goto("course", {"course": id}))
 	return card
+
+
+## Müzik / efekt / titreşim aç-kapa düğmeleri.
+func _settings_row() -> Control:
+	var h := UiKit.hbox(12)
+	var items := [
+		["set_music", func() -> bool: return Sound.music_on, func(on: bool) -> void: Sound.set_music_on(on)],
+		["set_sfx", func() -> bool: return Sound.sfx_on, func(on: bool) -> void: Sound.set_sfx_on(on)],
+		["set_haptics", func() -> bool: return Sound.haptics_on, func(on: bool) -> void: Sound.set_haptics_on(on)],
+	]
+	for it in items:
+		var key: String = it[0]
+		var getter: Callable = it[1]
+		var setter: Callable = it[2]
+		var b := UiKit.button("", Color.WHITE, Color("#C9D6F5"), UiKit.INK, 24)
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var refresh := func() -> void:
+			var on: bool = getter.call()
+			b.text = "%s %s" % [T.t(key), "✓" if on else "✗"]
+			b.add_theme_color_override("font_color", UiKit.GREEN_DARK if on else UiKit.RED_DARK)
+		refresh.call()
+		b.pressed.connect(func() -> void:
+			setter.call(not getter.call())
+			refresh.call())
+		h.add_child(b)
+	return h

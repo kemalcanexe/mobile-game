@@ -88,3 +88,34 @@ Yüklenen Markdown'da `%XX` kalıpları URL-decode edilerek bozulmuştu (`%10` �
 8. **Arayüz yeniden tasarlandı:** Baloo 2 fontu, tombul butonlar, yuvarlak kartlar; her menü ekranının arkasında canlı 3D kampüs ve Tüki. Sınav başında kamera Tüki'nin önündedir, "Başla"ya basınca arkasına süzülür.
 9. **Test linki:** Godot web motoru 39,5 MB olduğu için 3 parçaya bölünüp sayfada birleştirilir (yayın sayfasının dosya başı 16 MB sınırı). Oyunun kendisi değişmeden çalışır.
 10. **Android:** release APK (arm64 + armv7, 55 MB) şimdilik hata ayıklama anahtarıyla imzalı; mağaza için gerçek bir yükleme anahtarı gerekir.
+
+## Faz 4 kararları (derinlik ve ses)
+
+Kullanıcının isteği: "yaparken arada bana da göster". Ara ekran görüntüleri ve ses önizleme sayfası faz sırasında paylaşıldı.
+
+1. **Ses kodla üretildi:** 41 efekt ve 4 müzik döngüsü (`menu`, koşu tabanı, koşu melodi katmanı, final) `tools/gen_audio.py` ile sentezlenir; lisans sorunu yok. Koşuda melodi katmanı ilerleme %45'i geçince açılır; kalem cızırtısı hızla incelir, mürekkep azalınca kalınlaşır; toplama sesi kombo ile yükselir; All-nighter'da müzik alçak geçiren süzgeçle boğuklaşır. Ayarlar (müzik / efekt / titreşim) ana menüde, `user://settings.json`'da.
+2. **Güçlendiriciler:** Kütüphane Kartı ve CS'te Stack Overflow kartı bir çarpışmayı yutan kalkan; Syllabus 5 sn tehlikelerin üstüne kırmızı "!" ve yere halka koyar (3D'de "önceden gölge" yerine); Çalışma Grubu 6 sn yan şeritlerdeki (+) nesneleri mıknatıs gibi çeker.
+3. **Dikkat dağıtıcılar:** yastık (1 sn girdi yok), dizi maratonu (3 sn tünel görüş), parti daveti (3 sn ekranı kaplayan konfeti), "Cuma gecesi" şişesi (karikatür, gözlüklü; 3 sn kamera sallanır ve şerit geçişleri 0,22 sn gecikir), "Derse girmeyelim" arkadaşı (sıradaki yoklama otomatik kaçar).
+4. **Özel olaylar plana yerleşir:** level JSON'undaki `events` listesi üreticide kendi bloklarını oluşturur, `specials` olarak koşuya gider; kurallar `data/config/events.json`'da.
+   - Yoklama: yeşil şerit + kürsüde profesör; 2 sn orada kalırsan +10, kalmazsan −5.
+   - Pop Quiz: 4 sn üç şeritte not yağmuru, araya gizli telefonlar karışır.
+   - Grup Ödevi: tembel arkadaş 8 sn puanın yarısını alır; "İş Bölümü" kapısı onu ayırır.
+   - Ofis Saati: kapıdan geçince önündeki engeller kaybolur, şeridine bonus notlar dizilir.
+   - Soru Kapıları: her ders için 10 soruluk bankadan (`levels/<ders>/questions.json`); doğru +20, yanlış −10.
+   - All-nighter: finallerde sahne kararır, Tüki'nin feneri ve kahvelerin ışığı kalır.
+5. **Olay puanları maksimuma eklenmez:** Pop Quiz ve ofis saati notları (`nq`), yoklama ve soru kapısı puanları ayrı tutulur (`event_points` / `event_penalty`) ve döküme "Olaylar" satırı olarak yazılır. Böylece olaylar fırsat/risktir, kaçırmak %100'ü imkânsız kılmaz.
+6. **Tema mekanikleri:**
+   - CALC 101: türev rampası. Tüki'yi fırlatır; 2 sn hız ×1,35 ve puan ×2 verir.
+   - PHYS 101: yerçekimi bölgesi (ay yerçekimi, ↑/↓ yer değiştirir) ve sürtünmesiz buz bölgesi (şerit değişimi yavaş ve hedefi geçip geri kayar).
+   - CS 101: aralıklarla şerit değiştiren bug'lar (zıplanır) ve Stack Overflow kalkanı.
+   - Ertelenenler: asimptot duvarları ve Infinite loop bölümü; tasarımları 3D'de ayrıca düşünülmeli.
+7. **Prof. Kırmızı:**
+   - Görünüm: her finalde yolun önünde süzülen dev kırmızı kalem. Gözlüklü, derse göre kostüm giyer: CALC'ta mezuniyet kepi, PHYS'te laboratuvar önlüğü, CS'te kulaklık.
+   - Saldırılar: plandaki `bx` (✗) ve `bl` ("ÇIKMAZ" çizgisi) nesneleri görünmez başlar. Varıştan 1,9 sn önce şerit kırmızı kesik çizgiyle işaretlenir, 1,0 sn önce ✗ fırlatılıp yere çakılır. Saldırılar planın parçası olduğu için doğrulayıcının adillik kuralları (üç şerit birden kapanmaz) geçerlidir.
+   - Faz geçişleri: %33 ve %66'da "EK SORU!" ve hız bir kademe (+0,08) artar. Kademe `SpeedCurve`'e dahildir, yani level süresi korunur.
+   - Final sonu: son %15'te üç soru kapısı art arda gelir. Sayfa sonunda profesör notu görüp baş sallar (≥85), kaş kaldırır (≥60) ya da yüzünü avuçlar.
+8. **Bariyerler** Kenney modeli yerine kırmızı-beyaz çizgili, uyarı lambalı özel modelle değiştirildi (uzaktan "zıpla" diye okunuyor).
+9. **Denge botu:** `tools/soak.gd` bütün level'ları basit bir botla (kusursuz ya da `BOT=sloppy`) oynatır, çalışma hatalarını ve skorları raporlar.
+10. **Faz 3'ten kalan bir hata düzeltildi:** Jolt'un `WorldBoundaryShape3D`'si ±1000 m ile sınırlı. Tüki her level'da ~50-60. saniyede zeminin içinden düşüyor, notlara ve kapılara temas edemiyordu (mesafe z'den ölçüldüğü için koşu sürüyordu). Denge botu bunu ortaya çıkardı. Zemin artık Tüki ile birlikte taşınıyor; `test_uzun_kosuda_zemin_hep_var` testi hatayı yakalıyor.
+11. **Soru kapısında okuma süresi:** soru, kapıdan hıza göre 2,4 sn önce görünür (sabit satır sayısı finalin yüksek hızında ~0,5 sn'ye düşüyordu).
+12. **Denge botu sonuçları:** kusursuz bot 15 level'ın hepsinde 100 aldı. Tepkisi gecikmeli ve arada yanlış şerit seçen bot A ile C- arasında kaldı, en düşük PHYS 101 Proje (71). Gerçek oyuncularla test yapılana kadar sayılar değiştirilmedi.

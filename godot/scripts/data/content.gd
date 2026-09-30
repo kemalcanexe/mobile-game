@@ -6,6 +6,7 @@ const ROOT := "res://data/"
 
 var game_cfg: Dictionary
 var world_cfg: Dictionary
+var events_cfg: Dictionary
 var items: Dictionary = {}  # code -> item
 var grading: GradingRules
 var comments: Dictionary
@@ -24,6 +25,7 @@ static func load_all() -> Content:
 	var c := Content.new()
 	c.game_cfg = read_json("config/game.json")
 	c.world_cfg = read_json("config/world3d.json")
+	c.events_cfg = read_json("config/events.json")
 	for it in read_json("config/items.json")["items"]:
 		c.items[it["code"]] = it
 	c.grading = GradingRules.from_dict(read_json("config/grading.json"))
@@ -54,11 +56,18 @@ static func _load_course(path: String) -> Dictionary:
 	for key in course["levels"]:
 		levels[key] = read_json("levels/" + course["levels"][key])
 	course["levels"] = levels
+	course["questions"] = read_json("levels/" + course["questionFile"])["questions"] if course.has("questionFile") else []
 	return course
 
 
 func course(id: String) -> Dictionary:
 	return courses_by_id[id]
+
+
+## Dersin bir level'ı için deterministik spawn planı.
+func plan_for(course_id: String, level: Dictionary) -> Dictionary:
+	var c := course(course_id)
+	return LevelGenerator.generate(level, c["patterns"], game_cfg, 1.0, c["questions"], events_cfg)
 
 
 func offered_in(semester: int) -> Array:

@@ -9,6 +9,10 @@ signal finished(outcome: Dictionary)
 signal hud_update
 signal popup(text: String, color: Color)
 signal effect_event(kind: String)
+## Ekranın üstünde büyük duyuru (POP QUIZ!, EK SORU! …).
+signal banner(text: String, color: Color)
+## Soru kapısı sorusu ("" gizler).
+signal question(text: String)
 
 enum State { READY, RUNNING, FINISHED }
 
@@ -35,6 +39,10 @@ var state := State.READY
 var tuki: Tuki
 var camera: Camera3D
 var campus: Campus
+var director: EventDirector
+var env: Environment
+var sky_mat: ProceduralSkyMaterial
+var sun: DirectionalLight3D
 var trail: InkTrail
 var ink: InkState
 var score := LevelScore.new()
@@ -56,6 +64,10 @@ var _end_timer := -1.0
 var _last_drag_velocity := Vector2.ZERO
 ## 0 = tanıtım kamerası (Tüki'nin önünde), 1 = koşu kamerası (arkasında).
 var _intro_blend := 0.0
+var _ground: StaticBody3D
+var _lead_on := false
+var _t := 0.0
+var _was_low_ink := false
 
 
 func _ready() -> void:
@@ -74,8 +86,8 @@ func _ready() -> void:
 	theme = cfg["themes"].get(course_id, cfg["themes"]["calc101"])
 	upp = float(cfg["unitsPerPixel"])
 	lane_w = float(cfg["laneWidth"])
-	curve = SpeedCurve.from_dict(level["speed"])
-	plan = plan_override if not plan_override.is_empty() else LevelGenerator.generate(level, course["patterns"], game_cfg)
+	curve = SpeedCurve.from_dict(level["speed"], 1.0, level.get("boss", {}))
+	plan = plan_override if not plan_override.is_empty() else content.plan_for(course_id, level)
 	rng.seed = int(level["seed"])
 	ink = InkState.new(float(game_cfg["ink"]["max"]), float(game_cfg["ink"]["lowThreshold"]))
 	swipe.min_distance = float(cfg["input"]["minSwipeDistance"])
@@ -90,6 +102,9 @@ func _ready() -> void:
 	add_child(tuki)
 	tuki.position = Vector3(0, 0.02, 0)
 	tuki.hitbox.area_entered.connect(_on_area)
+	tuki.landed.connect(func() -> void:
+		if state == State.RUNNING:
+			Sound.play("land"))
 	trail = InkTrail.new()
 	trail.color = Color(theme["accent"]) if theme.get("lamps", false) else Color("#1F3A93")
 	add_child(trail)
@@ -99,6 +114,9 @@ func _ready() -> void:
 	add_child(camera)
 	_place_camera(1.0)
 	_build_finish_gate()
+	director = EventDirector.new()
+	director.setup(self, plan.get("specials", []))
+	add_child(director)
 	campus.update_for(0.0)
 	if with_hud:
 		add_child(RunHud.new(self))
@@ -106,10 +124,11 @@ func _ready() -> void:
 
 func _build_environment() -> void:
 	var we := WorldEnvironment.new()
-	var env := Environment.new()
+	env = Environment.new()
 	env.background_mode = Environment.BG_SKY
 	var sky := Sky.new()
 	var sm := ProceduralSkyMaterial.new()
+	sky_mat = sm
 	sm.sky_top_color = Color(theme["skyTop"])
 	sm.sky_horizon_color = Color(theme["skyHorizon"])
 	sm.ground_horizon_color = Color(theme["skyHorizon"])
@@ -128,7 +147,7 @@ func _build_environment() -> void:
 	env.glow_enabled = false
 	we.environment = env
 	add_child(we)
-	var sun := DirectionalLight3D.new()
+	sun = DirectionalLight3D.new()
 	sun.light_color = Color(theme["sunColor"])
 	sun.light_energy = float(theme["sunEnergy"])
 	sun.rotation_degrees = Vector3(float(theme["sunPitch"]), 35, 0)
@@ -138,8 +157,11 @@ func _build_environment() -> void:
 	add_child(sun)
 
 
+## Jolt'un WorldBoundaryShape3D'si sonlu (varsayılan ±1000 m); zemin Tüki ile
+## birlikte taşınır, böylece level uzunluğundan bağımsız olarak altı hep doludur.
 func _build_ground() -> void:
 	var ground := StaticBody3D.new()
+	_ground = ground
 	ground.collision_layer = 1
 	var cs := CollisionShape3D.new()
 	cs.shape = WorldBoundaryShape3D.new()
@@ -178,6 +200,9 @@ func start() -> void:
 	if state != State.READY:
 		return
 	state = State.RUNNING
+	Sound.play("start")
+	Sound.music("final" if assessment == "final" else "run")
+	Sound.scratch(true)
 	create_tween().tween_property(self, "_intro_blend", 1.0, 0.8).set_trans(Tween.TRANS_SINE)
 
 
@@ -190,6 +215,7 @@ func speed_mps() -> float:
 
 
 func _physics_process(delta: float) -> void:
+	_ground.position.z = tuki.position.z
 	if state == State.RUNNING:
 		effects.update(delta)
 		tuki.forward_speed = speed_mps()
@@ -209,6 +235,9 @@ func _process(delta: float) -> void:
 		if not _final_stretch_shown and progress() >= float(game_cfg["scroll"]["finalStretchProgress"]):
 			_final_stretch_shown = true
 			effect_event.emit("finalStretch")
+		_update_audio()
+		_update_effects(delta)
+		director.tick(delta)
 		if ink.is_empty() or distance >= float(plan["total"]):
 			_finish()
 		hud_update.emit()
@@ -219,6 +248,48 @@ func _process(delta: float) -> void:
 	trail.redraw(ink.is_low())
 	_despawn()
 	_place_camera(delta)
+
+
+func _update_effects(delta: float) -> void:
+	_t += delta
+	var fx: Dictionary = cfg["effects"]
+	# mıknatıs: yakındaki (+) nesneler Tüki'ye akar
+	tuki.set_magnet(effects.magnet_left > 0.0)
+	if effects.magnet_left > 0.0:
+		var reach := float(fx["magnetRange"])
+		var pull := float(fx["magnetPull"]) * delta
+		for o in _objects:
+			if not is_instance_valid(o) or o.resolved or not o.is_good():
+				continue
+			var dz := tuki.position.z - o.position.z
+			if dz > -1.0 and dz < reach:
+				var target := Vector3(tuki.position.x, 0.0, tuki.position.z)
+				o.position = o.position.move_toward(target, pull + speed_mps() * delta)
+	# syllabus: tehlikeleri işaretle
+	var reach_p := float(fx["previewRange"])
+	for o in _objects:
+		if is_instance_valid(o) and not o.resolved and o.is_hazard():
+			var ahead := tuki.position.z - o.position.z
+			o.set_marked(effects.preview_left > 0.0 and ahead > 0.0 and ahead < reach_p)
+	if effects.asleep():
+		tuki.set_status("Zzz", Color("#C9B8FF"))
+	elif effects.skip_show_left > 0.0:
+		tuki.set_status("Derse girmeyelim…", Color("#FFB27A"))
+	elif effects.wobbly():
+		tuki.set_status("@_@", Color("#B7F5C9"))
+	else:
+		tuki.set_status("")
+
+
+func _update_audio() -> void:
+	Sound.scratch_speed((curve.multiplier_at(progress()) - curve.start) / maxf(curve.end - curve.start, 0.01),
+		ink.is_low())
+	if not _lead_on and progress() >= float(Sound.cfg.get("leadLayerProgress", 1.0)):
+		_lead_on = true
+		Sound.set_lead(true)
+	if ink.is_low() and not _was_low_ink:
+		Sound.play("ink_low")
+	_was_low_ink = ink.is_low()
 
 
 func _place_camera(delta: float) -> void:
@@ -241,6 +312,9 @@ func _place_camera(delta: float) -> void:
 		look = intro_look.lerp(look, b)
 	camera.position = base + shake
 	camera.look_at(look)
+	if effects.wobbly():
+		var e: Dictionary = cfg["effects"]
+		camera.rotate_object_local(Vector3.FORWARD, sin(_t * TAU / float(e["wobbleRate"]) * 2.0) * float(e["wobbleRoll"]))
 	var boost := clampf((curve.multiplier_at(progress()) - 1.0) / 0.75, 0.0, 1.0) if state == State.RUNNING else 0.0
 	camera.fov = lerpf(camera.fov, float(c["fov"]) + float(c["fovSpeedBoost"]) * boost, k)
 
@@ -253,15 +327,26 @@ func _spawn() -> void:
 	while _next_event < events.size() and float(events[_next_event]["d"]) - distance <= ahead:
 		var e: Dictionary = events[_next_event]
 		_next_event += 1
-		var code: String = e["code"]
-		var item: Dictionary = content.items[code]
-		var obj := LaneObject.new()
-		obj.setup(code, item, int(e["lane"]), lane_w)
-		add_child(obj)
-		obj.position = Vector3((int(e["lane"]) - 1) * lane_w, 0, -float(e["d"]) * upp)
-		if item["kind"] == "collectible":
-			score.register_spawn(float(item["points"]))
-		_objects.append(obj)
+		spawn_item(e["code"], int(e["lane"]), float(e["d"]), e)
+
+
+## Plan dışından da (ofis saati koridoru) nesne üretmek için.
+func spawn_item(code: String, lane: int, d: float, extra: Dictionary = {}) -> LaneObject:
+	var item: Dictionary = content.items[code]
+	var obj := LaneObject.new()
+	obj.extra = extra
+	obj.setup(code, item, lane, lane_w)
+	add_child(obj)
+	obj.position = Vector3((lane - 1) * lane_w, 0, -d * upp)
+	if item["kind"] == "collectible" and bool(item.get("countsTowardMax", true)):
+		score.register_spawn(float(item["points"]))
+	_objects.append(obj)
+	director.on_spawned(obj)
+	return obj
+
+
+func objects() -> Array[LaneObject]:
+	return _objects
 
 
 func _despawn() -> void:
@@ -308,13 +393,24 @@ func _swipe(dir: String) -> void:
 
 ## Swipe'ı (debuff'ları hesaba katarak) Tüki'ye iletir.
 func handle_swipe(dir: String) -> void:
-	if state != State.RUNNING:
+	if state != State.RUNNING or effects.asleep():
 		return
+	if tuki.zone == "gravity":
+		if dir == SwipeDetector.UP:
+			dir = SwipeDetector.DOWN
+		elif dir == SwipeDetector.DOWN:
+			dir = SwipeDetector.UP
 	if effects.reversed():
 		if dir == SwipeDetector.LEFT:
 			dir = SwipeDetector.RIGHT
 		elif dir == SwipeDetector.RIGHT:
 			dir = SwipeDetector.LEFT
+	# "Cuma gecesi": şerit geçişleri gecikmeli
+	if effects.wobbly() and (dir == SwipeDetector.LEFT or dir == SwipeDetector.RIGHT):
+		get_tree().create_timer(effects.wobble_delay, false).timeout.connect(func() -> void:
+			if state == State.RUNNING:
+				_execute(dir))
+		return
 	# yeni komut bekleyen eskisini geçersiz kılar
 	if _execute(dir):
 		_buffer = ""
@@ -324,16 +420,22 @@ func handle_swipe(dir: String) -> void:
 
 
 func _execute(dir: String) -> bool:
+	var ok := true
 	match dir:
-		SwipeDetector.LEFT:
-			return tuki.change_lane(-1)
-		SwipeDetector.RIGHT:
-			return tuki.change_lane(1)
+		SwipeDetector.LEFT, SwipeDetector.RIGHT:
+			var before := tuki.target_lane
+			ok = tuki.change_lane(-1 if dir == SwipeDetector.LEFT else 1)
+			if tuki.target_lane != before:
+				Sound.play("lane")
 		SwipeDetector.UP:
-			return tuki.try_jump()
+			ok = tuki.try_jump()
+			if ok:
+				Sound.play("jump")
 		SwipeDetector.DOWN:
-			return tuki.slide_or_fast_fall()
-	return true
+			ok = tuki.slide_or_fast_fall()
+			if ok:
+				Sound.play("slide")
+	return ok
 
 
 func _update_buffer(delta: float) -> void:
@@ -364,6 +466,10 @@ func contact(obj: LaneObject) -> void:
 	match obj.kind():
 		"collectible", "bonus", "powerUp":
 			_collect(obj)
+		"gate":
+			director.on_gate(obj)
+		"ramp":
+			_ramp(obj)
 		_:
 			_hit(obj)
 
@@ -373,14 +479,16 @@ func _collect(obj: LaneObject) -> void:
 	var pos := obj.global_position + Vector3(0, 1.4, 0)
 	match item["kind"]:
 		"collectible":
-			var mult := effects.score_multiplier()
+			var mult := effects.score_multiplier() * director.share_factor()
 			score.collect(float(item["points"]), mult)
 			popup.emit("+%d" % roundi(float(item["points"]) * mult), UiKit.BLUE)
 			Fx.burst(self, pos, UiKit.YELLOW, 14, 5.0, 0.09)
-			Input.vibrate_handheld(15)
+			Sound.play_collect(float(item["points"]) >= float(Sound.cfg.get("bigPoints", 15)))
+			Sound.vibrate("collect")
 		"bonus":
 			score.add_extra_credit(float(item["extraCredit"]))
 			popup.emit("+%d ekstra kredi" % roundi(float(item["extraCredit"])), UiKit.GOLD)
+			Sound.play("bonus")
 			Fx.burst(self, pos, UiKit.GOLD, 26, 7.0, 0.12)
 		"powerUp":
 			var e: Dictionary = item["effect"]
@@ -396,18 +504,59 @@ func _collect(obj: LaneObject) -> void:
 				"ink":
 					ink.apply(float(e["value"]))
 					popup.emit("+%d mürekkep" % roundi(float(e["value"])), UiKit.BLUE)
+				"shield":
+					effects.shield = int(e["value"])
+					tuki.set_shield(true)
+					popup.emit("Kalkan!", Color("#0FA3C7"))
+				"preview":
+					effects.preview_left = float(e["duration"])
+					popup.emit("Syllabus!", UiKit.GREEN_DARK)
+				"magnet":
+					effects.magnet_left = float(e["duration"])
+					tuki.set_magnet(true)
+					popup.emit("Çalışma grubu!", Color("#E23B3B"))
 			effect_event.emit(e["type"])
+			Sound.play(item.get("sfx", "powerup"))
 			Fx.burst(self, pos, UiKit.BLUE, 22, 6.0, 0.1)
 	obj.pop()
 
 
+## Olay puanı (maksimuma eklenmez).
+func event_points(points: float, text: String, color := UiKit.GREEN_DARK) -> void:
+	if points >= 0.0:
+		score.add_event_points(points)
+	else:
+		score.add_event_penalty(-points)
+	popup.emit(text, color)
+
+
+func _ramp(obj: LaneObject) -> void:
+	obj.resolved = true
+	var e: Dictionary = obj.item["effect"]
+	effects.boost = float(e["boost"])
+	effects.boost_left = float(e["duration"])
+	effects.multiplier = float(e["multiplier"])
+	effects.multiplier_left = maxf(effects.multiplier_left, float(e["duration"]))
+	tuki.launch(float(e["launch"]))
+	Sound.play(obj.item.get("sfx", "ramp"))
+	popup.emit("Türev! x2", UiKit.GOLD)
+	effect_event.emit("scoreMultiplier")
+	Fx.burst(self, tuki.global_position + Vector3(0, 0.5, 0), UiKit.YELLOW, 20, 6.0, 0.1)
+
+
 func _hit(obj: LaneObject) -> void:
 	var item := obj.item
+	if effects.shield > 0:
+		_block_with_shield(obj)
+		return
 	score.penalize(float(item.get("points", 0)))
 	ink.apply(float(item.get("ink", 0)))
 	_shake = float(cfg["camera"]["shakeTime"])
 	tuki.stumble()
-	Input.vibrate_handheld(45)
+	Sound.play("hit")
+	Sound.vibrate("hit")
+	if item.has("sfx"):
+		Sound.play(item["sfx"])
 	popup.emit("%d" % roundi(float(item.get("points", 0))), UiKit.RED)
 	Fx.burst(self, obj.global_position + Vector3(0, 0.8, 0), Color(0.55, 0.45, 0.35), 16, 4.0, 0.14)
 	var e: Dictionary = item.get("effect", {})
@@ -423,11 +572,49 @@ func _hit(obj: LaneObject) -> void:
 			var dir := 1 if ln == 0 else (-1 if ln == 2 else (1 if rng.randi() % 2 == 0 else -1))
 			tuki.force_lane(ln + dir)
 			effect_event.emit("pullLane")
-	# fizik: nesne savrulur
-	# ileri ve yola dışarı doğru savrulur (kameraya gelmez)
+		"sleep":
+			effects.sleep_left = float(e["duration"])
+			_buffer = ""
+			effect_event.emit("sleep")
+		"tunnel":
+			effects.tunnel_left = float(e["duration"])
+			effect_event.emit("tunnel")
+		"confetti":
+			effects.confetti_left = float(e["duration"])
+			effect_event.emit("confetti")
+		"wobble":
+			effects.wobble_left = float(e["duration"])
+			effects.wobble_delay = float(e["laneDelay"])
+			effect_event.emit("wobble")
+		"skipClass":
+			effects.skip_class = true
+			effects.skip_show_left = float(e["duration"])
+			popup.emit("Yoklama kaçacak!", UiKit.PURPLE)
+			effect_event.emit("skipClass")
+	_knock(obj)
+
+
+## Fizik: nesne ileri ve yolun dışına doğru savrulur (kameraya gelmez).
+func _knock(obj: LaneObject) -> void:
 	var side := -1.0 if obj.lane == 0 else (1.0 if obj.lane == 2 else (1.0 if rng.randi() % 2 == 0 else -1.0))
 	var push := Vector3(side * rng.randf_range(5, 8), 5.0, -speed_mps() * 1.25)
 	obj.knock(push)
+
+
+func shake() -> void:
+	_shake = float(cfg["camera"]["shakeTime"])
+
+
+func _block_with_shield(obj: LaneObject) -> void:
+	effects.shield -= 1
+	if effects.shield <= 0:
+		tuki.set_shield(false)
+	Sound.play("shield_break")
+	Sound.vibrate("collect")
+	popup.emit("Kalkan korudu!", Color("#0FA3C7"))
+	Fx.burst(self, tuki.global_position + Vector3(0, 1.0, 0), Color("#7FE3FF"), 26, 6.0, 0.1)
+	effect_event.emit("shieldBreak")
+	_knock(obj)
 
 
 # ------------------------------------------------------------- bitiş
@@ -435,11 +622,15 @@ func _hit(obj: LaneObject) -> void:
 func _finish() -> void:
 	state = State.FINISHED
 	var depleted := ink.is_empty()
+	Sound.scratch(false)
+	Sound.play("fail" if depleted else "finish")
 	var result := score.finish(content.grading, ink.current, depleted)
 	outcome = {"score": result, "ink": ink.current, "collected": score.collected_count,
 		"hits": score.hit_count, "bonus": score.bonus_count, "distance": distance, "depleted": depleted}
 	if record_progress:
 		outcome["completion"] = Game.progress.record_level(course_id, assessment, float(result["score"]))
+	if director.boss:
+		outcome["bossReaction"] = director.boss.react(float(result["score"]))
 	if depleted:
 		tuki.stumble()
 		tuki.forward_speed = speed_mps() * 0.5

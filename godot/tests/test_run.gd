@@ -171,3 +171,95 @@ func test_sayfa_sonu_ve_murekkep_bitisi() -> void:
 	eq(s2.state, RunScene.State.FINISHED)
 	check(s2.outcome["depleted"])
 	check(s2.outcome["score"]["score"] <= 50.0)
+
+
+func test_kutuphane_karti_kalkan() -> void:
+	var s := make([{"d": 600.0, "lane": 1, "code": "lc"}, {"d": 900.0, "lane": 1, "code": "ow"},
+		{"d": 1300.0, "lane": 1, "code": "og"}])
+	await frames(2)
+	s.start()
+	await run_until(700)
+	eq(s.effects.shield, 1, "kalkan alındı")
+	check(s.tuki.has_shield_visual(), "balon görünür")
+	await run_until(1000)
+	eq(s.score.hit_count, 0, "duvar kalkana çarptı")
+	eq(s.ink.current, 100.0)
+	eq(s.effects.shield, 0, "tek kullanımlık")
+	check(not s.tuki.has_shield_visual())
+	await run_until(1400)
+	eq(s.score.hit_count, 1, "ikinci çarpışma sayılır")
+
+
+func test_calisma_grubu_miknatis() -> void:
+	var s := make([{"d": 500.0, "lane": 1, "code": "sg"}, {"d": 900.0, "lane": 0, "code": "nt"},
+		{"d": 1000.0, "lane": 2, "code": "fc"}])
+	await frames(2)
+	s.start()
+	await run_until(1150)
+	eq(s.score.collected_points, 15.0, "yan şeritlerdeki notlar çekildi")
+	eq(s.tuki.target_lane, 1, "Tüki şerit değiştirmedi")
+
+
+func test_syllabus_tehlikeyi_isaretler() -> void:
+	var s := make([{"d": 500.0, "lane": 1, "code": "sy"}, {"d": 1400.0, "lane": 0, "code": "og"},
+		{"d": 1400.0, "lane": 2, "code": "nt"}])
+	await frames(2)
+	s.start()
+	await run_until(600)
+	await frames(2)
+	var marked := 0
+	var goods_marked := 0
+	for o in s._objects:
+		if is_instance_valid(o) and o.is_marked():
+			if o.is_hazard():
+				marked += 1
+			else:
+				goods_marked += 1
+	eq(marked, 1, "engel işaretli")
+	eq(goods_marked, 0, "not işaretlenmez")
+
+
+func test_yastik_girdiyi_engeller_sise_geciktirir() -> void:
+	var s := make([{"d": 600.0, "lane": 1, "code": "pl"}, {"d": 1500.0, "lane": 1, "code": "bt"}])
+	await frames(2)
+	s.start()
+	await run_until(680)
+	check(s.effects.asleep(), "uyukluyor")
+	s.handle_swipe("left")
+	await frames(15)
+	eq(s.tuki.target_lane, 1, "uykuda girdi yok")
+	await frames(60)
+	check(not s.effects.asleep())
+	await run_until(1580)
+	check(s.effects.wobbly(), "baş ağrısı")
+	s.handle_swipe("right")
+	await frames(3)
+	eq(s.tuki.target_lane, 1, "şerit geçişi hemen olmaz")
+	await frames(20)
+	eq(s.tuki.target_lane, 2, "gecikmeyle olur")
+
+
+func test_dizi_parti_derse_girmeyelim() -> void:
+	var s := make([{"d": 600.0, "lane": 1, "code": "tv"}, {"d": 900.0, "lane": 1, "code": "pt"},
+		{"d": 1200.0, "lane": 1, "code": "fs"}])
+	await frames(2)
+	s.start()
+	await run_until(700)
+	check(s.effects.tunnel_left > 0.0, "tünel görüş")
+	await run_until(1000)
+	check(s.effects.confetti_left > 0.0, "konfeti")
+	await run_until(1300)
+	check(s.effects.skip_class, "yoklama kaçacak")
+	eq(s.score.penalty_points, 35.0)
+	eq(s.ink.current, 65.0)
+
+
+func test_uzun_kosuda_zemin_hep_var() -> void:
+	# Jolt'un zemin düzlemi ±1000 m ile sınırlı; 1500 m sonra da Tüki yerde olmalı
+	var s := make([], 40000)
+	await frames(2)
+	s.start()
+	s.tuki.position.z = -1480.0
+	await frames(60)
+	check(s.tuki.position.y > -0.1, "Tüki zeminden düşmedi (y=%.2f)" % s.tuki.position.y)
+	check(s.tuki.is_on_floor(), "yerde")

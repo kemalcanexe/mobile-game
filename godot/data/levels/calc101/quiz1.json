@@ -14,6 +14,7 @@
     { "at": 0.36, "pattern": "phone_bait" },
     { "at": 0.50, "pattern": "highlighter_run" }
   ],
+  "events": [{"at": 0.42, "type": "rollCall"}],
   "pool": [
     { "pattern": "cards_line", "weight": 4 },
     { "pattern": "cards_zigzag", "weight": 3 },
@@ -27,6 +28,9 @@
     { "pattern": "phone_bait", "weight": 1 },
     { "pattern": "friend_corner", "weight": 1, "from": 0.5 },
     { "pattern": "cartridge_risky", "weight": 1, "from": 0.4 },
-    { "pattern": "coffee_break", "weight": 1, "from": 0.6 }
+    { "pattern": "coffee_break", "weight": 1, "from": 0.6 },
+    { "pattern": "study_group_spread", "weight": 1, "from": 0.5 },
+    { "pattern": "pillow_trap", "weight": 1, "from": 0.5 },
+    { "pattern": "derivative_ramp", "weight": 1 }
   ]
 }

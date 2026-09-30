@@ -26,6 +26,8 @@
       "pattern": "phone_bait"
     }
   ],
+  "events": [{"at": 0.35, "type": "popQuiz"}, {"at": 0.65, "type": "rollCall"}],
+  "zones": [{"at": 0.5, "type": "ice", "rows": 14}],
   "pool": [
     {
       "pattern": "cards_line",
@@ -78,6 +80,23 @@
     {
       "pattern": "bonus_question",
       "weight": 1
+    },
+    {
+      "pattern": "study_group_spread",
+      "weight": 1
+    },
+    {
+      "pattern": "tv_bait",
+      "weight": 1
+    },
+    {
+      "pattern": "pillow_trap",
+      "weight": 1
+    },
+    {
+      "pattern": "friday_bottle",
+      "weight": 1,
+      "from": 0.3
     }
   ]
 }

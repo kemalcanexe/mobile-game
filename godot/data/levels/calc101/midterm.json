@@ -11,6 +11,7 @@
     { "at": 0.60, "pattern": "air_row" },
     { "at": 0.88, "pattern": "bonus_question" }
   ],
+  "events": [{"at": 0.25, "type": "rollCall"}, {"at": 0.45, "type": "questionGate"}, {"at": 0.6, "type": "officeHours"}, {"at": 0.75, "type": "questionGate"}],
   "pool": [
     { "pattern": "cards_line", "weight": 3 },
     { "pattern": "cards_zigzag", "weight": 3 },
@@ -29,6 +30,13 @@
     { "pattern": "highlighter_run", "weight": 1 },
     { "pattern": "coffee_break", "weight": 1 },
     { "pattern": "cartridge_gate", "weight": 1 },
-    { "pattern": "bonus_question", "weight": 1, "from": 0.5 }
+    { "pattern": "bonus_question", "weight": 1, "from": 0.5 },
+    { "pattern": "shield_run", "weight": 1 },
+    { "pattern": "syllabus_preview", "weight": 1 },
+    { "pattern": "tv_bait", "weight": 1 },
+    { "pattern": "party_row", "weight": 1 },
+    { "pattern": "skip_friend", "weight": 1 },
+    { "pattern": "derivative_ramp", "weight": 2 },
+    { "pattern": "ramp_over_spill", "weight": 2 }
   ]
 }

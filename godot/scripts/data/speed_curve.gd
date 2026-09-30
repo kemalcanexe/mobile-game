@@ -7,14 +7,20 @@ var start := 1.0
 var end := 1.0
 var curve := "easeInOut"
 var semester_multiplier := 1.0
+## Boss faz geçişleri: bu ilerlemelerde hız bir kademe (step) artar.
+var steps: Array = []
+var step := 0.0
 
 
-static func from_dict(d: Dictionary, p_semester := 1.0) -> SpeedCurve:
+static func from_dict(d: Dictionary, p_semester := 1.0, boss: Dictionary = {}) -> SpeedCurve:
 	var s := SpeedCurve.new()
 	s.start = float(d["start"])
 	s.end = float(d["end"])
 	s.curve = str(d.get("curve", "easeInOut"))
 	s.semester_multiplier = p_semester
+	if not boss.is_empty():
+		s.steps = boss.get("phases", [])
+		s.step = float(boss.get("speedStep", 0.0))
 	return s
 
 
@@ -30,7 +36,11 @@ func _ease(p: float) -> float:
 
 func multiplier_at(progress: float) -> float:
 	var p := clampf(progress, 0.0, 1.0)
-	return (start + (end - start) * _ease(p)) * semester_multiplier
+	var bonus := 0.0
+	for at in steps:
+		if p >= float(at):
+			bonus += step
+	return (start + (end - start) * _ease(p) + bonus) * semester_multiplier
 
 
 ## Verilen sürede bu eğriyle katedilecek mesafe: D = T·v0 / ∫₀¹ dp/m(p) (Simpson).

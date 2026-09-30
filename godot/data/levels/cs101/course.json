@@ -15,5 +15,6 @@
     "quiz2": "cs101/quiz2.json",
     "project": "cs101/project.json",
     "final": "cs101/final.json"
-  }
+  },
+  "questionFile": "cs101/questions.json"
 }

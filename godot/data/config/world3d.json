@@ -105,5 +105,15 @@
         "tree_oak"
       ]
     }
+  },
+  "effects": {
+    "_comment": "Güçlendirici/debuff davranışları (metre, saniye).",
+    "magnetRange": 18.0,
+    "magnetPull": 26.0,
+    "previewRange": 70.0,
+    "wobbleRoll": 0.07,
+    "wobbleRate": 3.2,
+    "tunnelAlpha": 0.92,
+    "shieldRadius": 1.25
   }
 }

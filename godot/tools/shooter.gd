@@ -1,7 +1,9 @@
 extends Node
 ## Ekran görüntüsü aracı (xvfb altında): SCENE sahnesini açar, SHOTS
 ## saniyelerinde OUT_<n>.png kaydeder. RUN=1 ise koşuyu başlatır,
-## SWIPES="1.0:left,2.5:up" zamanlanmış swipe'lar gönderir.
+## SWIPES="1.0:left,2.5:up" zamanlanmış swipe'lar gönderir. PLAN=plan.json
+## koşuya elle yazılmış bir yerleşim verir. SHOTS_D="800,1500" süre yerine
+## koşu mesafesinde çeker.
 
 func _ready() -> void:
 	var params := {}
@@ -22,11 +24,18 @@ func _ready() -> void:
 		var p := kv.split("=")
 		params[p[0]] = int(p[1]) if p[1].is_valid_int() else p[1]
 	var scene: Node = load(OS.get_environment("SCENE")).instantiate()
+	# PLAN=plan.json: koşu sahnesine elle yazılmış yerleşim ({total, events, specials})
+	if scene is RunScene and OS.get_environment("PLAN") != "":
+		scene.plan_override = JSON.parse_string(FileAccess.get_file_as_string(OS.get_environment("PLAN")))
 	get_tree().root.add_child.call_deferred(scene)
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var t0 := Time.get_ticks_msec()
-	var shots := Array(OS.get_environment("SHOTS").split(",")).map(func(x): return float(x))
+	var shots := Array(OS.get_environment("SHOTS").split(",", false)).map(func(x): return float(x))
+	# SHOTS_D: süre yerine koşu mesafesinde (piksel birimi) çek
+	var by_distance := OS.get_environment("SHOTS_D") != ""
+	if by_distance:
+		shots = Array(OS.get_environment("SHOTS_D").split(",", false)).map(func(x): return float(x))
 	var swipes := []
 	for s in OS.get_environment("SWIPES").split(",", false):
 		var parts := s.split(":")
@@ -48,7 +57,11 @@ func _ready() -> void:
 				if run:
 					run.handle_swipe(sw[1])
 				swipes.erase(sw)
-		if el >= shots[n]:
+		var run_now := _find_run(get_tree().root) if by_distance else null
+		var reached: bool = (run_now != null and run_now.distance >= shots[n]) if by_distance else el >= shots[n]
+		if by_distance and el > float(OS.get_environment("TIMEOUT_S") if OS.get_environment("TIMEOUT_S") != "" else "170"):
+			break
+		if reached:
 			await RenderingServer.frame_post_draw
 			get_viewport().get_texture().get_image().save_png("%s_%d.png" % [OS.get_environment("OUT"), n])
 			n += 1

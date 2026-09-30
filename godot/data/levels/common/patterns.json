@@ -34,6 +34,20 @@
     "coffee_break":      { "rows": ["cf .. ..", ".. .. ..", "og os ..", ".. .. ..", ".. oa ob"] },
     "cartridge_gate":    { "mirror": false, "rows": ["ow ik ow", ".. .. .."] },
     "cartridge_risky":   { "rows": ["og .. ..", "ik .. .."] },
-    "bonus_question":    { "mirror": false, "rows": ["oa .. oa", ".. bq ..", ".. .. .."] }
+    "bonus_question":    { "mirror": false, "rows": ["oa .. oa", ".. bq ..", ".. .. .."] },
+
+    "shield_run":        { "mirror": false, "rows": [".. lc ..", ".. .. ..", "ow nt ow", ".. nt .."] },
+    "syllabus_preview":  { "rows": ["sy .. ..", ".. .. ..", "og .. ob", ".. nt ..", "oa ow .."] },
+    "study_group_spread":{ "mirror": false, "rows": [".. sg ..", "nt .. ..", ".. .. fc", "fc .. ..", ".. .. nt"] },
+    "pillow_trap":       { "rows": [".. pl ..", "nt .. ..", "nt .. .."] },
+    "tv_bait":           { "rows": ["nt tv ..", "nt .. ..", ".. .. .."] },
+    "party_row":         { "rows": ["pt .. ..", ".. nt ..", ".. nt .."] },
+    "friday_bottle":     { "rows": [".. bt ..", "fc .. ..", "fc .. .."] },
+    "skip_friend":       { "rows": ["fs .. ..", ".. nt ..", ".. nt .."] },
+
+    "boss_x_side":       { "rows": ["bx .. ..", ".. nt ..", ".. nt .."] },
+    "boss_x_center":     { "mirror": false, "rows": [".. bx ..", "nt .. ..", "nt .. .."] },
+    "boss_line":         { "rows": ["bl bl ..", ".. .. nt", ".. .. nt"] },
+    "boss_line_edges":   { "mirror": false, "rows": ["bl .. bl", ".. fc ..", ".. fc .."] }
   }
 }

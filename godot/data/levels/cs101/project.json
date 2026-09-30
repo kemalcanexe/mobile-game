@@ -30,6 +30,20 @@
       "pattern": "commit_push"
     }
   ],
+  "events": [
+    {
+      "at": 0.3,
+      "type": "groupProject"
+    },
+    {
+      "at": 0.55,
+      "type": "rollCall"
+    },
+    {
+      "at": 0.75,
+      "type": "groupProject"
+    }
+  ],
   "pool": [
     {
       "pattern": "loop",
@@ -90,6 +104,30 @@
     {
       "pattern": "bonus_question",
       "weight": 1
+    },
+    {
+      "pattern": "stack_overflow",
+      "weight": 1
+    },
+    {
+      "pattern": "syllabus_preview",
+      "weight": 1
+    },
+    {
+      "pattern": "party_row",
+      "weight": 1
+    },
+    {
+      "pattern": "skip_friend",
+      "weight": 1
+    },
+    {
+      "pattern": "study_group_spread",
+      "weight": 1
+    },
+    {
+      "pattern": "bug_hunt",
+      "weight": 3
     }
   ]
 }

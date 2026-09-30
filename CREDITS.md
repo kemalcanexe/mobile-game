@@ -18,6 +18,10 @@
 
 Tüki'nin 3D modeli, nesnelerin çoğu ve efektler `godot/scripts/game/` altında kodla üretilir.
 
+**Ses ve müzik:** Bütün efektler ve lo-fi müzik döngüleri `godot/tools/gen_audio.py` ile
+sentezlenir (numpy). Harici ses örneği ya da kayıt kullanılmaz; çıktılar
+`godot/assets/audio/` altındadır ve projeyle aynı koşullarda kullanılabilir.
+
 ## 2D sürüm (Flutter, eski)
 
 Bütün çizimler (Tüki, nesneler, kağıt dokusu, damgalar) `lib/game/doodle/` altında

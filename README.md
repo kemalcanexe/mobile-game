@@ -17,6 +17,16 @@ referans olarak duruyor.
 |---|---|---|---|---|
 | ![](docs/screenshots/3d/06_run_walls.png) | ![](docs/screenshots/3d/07_cs101_night.png) | ![](docs/screenshots/3d/03_syllabus.png) | ![](docs/screenshots/3d/08_exam_summary.png) | ![](docs/screenshots/3d/11_transcript.png) |
 
+**Faz 4: olaylar, tema mekanikleri, boss**
+
+| Yoklama | Soru kapısı | Türev rampası | Yerçekimi bölgesi | Buz bölgesi |
+|---|---|---|---|---|
+| ![](docs/screenshots/3d/12_rollcall.png) | ![](docs/screenshots/3d/13_question_gate.png) | ![](docs/screenshots/3d/14_derivative_ramp.png) | ![](docs/screenshots/3d/15_gravity_zone.png) | ![](docs/screenshots/3d/16_ice_zone.png) |
+
+| Prof. Kırmızı | All-nighter | Çalışma grubu | Kalkan + Syllabus |
+|---|---|---|---|
+| ![](docs/screenshots/3d/17_prof_kirmizi.png) | ![](docs/screenshots/3d/18_all_nighter.png) | ![](docs/screenshots/3d/19_study_group.png) | ![](docs/screenshots/3d/20_shield_syllabus.png) |
+
 - Tasarım dokümanı: [`GAME_PROPOSAL.md`](GAME_PROPOSAL.md)
 - Kararlar: [`docs/DECISIONS.md`](docs/DECISIONS.md) · Mimari: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - Kullanıcı geri bildirimi: [`docs/FEEDBACK.md`](docs/FEEDBACK.md)
@@ -29,6 +39,12 @@ referans olarak duruyor.
 ```bash
 # Testler (headless, gerçek fizikle)
 godot --headless --fixed-fps 60 --path godot -s res://tests/run_tests.gd
+
+# Bütün level'ları botla oynat (çalışma hatası + denge raporu)
+godot --headless --fixed-fps 60 --path godot -s res://tools/soak.gd
+
+# Sesleri yeniden üret (numpy gerekir)
+python3 godot/tools/gen_audio.py
 
 # Android APK / Web
 godot --headless --path godot --export-release "Android" ../build_godot/android/tukenmez.apk
@@ -48,6 +64,9 @@ Android release imzası için `GODOT_ANDROID_KEYSTORE_RELEASE_PATH/USER/PASSWORD
 
 ## İçerik ekleme
 
-Yeni ders = veri: `godot/data/levels/<ders>/` altına `course.json`, 5 level JSON'u ve `patterns.json`;
+Yeni ders = veri: `godot/data/levels/<ders>/` altına `course.json`, 5 level JSON'u, `patterns.json` ve
+`questions.json` (soru kapıları; ilk şık doğru cevap);
 `courses.json` ve `curriculum.json`'a ekle; `world3d.json → themes` altına dersin kampüs temasını yaz.
-Yükleme sırasında veri doğrulanır.
+Level JSON'unda `events` (yoklama, pop quiz, grup ödevi, ofis saati, soru kapısı), `zones`
+(yerçekimi, buz), finallerde `boss` ve `allNighter` alanları olayları tanımlar; kuralları
+`godot/data/config/events.json`'dadır. Yükleme sırasında veri doğrulanır.

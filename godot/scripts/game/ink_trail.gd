@@ -39,13 +39,19 @@ func redraw(low_ink: bool) -> void:
 	_mesh.clear_surfaces()
 	if _pts.size() < 2:
 		return
-	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
 	var n := _pts.size()
+	var drawn: Array[int] = []
 	for i in range(1, n):
 		if _gaps[i] or _gaps[i - 1]:
 			continue
 		if low_ink and i % 3 == 0:
 			continue  # mürekkep azsa kesik kesik
+		drawn.append(i)
+	# uzun uçuşta (rampa, ay yerçekimi) çizilecek parça kalmayabilir
+	if drawn.is_empty():
+		return
+	_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i in drawn:
 		var a := _pts[i - 1]
 		var b := _pts[i]
 		var side := Vector3(width / 2.0, 0, 0)

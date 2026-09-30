@@ -15,6 +15,9 @@ var _t := 0.0
 
 
 func _ready() -> void:
+	Sound.music("menu")
+	Sound.scratch(false)
+	Sound.set_night(false)
 	_build_backdrop()
 	var layer := CanvasLayer.new()
 	add_child(layer)

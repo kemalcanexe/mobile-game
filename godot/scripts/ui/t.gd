@@ -87,7 +87,23 @@ const TR := {
 	"effect_double": "x2",
 	"effect_focus": "ODAK",
 	"effect_reverse": "TERS!",
+	"effect_shield": "KALKAN",
+	"effect_magnet": "GRUP",
+	"effect_preview": "SYLLABUS",
+	"effect_wobble": "BAŞ AĞRISI",
+	"effect_sleep": "UYKU",
+	"effect_group": "GRUP ÖDEVİ",
+	"effect_office": "OFİS SAATİ",
+	"effect_gravity": "YERÇEKİMİ",
+	"effect_ice": "BUZ",
+	"row_events": "Olaylar",
+	"boss_nod": "Prof. Kırmızı onaylarcasına başını salladı.",
+	"boss_eyebrow": "Prof. Kırmızı tek kaşını kaldırdı.",
+	"boss_facepalm": "Prof. Kırmızı yüzünü avuçladı.",
 	"back": "‹ Geri",
+	"set_music": "Müzik",
+	"set_sfx": "Efekt",
+	"set_haptics": "Titreşim",
 }
 
 

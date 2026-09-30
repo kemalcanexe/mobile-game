@@ -93,7 +93,9 @@ func _play() -> void:
 		_badge.scale = Vector2(3, 3))
 	tw.tween_property(_badge, "modulate:a", 1.0, 0.05)
 	tw.parallel().tween_property(_badge, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK)
-	tw.tween_callback(func() -> void: Input.vibrate_handheld(80))
+	tw.tween_callback(func() -> void:
+		Sound.play("stamp")
+		Sound.vibrate("stamp"))
 	tw.tween_property(_gpa_box, "modulate:a", 1.0, 0.3)
 	tw.tween_property(_button, "modulate:a", 1.0, 0.2)
 	tw.tween_callback(func() -> void: _button.disabled = false)

@@ -30,6 +30,8 @@
       "pattern": "momentum_ramp"
     }
   ],
+  "events": [{"at": 0.3, "type": "groupProject"}, {"at": 0.55, "type": "rollCall"}, {"at": 0.75, "type": "groupProject"}],
+  "zones": [{"at": 0.2, "type": "gravity", "rows": 16}, {"at": 0.62, "type": "ice", "rows": 16}],
   "pool": [
     {
       "pattern": "pendulum",
@@ -89,6 +91,26 @@
     },
     {
       "pattern": "bonus_question",
+      "weight": 1
+    },
+    {
+      "pattern": "shield_run",
+      "weight": 1
+    },
+    {
+      "pattern": "syllabus_preview",
+      "weight": 1
+    },
+    {
+      "pattern": "party_row",
+      "weight": 1
+    },
+    {
+      "pattern": "skip_friend",
+      "weight": 1
+    },
+    {
+      "pattern": "study_group_spread",
       "weight": 1
     }
   ]
