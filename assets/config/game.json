@@ -1,0 +1,58 @@
+{
+  "world": {
+    "width": 360,
+    "minVisibleHeight": 600,
+    "laneCount": 3,
+    "laneWidth": 108,
+    "penTipFromBottom": 190,
+    "spawnMarginTop": 90,
+    "despawnMarginBottom": 90
+  },
+  "scroll": {
+    "baseSpeed": 300,
+    "rowSpacing": 72,
+    "warmupSeconds": 1.6,
+    "endMarginRows": 3,
+    "finalStretchProgress": 0.85
+  },
+  "pen": {
+    "laneChangeSeconds": 0.11,
+    "jumpSeconds": 0.6,
+    "duckSeconds": 0.6,
+    "stumbleSeconds": 0.35,
+    "jumpScale": 1.3,
+    "hitboxWidth": 22,
+    "hitboxHeight": 30
+  },
+  "objects": {
+    "size": 44,
+    "wallSize": 70,
+    "hitboxInset": 8
+  },
+  "input": {
+    "minSwipeDistance": 22,
+    "minFlingVelocity": 380,
+    "bufferSeconds": 0.12
+  },
+  "ink": {
+    "max": 100,
+    "lowThreshold": 25
+  },
+  "trail": {
+    "sampleDistance": 7,
+    "maxPoints": 200,
+    "strokeWidth": 3.2,
+    "mapSampleDistance": 40,
+    "maxMapPoints": 1200
+  },
+  "doodle": {
+    "boilFps": 4,
+    "boilVariants": 3,
+    "wobble": 1.3
+  },
+  "juice": {
+    "shakeSeconds": 0.18,
+    "shakeAmplitude": 4,
+    "popupSeconds": 0.7
+  }
+}
