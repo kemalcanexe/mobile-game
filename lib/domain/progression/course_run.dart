@@ -33,7 +33,9 @@ class CourseRun {
 
   CourseRun withScore(AssessmentType type, double score) {
     if (type != nextAssessment) {
-      throw StateError('Sıradaki sınav ${nextAssessment?.key}, gelen ${type.key}.');
+      throw StateError(
+        'Sıradaki sınav ${nextAssessment?.key}, gelen ${type.key}.',
+      );
     }
     return CourseRun(
       courseId: courseId,

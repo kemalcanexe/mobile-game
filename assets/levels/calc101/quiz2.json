@@ -1,0 +1,28 @@
+{
+  "id": "calc101.quiz2",
+  "assessment": "quiz2",
+  "durationSeconds": 60,
+  "speed": { "start": 1.20, "end": 1.50, "curve": "easeInOut" },
+  "seed": 101003,
+  "gapRows": { "min": 1, "max": 2 },
+  "script": [
+    { "at": 0.00, "pattern": "cards_center" },
+    { "at": 0.45, "pattern": "highlighter_run" },
+    { "at": 0.47, "pattern": "phone_bait" }
+  ],
+  "pool": [
+    { "pattern": "cards_line", "weight": 3 },
+    { "pattern": "cards_zigzag", "weight": 3 },
+    { "pattern": "notes_pair", "weight": 2 },
+    { "pattern": "triple_choice", "weight": 2 },
+    { "pattern": "formula_diagonal", "weight": 2 },
+    { "pattern": "phone_bait", "weight": 3 },
+    { "pattern": "distraction_row", "weight": 2 },
+    { "pattern": "console_trap", "weight": 2 },
+    { "pattern": "mixed_hurdles", "weight": 2 },
+    { "pattern": "book_gate", "weight": 1 },
+    { "pattern": "ruler_center_gap", "weight": 1 },
+    { "pattern": "cartridge_risky", "weight": 1 },
+    { "pattern": "bonus_question", "weight": 1 }
+  ]
+}

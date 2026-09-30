@@ -1,0 +1,39 @@
+{
+  "_comment": "Satırlar geliş sırasındadır: ilk satır Tüki'ye ilk ulaşır. '..' boş hücre. mirror:false olmayan desenler rastgele aynalanabilir.",
+  "patterns": {
+    "cards_line":        { "rows": ["fc .. ..", "fc .. ..", "fc .. ..", "fc .. ..", "fc .. .."] },
+    "cards_center":      { "mirror": false, "rows": [".. fc ..", ".. fc ..", ".. fc ..", ".. fc .."] },
+    "cards_zigzag":      { "rows": ["fc .. ..", ".. fc ..", ".. .. fc", ".. fc ..", "fc .. .."] },
+    "cards_then_note":   { "rows": [".. fc ..", ".. fc ..", ".. nt .."] },
+    "notes_scatter":     { "rows": ["nt .. ..", ".. .. nt", ".. nt .."] },
+    "notes_pair":        { "mirror": false, "rows": ["nt .. nt", ".. .. ..", ".. nt .."] },
+    "triple_choice":     { "rows": ["fc nt gc", "fc nt ..", "fc .. .."] },
+
+    "jump_intro":        { "mirror": false, "rows": [".. og ..", ".. .. ..", ".. fc ..", ".. fc .."] },
+    "duck_intro":        { "mirror": false, "rows": [".. oa ..", ".. .. ..", ".. fc ..", ".. fc .."] },
+    "wall_intro":        { "mirror": false, "rows": [".. ow ..", ".. .. ..", "fc .. fc", "fc .. fc"] },
+
+    "ground_row":        { "mirror": false, "rows": ["og os og", ".. .. ..", "fc fc fc"] },
+    "air_row":           { "mirror": false, "rows": ["oa ob oa", ".. .. ..", "fc fc fc"] },
+    "book_behind_spill": { "rows": ["og .. ..", "bk .. ..", ".. .. .."] },
+    "book_under_plane":  { "rows": ["oa .. ..", "bk .. ..", ".. .. .."] },
+    "book_gate":         { "mirror": false, "rows": ["ow bk ow", ".. .. .."] },
+    "mixed_hurdles":     { "rows": ["og .. ..", ".. .. ..", ".. .. ..", "ob .. ..", "nt .. .."] },
+
+    "wall_slalom":       { "rows": ["ow .. ..", ".. nt ..", ".. .. ..", ".. .. ow", ".. nt ..", ".. .. .."] },
+    "ruler_barrier":     { "rows": ["ow ow ..", ".. .. nt", ".. .. nt"] },
+    "ruler_center_gap":  { "mirror": false, "rows": ["ow .. ow", ".. nt ..", ".. fc .."] },
+
+    "phone_bait":        { "mirror": false, "rows": ["fc ph fc", "fc .. fc", "fc .. fc"] },
+    "console_trap":      { "rows": ["nt gc ..", "nt .. ..", ".. .. .."] },
+    "friend_block":      { "mirror": false, "rows": [".. fr ..", "nt .. nt"] },
+    "distraction_row":   { "rows": ["ph .. gc", ".. nt ..", ".. nt .."] },
+    "friend_corner":     { "rows": ["fr .. ..", ".. fc ..", ".. fc .."] },
+
+    "highlighter_run":   { "mirror": false, "rows": [".. hl ..", ".. fc ..", "fc fc fc", "fc fc fc", "nt nt nt"] },
+    "coffee_break":      { "rows": ["cf .. ..", ".. .. ..", "og os ..", ".. .. ..", ".. oa ob"] },
+    "cartridge_gate":    { "mirror": false, "rows": ["ow ik ow", ".. .. .."] },
+    "cartridge_risky":   { "rows": ["og .. ..", "ik .. .."] },
+    "bonus_question":    { "mirror": false, "rows": ["oa .. oa", ".. bq ..", ".. .. .."] }
+  }
+}

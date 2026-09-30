@@ -84,7 +84,9 @@ class LevelScoreResult {
     final clean = !inkDepleted && inkRemaining >= rules.cleanPaperMinInk
         ? rules.cleanPaperCredit
         : 0.0;
-    var score = (base + bonusExtraCredit + clean).clamp(0, rules.max).toDouble();
+    var score = (base + bonusExtraCredit + clean)
+        .clamp(0, rules.max)
+        .toDouble();
     var capped = false;
     if (inkDepleted && score > rules.inkOutCap) {
       score = rules.inkOutCap;

@@ -1,0 +1,31 @@
+{
+  "id": "calc101.project",
+  "assessment": "project",
+  "durationSeconds": 75,
+  "speed": { "start": 1.15, "end": 1.50, "curve": "easeInOut" },
+  "seed": 101004,
+  "gapRows": { "min": 1, "max": 3 },
+  "script": [
+    { "at": 0.00, "pattern": "formula_diagonal" },
+    { "at": 0.20, "pattern": "derivative_ramp" },
+    { "at": 0.55, "pattern": "asymptote_column" },
+    { "at": 0.75, "pattern": "derivative_ramp" }
+  ],
+  "pool": [
+    { "pattern": "formula_diagonal", "weight": 4 },
+    { "pattern": "integral_gate", "weight": 3 },
+    { "pattern": "limit_squeeze", "weight": 3 },
+    { "pattern": "asymptote_column", "weight": 2 },
+    { "pattern": "derivative_ramp", "weight": 1 },
+    { "pattern": "cards_zigzag", "weight": 2 },
+    { "pattern": "notes_scatter", "weight": 2 },
+    { "pattern": "wall_slalom", "weight": 2 },
+    { "pattern": "ruler_barrier", "weight": 2 },
+    { "pattern": "mixed_hurdles", "weight": 2 },
+    { "pattern": "friend_block", "weight": 2 },
+    { "pattern": "console_trap", "weight": 1 },
+    { "pattern": "cartridge_gate", "weight": 1 },
+    { "pattern": "coffee_break", "weight": 1 },
+    { "pattern": "bonus_question", "weight": 1 }
+  ]
+}

@@ -46,7 +46,9 @@ class StandingRules {
     probationBelowCgpa: (json['probationBelowCgpa'] as num).toDouble(),
     honors: (json['honors'] as List)
         .cast<Map<String, dynamic>>()
-        .map((h) => HonorRule(h['id'] as String, (h['minCgpa'] as num).toDouble()))
+        .map(
+          (h) => HonorRule(h['id'] as String, (h['minCgpa'] as num).toDouble()),
+        )
         .toList(),
   );
 
@@ -73,13 +75,16 @@ class GradingRules {
     }
     final sum = weights.values.fold<double>(0, (a, b) => a + b);
     if ((sum - 1).abs() > 1e-6) {
-      throw FormatException('Değerlendirme ağırlıklarının toplamı 1 olmalı: $sum');
+      throw FormatException(
+        'Değerlendirme ağırlıklarının toplamı 1 olmalı: $sum',
+      );
     }
   }
 
   factory GradingRules.fromJson(Map<String, dynamic> json) => GradingRules(
     weights: {
-      for (final a in (json['assessments'] as List).cast<Map<String, dynamic>>())
+      for (final a
+          in (json['assessments'] as List).cast<Map<String, dynamic>>())
         AssessmentType.fromKey(a['type'] as String): (a['weight'] as num)
             .toDouble(),
     },

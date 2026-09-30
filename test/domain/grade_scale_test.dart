@@ -57,7 +57,8 @@ void main() {
 
   test('0 alt sınırı olmayan tablo reddedilir', () {
     expect(
-      () => GradeScale([const LetterGrade(symbol: 'A', minScore: 90, points: 4)]),
+      () =>
+          GradeScale([const LetterGrade(symbol: 'A', minScore: 90, points: 4)]),
       throwsArgumentError,
     );
   });

@@ -1,0 +1,40 @@
+{
+  "_comment": "Hocanın kırmızı kalemle yazdığı yorumlar. Harfin ilk karakterine göre seçilir.",
+  "tr": {
+    "A": [
+      "Mükemmel, ama el yazın berbat.",
+      "Bunu kimden kopyaladın? Şaka şaka, aferin.",
+      "Tahtaya çık da herkese anlat.",
+      "Sınıf ortalamasını bozdun, tebrikler."
+    ],
+    "B": [
+      "İyi, ama daha iyisi olabilirdi.",
+      "Son sorularda kalem titremiş.",
+      "Fena değil. Kantine biraz ara ver.",
+      "Emek var, dikkat eksik."
+    ],
+    "C": [
+      "Ders dinlerken uyumuşsun, belli.",
+      "Ortalamanın tam ortası. Tebrik mi etsem?",
+      "Notlarını arkadaşından mı aldın?",
+      "Yarısı doğru, yarısı konsol."
+    ],
+    "D": [
+      "Geçtin. Nasıl, bilmiyorum.",
+      "Bu kağıda bakınca gözlüğümü sildim.",
+      "Ofis saatlerime bir uğra.",
+      "Kıl payı. Kalemine teşekkür et."
+    ],
+    "F": [
+      "Görüşelim.",
+      "Bu bir sınav kağıdı mı, alışveriş listesi mi?",
+      "Bütünlemede görüşürüz.",
+      "Kalemin bile utandı."
+    ],
+    "inkOut": [
+      "Kağıdın yarısı boş?",
+      "Mürekkebi nereye harcadın?",
+      "Kalemin bitti, bahanen bitmedi."
+    ]
+  }
+}

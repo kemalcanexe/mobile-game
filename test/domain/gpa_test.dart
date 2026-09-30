@@ -43,7 +43,11 @@ void main() {
     });
 
     test('hesapta yuvarlama yok, gösterimde 2 basamak', () {
-      final v = gpa.gpa([rec('a', 'A-', 3.7), rec('b', 'B+', 3.3), rec('c', 'B', 3.0)]);
+      final v = gpa.gpa([
+        rec('a', 'A-', 3.7),
+        rec('b', 'B+', 3.3),
+        rec('c', 'B', 3.0),
+      ]);
       expect(v, closeTo(10 / 3, 1e-12));
       expect(GpaCalculator.format(v), '3.33');
     });
@@ -79,7 +83,11 @@ void main() {
         policy,
       );
       expect(t.records, hasLength(3));
-      expect(t.records.first.replaced, isTrue, reason: 'eski kayıt R ile saklanır');
+      expect(
+        t.records.first.replaced,
+        isTrue,
+        reason: 'eski kayıt R ile saklanır',
+      );
       expect(t.activeRecordFor('calc101')!.letter, 'B+');
       expect(t.cgpa, closeTo((3.3 * 4 + 3.0 * 3) / 7, 1e-12));
       expect(t.hasUnresolvedFailure, isFalse);
@@ -88,7 +96,10 @@ void main() {
 
     test('ilk dönemin GPA\'i tarihsel olarak değişmez', () {
       var t = Transcript([rec('calc101', 'F', 0, semester: 1)]);
-      t = t.addResult(rec('calc101', 'A', 4.0, semester: 2, attempt: 2), policy);
+      t = t.addResult(
+        rec('calc101', 'A', 4.0, semester: 2, attempt: 2),
+        policy,
+      );
       expect(t.semesterGpa(1), 0.0);
       expect(t.semesterGpa(2), 4.0);
       expect(t.cgpa, 4.0);
@@ -96,7 +107,10 @@ void main() {
 
     test('geçilen ders tekrar alınamaz', () {
       final t = Transcript([rec('calc101', 'D-', 0.7)]);
-      expect(() => t.addResult(rec('calc101', 'A', 4.0), policy), throwsStateError);
+      expect(
+        () => t.addResult(rec('calc101', 'A', 4.0), policy),
+        throwsStateError,
+      );
     });
 
     test('ikinci F de tekrar alınabilir', () {
@@ -155,7 +169,11 @@ void main() {
       );
       final withF = Transcript([rec('a', 'A', 4.0), rec('b', 'F', 0)]);
       expect(
-        standing.canGraduate(withF, completedSemesters: 8, requiredSemesters: 8),
+        standing.canGraduate(
+          withF,
+          completedSemesters: 8,
+          requiredSemesters: 8,
+        ),
         isFalse,
       );
       final low = Transcript([rec('a', 'D', 1.0)]);

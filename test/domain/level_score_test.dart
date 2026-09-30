@@ -95,7 +95,9 @@ void main() {
     });
 
     test('ekstra kredi sayılır', () {
-      final t = LevelScoreTracker()..addExtraCredit(3)..addExtraCredit(3);
+      final t = LevelScoreTracker()
+        ..addExtraCredit(3)
+        ..addExtraCredit(3);
       expect(t.extraCredit, 6);
       expect(t.bonusCount, 2);
     });
@@ -123,7 +125,10 @@ void main() {
       expect(run.nextAssessment, AssessmentType.quiz1);
       run = run.withScore(AssessmentType.quiz1, 90);
       expect(run.nextAssessment, AssessmentType.midterm);
-      expect(() => run.withScore(AssessmentType.finalExam, 90), throwsStateError);
+      expect(
+        () => run.withScore(AssessmentType.finalExam, 90),
+        throwsStateError,
+      );
       for (final t in AssessmentType.values.skip(1)) {
         run = run.withScore(t, 80);
       }
@@ -132,8 +137,10 @@ void main() {
     });
 
     test('JSON gidiş-dönüş', () {
-      final run = CourseRun(courseId: 'calc101', attempt: 2)
-          .withScore(AssessmentType.quiz1, 88.5);
+      final run = CourseRun(
+        courseId: 'calc101',
+        attempt: 2,
+      ).withScore(AssessmentType.quiz1, 88.5);
       final back = CourseRun.fromJson(run.toJson());
       expect(back.attempt, 2);
       expect(back.scores[AssessmentType.quiz1], 88.5);

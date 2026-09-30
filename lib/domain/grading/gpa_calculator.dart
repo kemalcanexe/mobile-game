@@ -21,5 +21,6 @@ class GpaCalculator {
   }
 
   /// Gösterim: 2 ondalık basamak. GPA tanımsızsa "—".
-  static String format(double? gpa) => gpa == null ? '—' : gpa.toStringAsFixed(2);
+  static String format(double? gpa) =>
+      gpa == null ? '—' : gpa.toStringAsFixed(2);
 }
