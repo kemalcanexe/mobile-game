@@ -22,7 +22,11 @@ class StartOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final hints = [l.readyHintLanes, l.readyHintJump, l.readyHintDuck];
+    final hints = [
+      (Icons.swap_horiz_rounded, l.readyHintLanes),
+      (Icons.arrow_upward_rounded, l.readyHintJump),
+      (Icons.arrow_downward_rounded, l.readyHintDuck),
+    ];
     return ColoredBox(
       color: const Color(0x55FBF8EF),
       child: SafeArea(
@@ -47,10 +51,18 @@ class StartOverlay extends StatelessWidget {
                     children: [
                       Text(title, style: AppTheme.hand(44)),
                       const SizedBox(height: 10),
-                      for (final h in hints)
+                      for (final (icon, text) in hints)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 3),
-                          child: Text(h, style: AppTheme.ui(17)),
+                          child: Row(
+                            children: [
+                              Icon(icon, color: Palette.ink, size: 22),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(text, style: AppTheme.ui(17)),
+                              ),
+                            ],
+                          ),
                         ),
                       const SizedBox(height: 6),
                       Text(

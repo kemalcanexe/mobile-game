@@ -38,7 +38,11 @@ class MainMenuScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(l.appTitle, style: AppTheme.hand(56)),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(l.appTitle, style: AppTheme.hand(56)),
+                        ),
                         Text(
                           l.appSubtitle,
                           style: AppTheme.hand(34, color: Palette.teacherRed),
@@ -211,7 +215,11 @@ class _CourseCard extends StatelessWidget {
             if (letter != null)
               GradeStamp(letter: letter!, size: 64)
             else
-              Text('→', style: AppTheme.hand(44)),
+              const Icon(
+                Icons.arrow_forward_rounded,
+                color: Palette.ink,
+                size: 40,
+              ),
           ],
         ),
       ),

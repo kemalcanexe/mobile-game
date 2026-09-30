@@ -313,19 +313,19 @@ abstract class AppLocalizations {
   /// No description provided for @readyHintLanes.
   ///
   /// In tr, this message translates to:
-  /// **'← → sola/sağa kaydır: satır atla'**
+  /// **'Sola/sağa kaydır: satır atla'**
   String get readyHintLanes;
 
   /// No description provided for @readyHintJump.
   ///
   /// In tr, this message translates to:
-  /// **'↑ yukarı kaydır: kalemi kaldır (zıpla)'**
+  /// **'Yukarı kaydır: kalemi kaldır (zıpla)'**
   String get readyHintJump;
 
   /// No description provided for @readyHintDuck.
   ///
   /// In tr, this message translates to:
-  /// **'↓ aşağı kaydır: yatık yazı (eğil)'**
+  /// **'Aşağı kaydır: yatık yazı (eğil)'**
   String get readyHintDuck;
 
   /// No description provided for @readyHintInk.
@@ -505,7 +505,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameNotificationBody.
   ///
   /// In tr, this message translates to:
-  /// **'hikaye paylaştı 👀'**
+  /// **'hikaye paylaştı'**
   String get gameNotificationBody;
 
   /// No description provided for @gameFriendBubble.

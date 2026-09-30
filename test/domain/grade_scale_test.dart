@@ -63,6 +63,15 @@ void main() {
     );
   });
 
+  test('negatif skor F, eşitlik harfe göre', () {
+    expect(scale.gradeFor(-5).symbol, 'F');
+    const a = LetterGrade(symbol: 'A', minScore: 93, points: 4);
+    expect(scale.bySymbol('A'), a);
+    expect(scale.bySymbol('A').hashCode, a.hashCode);
+    expect(scale.bySymbol('A') == scale.bySymbol('A+'), isFalse);
+    expect('${scale.bySymbol('B-')}', 'B-');
+  });
+
   test('bilinmeyen harf hata verir', () {
     expect(() => scale.bySymbol('E'), throwsFormatException);
   });

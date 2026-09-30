@@ -186,6 +186,7 @@ void main() {
             id: 'bad',
             rows: [
               ['fc', '..'],
+              ['fc', 'nt', '..'],
               ['ow', 'ow', 'ow'],
               ['zz', '..', '..'],
             ],
@@ -201,6 +202,7 @@ void main() {
       ).validate(broken());
       bool has(String s) => errors.any((e) => e.contains(s));
       expect(has('3 hücre bekleniyordu'), isTrue);
+      expect(has('birden fazla toplanabilir'), isTrue);
       expect(has('bütün şeritler duvarla kapalı'), isTrue);
       expect(has('bilinmeyen nesne kodu "zz"'), isTrue);
       expect(has('"midterm" level\'ı eksik'), isTrue);

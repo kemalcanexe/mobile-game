@@ -29,6 +29,15 @@ class LevelValidator {
         final walls = row.where(
           (c) => catalog.contains(c) && catalog[c].kind == ItemKind.wall,
         );
+        final collectibles = row.where(
+          (c) => catalog.contains(c) && catalog[c].countsTowardMax,
+        );
+        if (collectibles.length > 1) {
+          errors.add(
+            'desen "$id" satır $i: aynı satırda birden fazla toplanabilir '
+            '(hepsi toplanamaz, %100 imkânsızlaşır)',
+          );
+        }
         if (walls.length >= laneCount) {
           errors.add(
             'desen "$id" satır $i: bütün şeritler duvarla kapalı (geçilemez)',

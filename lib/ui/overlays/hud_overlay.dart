@@ -21,9 +21,9 @@ class HudOverlay extends StatelessWidget {
         children: [
           // ilerleme çubuğu
           Positioned(
-            left: 64,
-            right: 64,
-            top: 14,
+            left: 110,
+            right: 60,
+            top: 18,
             child: ValueListenableBuilder<double>(
               valueListenable: hud.progress,
               builder: (_, p, _) => _ProgressBar(progress: p),

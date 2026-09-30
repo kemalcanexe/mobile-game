@@ -135,13 +135,13 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get readyHintLanes => '← → sola/sağa kaydır: satır atla';
+  String get readyHintLanes => 'Sola/sağa kaydır: satır atla';
 
   @override
-  String get readyHintJump => '↑ yukarı kaydır: kalemi kaldır (zıpla)';
+  String get readyHintJump => 'Yukarı kaydır: kalemi kaldır (zıpla)';
 
   @override
-  String get readyHintDuck => '↓ aşağı kaydır: yatık yazı (eğil)';
+  String get readyHintDuck => 'Aşağı kaydır: yatık yazı (eğil)';
 
   @override
   String get readyHintInk => 'Dikkat dağıtıcılar mürekkebini bitirir!';
@@ -231,7 +231,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gameNotificationTitle => 'Ayşe';
 
   @override
-  String get gameNotificationBody => 'hikaye paylaştı 👀';
+  String get gameNotificationBody => 'hikaye paylaştı';
 
   @override
   String get gameFriendBubble => 'Kantin?';

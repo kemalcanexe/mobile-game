@@ -49,9 +49,9 @@
 
   "readyTitle": "{name}",
   "@readyTitle": { "placeholders": { "name": { "type": "String" } } },
-  "readyHintLanes": "← → sola/sağa kaydır: satır atla",
-  "readyHintJump": "↑ yukarı kaydır: kalemi kaldır (zıpla)",
-  "readyHintDuck": "↓ aşağı kaydır: yatık yazı (eğil)",
+  "readyHintLanes": "Sola/sağa kaydır: satır atla",
+  "readyHintJump": "Yukarı kaydır: kalemi kaldır (zıpla)",
+  "readyHintDuck": "Aşağı kaydır: yatık yazı (eğil)",
   "readyHintInk": "Dikkat dağıtıcılar mürekkebini bitirir!",
   "start": "Başla",
 

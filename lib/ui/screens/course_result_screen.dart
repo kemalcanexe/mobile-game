@@ -101,11 +101,9 @@ class _CourseResultScreenState extends ConsumerState<CourseResultScreen>
               final gpa = _interval(_stampEnd, 1);
               final before = c.cgpaBefore;
               final after = c.cgpaAfter;
-              final arrow = before == null || after == null || after == before
-                  ? ''
-                  : after > before
-                  ? ' ▲'
-                  : ' ▼';
+              final trend = before == null || after == null || after == before
+                  ? 0
+                  : (after > before ? 1 : -1);
 
               return ListView(
                 padding: const EdgeInsets.fromLTRB(40, 16, 20, 32),
@@ -159,15 +157,7 @@ class _CourseResultScreenState extends ConsumerState<CourseResultScreen>
                           l.gpaLabel,
                           style: AppTheme.ui(16, color: Palette.pencil),
                         ),
-                        Text(
-                          '${GpaCalculator.format(before)} → ${GpaCalculator.format(after)}$arrow',
-                          style: AppTheme.hand(
-                            40,
-                            color: arrow == ' ▼'
-                                ? Palette.teacherRed
-                                : Palette.ink,
-                          ),
-                        ),
+                        _GpaChange(before: before, after: after, trend: trend),
                         if (c.failed) ...[
                           const SizedBox(height: 8),
                           Text(
@@ -177,9 +167,12 @@ class _CourseResultScreenState extends ConsumerState<CourseResultScreen>
                           ),
                         ],
                         const SizedBox(height: 22),
-                        PostItButton(
-                          label: l.backToCourse,
-                          onPressed: () => Navigator.of(context).pop(),
+                        IgnorePointer(
+                          ignoring: gpa < 1,
+                          child: PostItButton(
+                            label: l.backToCourse,
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
                         ),
                       ],
                     ),
@@ -208,4 +201,38 @@ class _CourseResultScreenState extends ConsumerState<CourseResultScreen>
           ],
         ),
       );
+}
+
+class _GpaChange extends StatelessWidget {
+  const _GpaChange({
+    required this.before,
+    required this.after,
+    required this.trend,
+  });
+
+  final double? before;
+  final double? after;
+  final int trend;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = trend < 0 ? Palette.teacherRed : Palette.ink;
+    final style = AppTheme.hand(40, color: color);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(GpaCalculator.format(before), style: style),
+        Icon(Icons.arrow_forward_rounded, color: color, size: 30),
+        Text(GpaCalculator.format(after), style: style),
+        if (trend != 0)
+          Icon(
+            trend > 0
+                ? Icons.arrow_drop_up_rounded
+                : Icons.arrow_drop_down_rounded,
+            color: color,
+            size: 44,
+          ),
+      ],
+    );
+  }
 }

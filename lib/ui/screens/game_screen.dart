@@ -35,6 +35,10 @@ class GameScreen extends ConsumerStatefulWidget {
 class _GameScreenState extends ConsumerState<GameScreen>
     with WidgetsBindingObserver {
   TukenmezGame? _game;
+
+  /// GameWidget bir kez kurulur: constructor'ı her çağrıldığında
+  /// initialActiveOverlays'i yeniden ekler.
+  Widget? _gameWidget;
   Future<CourseCompletion?>? _completion;
   String _comment = '';
 
@@ -97,7 +101,6 @@ class _GameScreenState extends ConsumerState<GameScreen>
       content.grading,
     );
     HapticFeedback.heavyImpact();
-    setState(() {});
   }
 
   Future<void> _continue() async {
@@ -145,7 +148,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
         }
       },
       child: Scaffold(
-        body: GameWidget<TukenmezGame>(
+        body: _gameWidget ??= GameWidget<TukenmezGame>(
           game: game,
           initialActiveOverlays: const [TukenmezGame.overlayStart],
           overlayBuilderMap: {

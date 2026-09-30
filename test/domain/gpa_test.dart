@@ -126,10 +126,39 @@ void main() {
       expect(t.records.single.replaced, isFalse);
     });
 
+    test('eski formatlı kayıt (opsiyonel alanlar yok) okunur', () {
+      final r = CourseRecord.fromJson({
+        'courseId': 'calc101',
+        'courseCode': 'CALC 101',
+        'credits': 4,
+        'semester': 1,
+        'score': 91,
+        'letter': 'A-',
+        'gradePoints': 3.7,
+      });
+      expect(r.attempt, 1);
+      expect(r.replaced, isFalse);
+      expect(r.assessmentScores, isEmpty);
+    });
+
     test('JSON gidiş-dönüş', () {
       var t = Transcript([rec('calc101', 'F', 0)]);
-      t = t.addResult(rec('calc101', 'A', 4.0, attempt: 2), policy);
+      t = t.addResult(
+        CourseRecord(
+          courseId: 'calc101',
+          courseCode: 'CALC 101',
+          credits: 3,
+          semester: 1,
+          score: 95,
+          letter: 'A',
+          gradePoints: 4.0,
+          attempt: 2,
+          assessmentScores: const {'final': 88.0},
+        ),
+        policy,
+      );
       final back = Transcript.fromJson(t.toJson());
+      expect(back.records.last.assessmentScores, {'final': 88.0});
       expect(back.records.first.replaced, isTrue);
       expect(back.records.last.isRetake, isTrue);
       expect(back.cgpa, t.cgpa);

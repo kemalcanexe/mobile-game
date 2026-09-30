@@ -12,6 +12,7 @@ class CourseRecord implements GpaEntry {
     required this.gradePoints,
     this.attempt = 1,
     this.replaced = false,
+    this.assessmentScores = const {},
   });
 
   factory CourseRecord.fromJson(Map<String, dynamic> json) => CourseRecord(
@@ -24,6 +25,12 @@ class CourseRecord implements GpaEntry {
     gradePoints: (json['gradePoints'] as num).toDouble(),
     attempt: json['attempt'] as int? ?? 1,
     replaced: json['replaced'] as bool? ?? false,
+    assessmentScores: {
+      for (final e
+          in (json['assessmentScores'] as Map<String, dynamic>? ?? const {})
+              .entries)
+        e.key: (e.value as num).toDouble(),
+    },
   );
 
   final String courseId;
@@ -43,6 +50,9 @@ class CourseRecord implements GpaEntry {
   /// CGPA'e girmez.
   final bool replaced;
 
+  /// Sınav türü anahtarına göre level skorları (izlence dökümü için).
+  final Map<String, double> assessmentScores;
+
   bool get isRetake => attempt > 1;
 
   CourseRecord markReplaced() => CourseRecord(
@@ -55,6 +65,7 @@ class CourseRecord implements GpaEntry {
     gradePoints: gradePoints,
     attempt: attempt,
     replaced: true,
+    assessmentScores: assessmentScores,
   );
 
   Map<String, dynamic> toJson() => {
@@ -67,5 +78,6 @@ class CourseRecord implements GpaEntry {
     'gradePoints': gradePoints,
     'attempt': attempt,
     'replaced': replaced,
+    'assessmentScores': assessmentScores,
   };
 }

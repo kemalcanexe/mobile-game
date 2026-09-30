@@ -71,8 +71,8 @@ class PaperBackground extends Component with HasGameReference<TukenmezGame> {
     // spiral delikleri
     final holeOffset = d % _holeStep;
     for (var y = holeOffset - _holeStep; y < h; y += _holeStep) {
-      canvas.drawCircle(Offset(10, y), 5, _hole);
-      canvas.drawCircle(Offset(10, y), 5, _holeRim);
+      canvas.drawCircle(Offset(left + 10, y), 5, _hole);
+      canvas.drawCircle(Offset(left + 10, y), 5, _holeRim);
     }
 
     // şerit kılavuzları (hafif kurşun kalem, kesik)

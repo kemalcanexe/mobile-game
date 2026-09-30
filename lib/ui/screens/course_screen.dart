@@ -34,6 +34,9 @@ class CourseScreen extends ConsumerWidget {
         .transcript
         .activeRecordFor(course.id);
     final next = run?.nextAssessment;
+    // Devam eden denemede o denemenin, biten derste transkriptin skorları.
+    double? scoreOf(AssessmentType t) =>
+        run != null ? run.scores[t] : record?.assessmentScores[t.key];
     final weights = content.grading.weights;
     final scale = content.grading.scale;
 
@@ -82,7 +85,7 @@ class CourseScreen extends ConsumerWidget {
                           l.assessmentName(t),
                           '%${(weights[t]! * 100).round()}',
                           l.seconds(course.level(t).durationSeconds.round()),
-                          switch (run?.scores[t]) {
+                          switch (scoreOf(t)) {
                             final s? =>
                               '${formatScore(s)} ${scale.gradeFor(s).symbol}',
                             null => '—',
@@ -153,7 +156,16 @@ class CourseScreen extends ConsumerWidget {
     padding: const EdgeInsets.symmetric(vertical: 5),
     child: Row(
       children: [
-        SizedBox(width: 18, child: marker ? Text('▸', style: style) : null),
+        SizedBox(
+          width: 20,
+          child: marker
+              ? const Icon(
+                  Icons.play_arrow_rounded,
+                  color: Palette.ink,
+                  size: 18,
+                )
+              : null,
+        ),
         Expanded(flex: 4, child: Text(cells[0], style: style)),
         Expanded(flex: 2, child: Text(cells[1], style: style)),
         Expanded(flex: 2, child: Text(cells[2], style: style)),

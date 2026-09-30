@@ -115,6 +115,9 @@ class ProgressController extends Notifier<SaveData> {
         letter: letter.symbol,
         gradePoints: letter.points,
         attempt: run.attempt,
+        assessmentScores: {
+          for (final e in run.scores.entries) e.key.key: e.value,
+        },
       ),
       RetakePolicy(rules.retakeableLetters),
     );
