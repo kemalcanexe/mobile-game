@@ -11,8 +11,10 @@ godot/
     config/world3d.json      # 3D ölçek, oyuncu fiziği, kamera, ders temaları, efekt ayarları
     config/events.json       # özel olay ve boss kuralları
     config/audio.json        # ses seviyeleri, müzik katmanları, titreşim
+    config/locations.json    # sınav → mekân eşlemesi, mekân başına ışık/sis/gökyüzü ön ayarı
     levels/<ders>/questions.json  # soru kapısı bankası
-  assets/models/             # Kenney CC0 GLB modelleri
+  assets/models/             # Kenney + KayKit CC0 modelleri; tuki/tuki.glb (Blender betiği çıktısı)
+  assets/shaders/            # zemin (ahşap, fayans, parke taşı, çim) + mürekkep lekesi geçişi
   assets/audio/              # tools/gen_audio.py ile üretilen efekt ve müzikler (WAV)
   assets/fonts/              # Baloo 2 + Noto Sans Symbols 2
   scripts/
@@ -24,18 +26,25 @@ godot/
     autoload/audio.gd        # Sound: efekt havuzu, katmanlı müzik, kalem cızırtısı, titreşim, ayarlar
     game/                    # RunScene (koşu), Tuki + TukiModel, Campus (chunk'lı dünya), LaneObject,
                              # ItemFactory, InkTrail, SwipeDetector, EffectState, Fx, Models,
-                             # EventDirector (olaylar, bölgeler, all-nighter), ProfKirmizi (final boss)
-    ui/                      # UiKit, T (metinler), RunHud, MenuScreen + 6 ekran
+                             # EventDirector (olaylar, bölgeler, all-nighter), ProfKirmizi (final boss),
+                             # ItemArt (nesnelerin oyuncak stili görselleri, mekâna göre engeller)
+    game/world/              # LocKit (malzeme/kutu/etiket yardımcıları, BoxBatch = MultiMesh), ShapeLib
+                             # (yuvarlak kutu, yıldız), Ambience (ışık ön ayarı), Location + 5 mekân:
+                             # LocQuad, LocLibrary, LocCafeteria, LocLab, LocGym
+    ui/                      # UiKit, T (metinler), RunHud, MenuScreen + 6 ekran, CampusDiorama (menü maketi)
   scenes/                    # main, enrollment, course, run, course_result, semester_report, transcript
-  tests/                     # headless test koşucusu + 57 test (domain, veri, gerçek fizikli koşu, olaylar, derleme)
-  tools/                     # xvfb ekran görüntüsü aracı, ses üretici (gen_audio.py), denge botu (soak.gd)
+  tests/                     # headless test koşucusu + 61 test (domain, veri, gerçek fizikli koşu, olaylar, dünya, derleme)
+  tools/                     # xvfb ekran görüntüsü aracı (PERF=1 çizim çağrısı ölçer), nesne vitrini (showcase),
+                             # ses üretici (gen_audio.py), denge botu (soak.gd), blender/tuki.py (Tüki modeli)
 ```
 
 - **Koordinatlar:** Tüki `-z` yönünde koşar, şeritler `x = (şerit-1) × 2,6 m`. Level verisi 2D piksel; `unitsPerPixel` ile metreye çevrilir.
 - **Fizik:** Tüki `CharacterBody3D` (kapsül), yer `WorldBoundaryShape3D`. Jolt'ta bu düzlem ±1000 m ile sınırlı olduğu için zemin gövdesi her fizik adımında Tüki'nin z'sine taşınır. Nesneler `Area3D`; Tüki'nin hitbox'ı ile örtüşünce kural uygulanır. Kayarken kapsül 0,7 m'ye iner.
 - **Plan ve olaylar:** `LevelGenerator` `{total, events, specials}` üretir. `events` şeritteki nesneler; `specials` koşu sırasında `EventDirector`'ın işlediği olaylar (yoklama, pop quiz, grup ödevi, ofis saati, soru kapısı, yerçekimi/buz bölgesi, all-nighter, boss fazları). Boss saldırıları plandaki `telegraph` nesneleridir; `ProfKirmizi` onları gizler, telgraflar ve düşürür.
 - **Skor:** olay puanları `LevelScore.event_points / event_penalty` olarak ayrı tutulur ve maksimuma eklenmez.
-- **Dünya:** 30 m'lik parçalar önde üretilir, arkada silinir; içerik parça indeksine göre seed'li.
+- **Dünya:** 30 m'lik parçalar önde üretilir, arkada silinir; içerik parça indeksine göre seed'li. Parçayı sınavın mekânı (`Location.create(content.location_for(sınav))`) kurar; ışık `Ambience.build(preset)` ile gelir. Aynı parçadaki kutular tek `MultiMesh`'te çizilir, küçük detaylar gölge düşürmez.
+- **Tüki modeli:** `tools/blender/tuki.py` → `tuki.glb` (iskelet + 8 animasyon). `TukiModel` oyundaki pozu (run, air, slide, stumble, victory…) animasyona çevirir, yatma/ezilme/vuruş efektlerini ekler.
+- **Nesne görselleri:** `ItemFactory` önce `ItemArt.build(art)` dener; tanımadığı nesnede eski görsele düşer. Engeller `ItemArt.location`'a göre değişir, çarpışma kutusu değişmez.
 - **Kayıt:** `user://save.json` (sürüm 3; eski kayıtlar taşınır).
 
 ## Flutter 2D sürüm (Faz 1-2)

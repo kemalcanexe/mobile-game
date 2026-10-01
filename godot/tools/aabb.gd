@@ -13,7 +13,7 @@ func _aabb(n: Node, xf: Transform3D) -> AABB:
 			first = false
 	return box
 func _initialize() -> void:
-	for dir in ["roads", "commercial", "suburban", "nature", "furniture", "food"]:
+	for dir in ["roads", "furniture", "food", "fantasy", "mini_forest", "students", "kk_furniture", "kk_restaurant"]:
 		var d := DirAccess.open("res://assets/models/" + dir)
 		for f in d.get_files():
 			if f.ends_with(".glb"):

@@ -7,7 +7,10 @@ static var _cache := {}
 static func scene(kit: String, name: String) -> PackedScene:
 	var key := kit + "/" + name
 	if not _cache.has(key):
-		_cache[key] = load("res://assets/models/%s/%s.glb" % [kit, name])
+		var path := "res://assets/models/%s/%s.glb" % [kit, name]
+		if not ResourceLoader.exists(path):
+			path = "res://assets/models/%s/%s.gltf" % [kit, name]  # KayKit paketleri
+		_cache[key] = load(path)
 	return _cache[key]
 
 

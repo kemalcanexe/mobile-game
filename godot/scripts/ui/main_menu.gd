@@ -4,16 +4,24 @@ extends MenuScreen
 
 func _init() -> void:
 	hero_space = 0.0
+	use_diorama = true
 
 
 func build(v: VBoxContainer) -> void:
 	var p := Game.progress
-	var logo := UiKit.vbox(-28)
-	logo.add_child(UiKit.outlined(T.t("app_title"), 104, Color.WHITE, UiKit.BLUE_DARK))
-	logo.add_child(UiKit.outlined(T.t("app_subtitle"), 60, UiKit.YELLOW, UiKit.INK))
-	logo.add_child(UiKit.outlined(T.t("tagline"), 26, Color.WHITE, UiKit.INK))
+	var logo := UiKit.vbox(-34)
+	logo.alignment = BoxContainer.ALIGNMENT_CENTER
+	var title := UiKit.outlined(T.t("app_title"), 100, Color.WHITE, UiKit.BLUE_DARK)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	logo.add_child(title)
+	var sub := UiKit.outlined(T.t("app_subtitle"), 50, UiKit.YELLOW, UiKit.INK)
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	logo.add_child(sub)
+	var tag := UiKit.outlined(T.t("tagline"), 22, Color.WHITE, UiKit.INK)
+	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	logo.add_child(tag)
 	v.add_child(logo)
-	v.add_child(UiKit.spacer(380))  # Tüki burada görünür
+	v.add_child(UiKit.spacer(450))  # kampüs maketi burada görünür
 
 	var stats := UiKit.hbox(16)
 	var gpa := UiKit.panel(UiKit.BLUE, 30)

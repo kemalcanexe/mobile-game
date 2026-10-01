@@ -1,5 +1,16 @@
 # Kullanıcı Geri Bildirimi
 
+## 2026-09-30 · Faz 4 sonrası: tasarım ve animasyon
+
+> "Oyun mekanikleri harika, ama tasarım çok amatör ve çirkin duruyor… Şehirdeyiz şu an, şehirde değil kampüste olmak istiyorum, her dönem farklı tema olsun: kütüphane, spor salonu… kalem falan da, çevre, menüler. Senden bu fazda aşırı kaliteli bir animasyon ve tasarım update'i istiyorum."
+
+**Durum:** Faz 5'te ele alındı. Önce CC0 kitler ve teknikler tarandı, öneri sunuldu. Kullanıcının seçimleri:
+- her sınav ayrı mekân;
+- Tüki bacaksız, insan özellikleri kalsın, kayarak gitsin;
+- ana menü kampüs maketi.
+
+Ayrıntılar: [`DECISIONS.md` → Faz 5](DECISIONS.md).
+
 ## 2026-09-30 · Faz 1 sonrası: görsel yön
 
 > "Bu tasarımı hiç beğenmedim, 3 boyutlu ve eğlenceli bir şey istiyorum."

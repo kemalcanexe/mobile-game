@@ -102,28 +102,45 @@ func _build_top() -> void:
 	bar.add_child(pause)
 
 
+## Mürekkep haznesi: kapaklı, pirinç uçlu bir kalem gövdesi gibi dolup boşalır.
 func _build_ink() -> void:
-	var box := UiKit.vbox(4)
-	box.position = Vector2(26, _top_margin() + 150)
+	var box := UiKit.vbox(0)
+	box.position = Vector2(30, _top_margin() + 140)
 	box.name = "InkBox"
-	ink_icon = UiKit.label("MÜREKKEP", 18, Color.WHITE, UiKit.heavy())
-	ink_icon.autowrap_mode = TextServer.AUTOWRAP_OFF
-	ink_icon.add_theme_constant_override("outline_size", 6)
-	ink_icon.add_theme_color_override("font_outline_color", UiKit.INK)
-	box.add_child(ink_icon)
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	var cap := Panel.new()
+	cap.custom_minimum_size = Vector2(46, 44)
+	var cs := UiKit.style(Color("#1F3A93"), 20, 0.15)
+	cs.corner_radius_bottom_left = 6
+	cs.corner_radius_bottom_right = 6
+	cap.add_theme_stylebox_override("panel", cs)
+	box.add_child(cap)
 	ink_bar = ProgressBar.new()
 	ink_bar.fill_mode = ProgressBar.FILL_BOTTOM_TO_TOP
 	ink_bar.show_percentage = false
-	ink_bar.custom_minimum_size = Vector2(44, 300)
+	ink_bar.custom_minimum_size = Vector2(40, 250)
+	ink_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	ink_bar.max_value = 1.0
 	ink_bar.value = 1.0
-	var bg := UiKit.style(Color(1, 1, 1, 0.85), 22, 0.12, UiKit.INK, 4)
+	var bg := UiKit.style(Color(1, 1, 1, 0.88), 6, 0.12, Color("#1F3A93"), 3)
 	bg.set_content_margin_all(0)
-	var fill := UiKit.style(Color("#1F3A93"), 22, 0.0)
+	var fill := UiKit.style(Color("#1F3A93"), 4, 0.0)
 	fill.set_content_margin_all(0)
 	ink_bar.add_theme_stylebox_override("background", bg)
 	ink_bar.add_theme_stylebox_override("fill", fill)
 	box.add_child(ink_bar)
+	var tip := Panel.new()
+	tip.custom_minimum_size = Vector2(40, 30)
+	var ts := UiKit.style(Color("#E7B65A"), 4, 0.0)
+	ts.corner_radius_bottom_left = 20
+	ts.corner_radius_bottom_right = 20
+	tip.add_theme_stylebox_override("panel", ts)
+	box.add_child(tip)
+	ink_icon = UiKit.label("MÜREKKEP", 16, Color.WHITE, UiKit.heavy(), HORIZONTAL_ALIGNMENT_CENTER)
+	ink_icon.autowrap_mode = TextServer.AUTOWRAP_OFF
+	ink_icon.add_theme_constant_override("outline_size", 6)
+	ink_icon.add_theme_color_override("font_outline_color", UiKit.INK)
+	box.add_child(ink_icon)
 	root.add_child(box)
 
 

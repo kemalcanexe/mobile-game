@@ -7,6 +7,7 @@ const ROOT := "res://data/"
 var game_cfg: Dictionary
 var world_cfg: Dictionary
 var events_cfg: Dictionary
+var locations_cfg: Dictionary
 var items: Dictionary = {}  # code -> item
 var grading: GradingRules
 var comments: Dictionary
@@ -26,6 +27,7 @@ static func load_all() -> Content:
 	c.game_cfg = read_json("config/game.json")
 	c.world_cfg = read_json("config/world3d.json")
 	c.events_cfg = read_json("config/events.json")
+	c.locations_cfg = read_json("config/locations.json")
 	for it in read_json("config/items.json")["items"]:
 		c.items[it["code"]] = it
 	c.grading = GradingRules.from_dict(read_json("config/grading.json"))
@@ -68,6 +70,15 @@ func course(id: String) -> Dictionary:
 func plan_for(course_id: String, level: Dictionary) -> Dictionary:
 	var c := course(course_id)
 	return LevelGenerator.generate(level, c["patterns"], game_cfg, 1.0, c["questions"], events_cfg)
+
+
+## Sınav türünün geçtiği mekân kimliği ve ön ayarı.
+func location_for(assessment: String) -> String:
+	return str(locations_cfg["assessmentLocations"].get(assessment, "quad"))
+
+
+func location_preset(loc_id: String) -> Dictionary:
+	return locations_cfg["locations"].get(loc_id, locations_cfg["locations"]["quad"])
 
 
 func offered_in(semester: int) -> Array:

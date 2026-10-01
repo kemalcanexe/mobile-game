@@ -30,6 +30,9 @@ var cfg: Dictionary
 var game_cfg: Dictionary
 var level: Dictionary
 var theme: Dictionary
+## Sınavın geçtiği kampüs mekânı ve ışık ön ayarı.
+var location_id := "quad"
+var loc_preset: Dictionary
 var plan: Dictionary
 var curve: SpeedCurve
 var upp := 0.05
@@ -84,6 +87,9 @@ func _ready() -> void:
 		level = level.duplicate(true)
 		level["durationSeconds"] = float(Game.params["duration"])
 	theme = cfg["themes"].get(course_id, cfg["themes"]["calc101"])
+	location_id = content.location_for(level.get("assessment", assessment))
+	loc_preset = content.location_preset(location_id)
+	ItemArt.location = location_id
 	upp = float(cfg["unitsPerPixel"])
 	lane_w = float(cfg["laneWidth"])
 	curve = SpeedCurve.from_dict(level["speed"], 1.0, level.get("boss", {}))
@@ -94,7 +100,7 @@ func _ready() -> void:
 	swipe.min_fling = float(cfg["input"]["minFlingVelocity"])
 	_build_environment()
 	campus = Campus.new()
-	campus.setup(theme, cfg)
+	campus.setup(location_id, loc_preset, theme, cfg)
 	add_child(campus)
 	_build_ground()
 	tuki = Tuki.new()
@@ -106,7 +112,7 @@ func _ready() -> void:
 		if state == State.RUNNING:
 			Sound.play("land"))
 	trail = InkTrail.new()
-	trail.color = Color(theme["accent"]) if theme.get("lamps", false) else Color("#1F3A93")
+	trail.color = Color(loc_preset.get("trail", "#1F3A93"))
 	add_child(trail)
 	camera = Camera3D.new()
 	camera.fov = float(cfg["camera"]["fov"])
@@ -123,38 +129,10 @@ func _ready() -> void:
 
 
 func _build_environment() -> void:
-	var we := WorldEnvironment.new()
-	env = Environment.new()
-	env.background_mode = Environment.BG_SKY
-	var sky := Sky.new()
-	var sm := ProceduralSkyMaterial.new()
-	sky_mat = sm
-	sm.sky_top_color = Color(theme["skyTop"])
-	sm.sky_horizon_color = Color(theme["skyHorizon"])
-	sm.ground_horizon_color = Color(theme["skyHorizon"])
-	sm.ground_bottom_color = Color(theme["ground"]).darkened(0.3)
-	sm.sun_angle_max = 20.0
-	sky.sky_material = sm
-	env.sky = sky
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(theme["skyHorizon"]).lerp(Color("#FFF6EA"), 0.75)
-	env.ambient_light_energy = float(theme["ambient"])
-	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
-	env.fog_enabled = true
-	env.fog_light_color = Color(theme["fog"])
-	env.fog_density = 0.0022
-	env.fog_sky_affect = 0.0
-	env.glow_enabled = false
-	we.environment = env
-	add_child(we)
-	sun = DirectionalLight3D.new()
-	sun.light_color = Color(theme["sunColor"])
-	sun.light_energy = float(theme["sunEnergy"])
-	sun.rotation_degrees = Vector3(float(theme["sunPitch"]), 35, 0)
-	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = 70.0
-	sun.shadow_bias = 0.05
-	add_child(sun)
+	var amb := Ambience.build(self, loc_preset)
+	env = amb["env"]
+	sky_mat = amb["sky"]
+	sun = amb["sun"]
 
 
 ## Jolt'un WorldBoundaryShape3D'si sonlu (varsayılan ±1000 m); zemin Tüki ile
@@ -631,6 +609,7 @@ func _finish() -> void:
 		outcome["completion"] = Game.progress.record_level(course_id, assessment, float(result["score"]))
 	if director.boss:
 		outcome["bossReaction"] = director.boss.react(float(result["score"]))
+	tuki.emote_override = "sad" if depleted or float(result["score"]) < 60.0 else "victory"
 	if depleted:
 		tuki.stumble()
 		tuki.forward_speed = speed_mps() * 0.5

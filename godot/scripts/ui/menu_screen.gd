@@ -3,7 +3,16 @@ extends Node3D
 ## Menü ekranlarının tabanı: arkada canlı 3D kampüs (Tüki bekler, kamera
 ## yavaşça döner), önde kaydırılabilir arayüz.
 
+## Maket kamerasının yatay görüş açısı (9:16'da dikey 42°'ye eşit) ve arayüzün tasarım oranı.
+const DIORAMA_HFOV := 24.37
+const DIORAMA_VFOV := 42.0
+const DESIGN_ASPECT := 16.0 / 9.0
+
 var theme_id := "calc101"
+## Arka plandaki kampüs mekânı (locations.json).
+var location_id := "quad"
+## Ana menü: mekân yerine kampüs maketi.
+var use_diorama := false
 ## Arayüz başlamadan önce 3D sahne için bırakılan boşluk (Tüki görünsün).
 var hero_space := 0.0
 var dim := 0.0
@@ -59,35 +68,15 @@ func _safe_top() -> float:
 
 
 func _build_backdrop() -> void:
+	if use_diorama:
+		_build_diorama()
+		return
 	var cfg := Game.content.world_cfg
 	var theme: Dictionary = cfg["themes"].get(theme_id, cfg["themes"]["calc101"])
-	var we := WorldEnvironment.new()
-	var env := Environment.new()
-	env.background_mode = Environment.BG_SKY
-	var sky := Sky.new()
-	var sm := ProceduralSkyMaterial.new()
-	sm.sky_top_color = Color(theme["skyTop"])
-	sm.sky_horizon_color = Color(theme["skyHorizon"])
-	sm.ground_horizon_color = Color(theme["skyHorizon"])
-	sky.sky_material = sm
-	env.sky = sky
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(theme["skyHorizon"]).lerp(Color("#FFF6EA"), 0.75)
-	env.ambient_light_energy = float(theme["ambient"])
-	env.fog_enabled = true
-	env.fog_light_color = Color(theme["fog"])
-	env.fog_density = 0.004
-	we.environment = env
-	add_child(we)
-	var sun := DirectionalLight3D.new()
-	sun.light_color = Color(theme["sunColor"])
-	sun.light_energy = float(theme["sunEnergy"])
-	sun.rotation_degrees = Vector3(float(theme["sunPitch"]), 35, 0)
-	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = 40.0
-	add_child(sun)
+	var preset := Game.content.location_preset(location_id)
+	Ambience.build(self, preset, 40.0)
 	var campus := Campus.new()
-	campus.setup(theme, cfg)
+	campus.setup(location_id, preset, theme, cfg)
 	add_child(campus)
 	campus.update_for(8.0)
 	var holder := Node3D.new()
@@ -101,12 +90,61 @@ func _build_backdrop() -> void:
 	_place_cam()
 
 
+func _build_diorama() -> void:
+	var preset := Game.content.location_preset("quad").duplicate()
+	preset["fogDensity"] = 0.0
+	preset["background"] = ""
+	preset["skyTop"] = "#5FA8F0"
+	preset["skyHorizon"] = "#D8ECFF"
+	preset["far"] = "#BFE0FF"
+	var amb := Ambience.build(self, preset, 60.0)
+	# kamera maketi yukarıdan görür: ufkun altı da gökyüzü gibi yumuşak mavi kalsın
+	var sky: ProceduralSkyMaterial = amb["sky"]
+	sky.ground_horizon_color = Color("#BFE0FF")
+	sky.ground_bottom_color = Color("#4C9BEE")
+	sky.ground_curve = 0.25
+	var d := CampusDiorama.new()
+	add_child(d)
+	tuki_model = d.tuki
+	_cam = Camera3D.new()
+	add_child(_cam)
+	_place_cam()
+
+
 func _place_cam() -> void:
+	if use_diorama:
+		# maketin etrafında yavaş tam tur; maket ekranın üst yarısında kalır
+		var ang := _t * 0.12 + 0.4
+		var target := Vector3(0, -5.8, 0)
+		_cam.position = Vector3(sin(ang) * 42.0, 29.0, cos(ang) * 42.0)
+		_cam.look_at(target)
+		_fit_to_width(_cam.position.distance_to(target))
+		return
 	var a := sin(_t * 0.25) * 0.45
 	var target := Vector3(0, 1.1, -2.0)
 	_cam.position = target + Vector3(sin(a) * 6.2, 1.6, -cos(a) * 6.2)
 	# Tüki ekranın üst kısmında kalsın: bakış noktası aşağıda
 	_cam.look_at(target + Vector3(0, -2.2 if hero_space > 0.0 else -0.4, 0))
+
+
+## Maket ekran genişliğine sığar ve arayüz gibi üste yaslanır: uzun (19.5:9)
+## telefonda kenarlar kesilmez, kartlar maketin altını örtmez.
+func _fit_to_width(dist: float) -> void:
+	var vp := get_viewport().get_visible_rect().size
+	if vp.x <= 0.0 or vp.y <= 0.0:
+		return
+	if vp.y / vp.x < DESIGN_ASPECT:
+		# tablet gibi geniş ekranda arayüz yüksekliğe göre ölçeklenir; kamera da öyle
+		_cam.keep_aspect = Camera3D.KEEP_HEIGHT
+		_cam.fov = DIORAMA_VFOV
+		_cam.v_offset = 0.0
+		return
+	_cam.keep_aspect = Camera3D.KEEP_WIDTH
+	_cam.fov = DIORAMA_HFOV
+	var base_h := vp.x * DESIGN_ASPECT  # arayüzün tasarlandığı 9:16 yükseklik
+	var frac := (vp.y - base_h) * 0.5 / vp.y
+	var vfov := 2.0 * atan(tan(deg_to_rad(DIORAMA_HFOV) * 0.5) * vp.y / vp.x)
+	_cam.v_offset = -frac * 2.0 * dist * tan(vfov * 0.5)
 
 
 func _process(delta: float) -> void:

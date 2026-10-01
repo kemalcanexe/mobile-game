@@ -2,14 +2,24 @@
 
 > *"Mürekkebin bitebilir, hırsın bitmez."*
 
-Kampüste koşan 3D bir tükenmez kalem: **Tüki**. Her koşu bir sınav, 5 sınav bir ders, her ders sonunda
+Kampüste süzülen 3D bir tükenmez kalem: **Tüki**. Her koşu bir sınav, 5 sınav bir ders, her ders sonunda
 karneye harf notu ve 4.0 skalasında GPA. Her dönem ders seçilir, dönem sonunda karne gelir
 (Dean's List / Probation), F alınan ders tekrar alınır.
 
 **Güncel sürüm: `godot/` (Godot 4.7.2, 3D).** Kökteki Flutter projesi (`lib/`, `test/`) 2D ilk sürümdür ve
 referans olarak duruyor.
 
-| Menü | Sınav başı | Koşu | Ders sonucu | Karne |
+**Faz 5: her sınav ayrı kampüs mekânında**
+
+| Quiz 1 · Meydan | Midterm · Kütüphane | Quiz 2 · Yemekhane | Proje · Laboratuvar | Final · Spor Salonu |
+|---|---|---|---|---|
+| ![](docs/screenshots/3d/21_loc_quad.png) | ![](docs/screenshots/3d/22_loc_library.png) | ![](docs/screenshots/3d/23_loc_cafeteria.png) | ![](docs/screenshots/3d/24_loc_lab.png) | ![](docs/screenshots/3d/25_loc_gym.png) |
+
+| Tüki 2.0 (Blender, 8 animasyon) | Nesneler | Engeller (mekâna göre) |
+|---|---|---|
+| ![](docs/screenshots/3d/26_tuki_poses.png) | ![](docs/screenshots/3d/27_items.png) | ![](docs/screenshots/3d/28_obstacles.png) |
+
+| Menü (kampüs maketi) | Sınav başı | Koşu | Ders sonucu | Karne |
 |---|---|---|---|---|
 | ![](docs/screenshots/3d/01_menu.png) | ![](docs/screenshots/3d/04_start.png) | ![](docs/screenshots/3d/05_run_collect.png) | ![](docs/screenshots/3d/09_course_result.png) | ![](docs/screenshots/3d/10_term_report.png) |
 
@@ -46,6 +56,12 @@ godot --headless --fixed-fps 60 --path godot -s res://tools/soak.gd
 # Sesleri yeniden üret (numpy gerekir)
 python3 godot/tools/gen_audio.py
 
+# Tüki modelini ve animasyonlarını yeniden üret (pip install bpy); --render <klasör> poz önizlemesi çizer
+python3 godot/tools/blender/tuki.py
+
+# Ekran görüntüsü + çizim çağrısı ölçümü (xvfb)
+PERF=1 SCENE=res://scenes/run.tscn COURSE=calc101 ASSESS=quiz2 RUN=1 SHOTS=3 OUT=/tmp/shot godot/tools/shoot.sh
+
 # Android APK / Web
 godot --headless --path godot --export-release "Android" ../build_godot/android/tukenmez.apk
 godot --headless --path godot --export-release "Web" ../build_godot/web/index.html
@@ -66,7 +82,8 @@ Android release imzası için `GODOT_ANDROID_KEYSTORE_RELEASE_PATH/USER/PASSWORD
 
 Yeni ders = veri: `godot/data/levels/<ders>/` altına `course.json`, 5 level JSON'u, `patterns.json` ve
 `questions.json` (soru kapıları; ilk şık doğru cevap);
-`courses.json` ve `curriculum.json`'a ekle; `world3d.json → themes` altına dersin kampüs temasını yaz.
+`courses.json` ve `curriculum.json`'a ekle; `world3d.json → themes` altına dersin tabelasını ve vurgu rengini yaz.
+Sınavın hangi mekânda geçtiği ve mekânların ışık ayarları `godot/data/config/locations.json`'dadır.
 Level JSON'unda `events` (yoklama, pop quiz, grup ödevi, ofis saati, soru kapısı), `zones`
 (yerçekimi, buz), finallerde `boss` ve `allNighter` alanları olayları tanımlar; kuralları
 `godot/data/config/events.json`'dadır. Yükleme sırasında veri doğrulanır.

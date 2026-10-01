@@ -119,3 +119,45 @@ Kullanıcının isteği: "yaparken arada bana da göster". Ara ekran görüntül
 10. **Faz 3'ten kalan bir hata düzeltildi:** Jolt'un `WorldBoundaryShape3D`'si ±1000 m ile sınırlı. Tüki her level'da ~50-60. saniyede zeminin içinden düşüyor, notlara ve kapılara temas edemiyordu (mesafe z'den ölçüldüğü için koşu sürüyordu). Denge botu bunu ortaya çıkardı. Zemin artık Tüki ile birlikte taşınıyor; `test_uzun_kosuda_zemin_hep_var` testi hatayı yakalıyor.
 11. **Soru kapısında okuma süresi:** soru, kapıdan hıza göre 2,4 sn önce görünür (sabit satır sayısı finalin yüksek hızında ~0,5 sn'ye düşüyordu).
 12. **Denge botu sonuçları:** kusursuz bot 15 level'ın hepsinde 100 aldı. Tepkisi gecikmeli ve arada yanlış şerit seçen bot A ile C- arasında kaldı, en düşük PHYS 101 Proje (71). Gerçek oyuncularla test yapılana kadar sayılar değiştirilmedi.
+
+## Faz 5 kararları (tasarım ve animasyon)
+
+Kullanıcının isteği: "tasarım çok amatör… şehirde değil kampüste olmak istiyorum, her dönem farklı tema… kütüphane, spor salonu… aşırı kaliteli bir animasyon ve tasarım". Önce hazır CC0 kitler ve teknikler tarandı ve öneri sunuldu; ardından üç seçim soruldu:
+mekânlar **her sınav ayrı mekân**, Tüki **bacaksız, insan özellikleri kalsın, kayarak gitsin**, ana menü **kampüs maketi**.
+
+1. **Her sınav ayrı mekânda** (`data/config/locations.json → assessmentLocations`):
+   - Quiz 1: Kampüs Meydanı. Parke taş yol, fakülte binaları, çit ve çiçek tarhları, fenerler, bayraklar, çeşme, dolaşan öğrenciler.
+   - Midterm: Merkez Kütüphane. Ahşap zemin, bordo halı yol, rastgele kitap sırtlarıyla dolu raflar, okuma nişleri, kemerli pencerelerden süzülen ışık huzmeleri ve toz zerreleri.
+   - Quiz 2: Yemekhane. Damalı fayans, uzun masalar ve oturan öğrenciler, self servis tezgâhı, "Günün Menüsü" panosu, sarkan lambalar.
+   - Proje: Fen Laboratuvarı. Tezgâhlarda renkli ışıyan cam kaplar, çeker ocaklar, periyodik tablo, tehlike şeritleri, borular.
+   - Final: Spor Salonu (finaller gerçekten orada yapılır). Parke saha, kenarlarda sınav sıraları, dolu tribünler, flamalar, "FİNAL · …" skorbordu.
+   
+   Dersin kimliği mekâna taşınır: kemerdeki tabela ve vurgu rengi dersten gelir. Eski şehir kitleri (City Commercial/Suburban, Nature) kaldırıldı.
+2. **Işık her mekânda ayrı** (`locations.json → locations.<id>`): gökyüzü, ortam ışığı, güneş rengi/açısı, sis, pozlama, bloom, doygunluk. Tonemap AgX. Kapalı mekânlarda gölge mesafesi kısalır, sıcak nokta ışıklar eklenir.
+3. **Zeminler shader** (`assets/shaders/`): ahşap parke, fayans (damalı), parke taşı, çim. Dünya koordinatında çizildikleri için parçalar arasında dikiş görünmez, doku dosyası gerekmez.
+4. **Tüki 2.0 Blender'da kodla üretildi** (`tools/blender/tuki.py`, bpy 5.0.1):
+   - Bacak yok; pirinç ucunun üstünde süzülür. Kollar, eldivenli eller, gözler, kaşlar ve ağız korundu.
+   - İskelet ve 8 animasyon: idle, glide (koşu), air, slide, stumble, victory, sad, wave. Çıktı `assets/models/tuki/tuki.glb`.
+   - Oyunda animasyonlar arasında 0,14 sn geçiş yapılır. Şerit değiştirirken yana yatar, inişte ezilip uzar, çarpınca kırmızı yanıp söner.
+   - Sonuç ekranlarında nota göre sevinir, üzülür ya da el sallar.
+5. **Nesneler oyuncak stilinde** (`scripts/game/item_art.gd`):
+   - (+) nesneler parlak mavi/sarı ve yuvarlak hatlı; (−) nesneler mor/kırmızı.
+   - Toplanabilirler altlarında parlayan halkayla süzülür.
+   - Engeller mekâna göre değişir: kütüphanede kitap yığını, yemekhanede "Kaygan zemin" tabelası, laboratuvarda sızıntı… Çarpışma kutusu her mekânda aynıdır (testle korunur).
+   - Dikkat dağıtıcı arkadaşlar konuşma balonlu, animasyonlu öğrencilerdir.
+6. **Hazır modeller yalnızca CC0:** KayKit Furniture Bits ve Restaurant Bits (masa, sandalye, tezgâh), Kenney Fantasy Town, Mini Forest ve Mini Characters (öğrenciler). Binaların, rafların, tribünlerin ve maketin çoğu kodla kurulur.
+7. **Ana menü kampüs maketi** (`scripts/ui/campus_diorama.gd`):
+   - Yüzen ada üzerinde beş mekânın binaları, ortada saat kulesi ve çeşme; el sallayan Tüki.
+   - Kamera maketin etrafında yavaşça döner. Etiketler "Kütüphane / Midterm" gibi mekânı ve orada yapılan sınavı gösterir; kameraya bakan taraftakiler görünür, arkadakiler söner (başlıkla çakışmaz).
+8. **Arayüz 2.0:**
+   - Ekran geçişi mürekkep lekesi (shader, `Game.goto`).
+   - Paneller kâğıt rengi, alt kenarı kalın ve gölgeli.
+   - Koşuda mürekkep göstergesi tükenmez kalem şeklinde (mavi kapak, dolum, pirinç uç).
+   - Parçacıklar yumuşak ışıma ve yıldızlarla.
+9. **Performans:**
+   - Aynı parçadaki kutular (kitaplar, tribün, duvarlar) tek `MultiMesh`'te çizilir (`LocKit.BoxBatch`).
+   - Küçük detaylar (kitaplar, seyirciler, öğrenciler, fenerler) gölge düşürmez.
+   - Yemekhane tezgâhları modelden kutu grubuna çevrildi: çizim çağrısı 644'ten 478'e indi.
+   - Ölçüm aracı: `PERF=1 tools/shoot.sh`. Son değerler: meydan 416, kütüphane 428, yemekhane 478, laboratuvar 242, spor salonu 260 çizim çağrısı.
+   - Boyut: Tüki'nin ağı 30 bin köşeden ~9 bine indirildi (görünüm aynı). Kullanılmayan kit modelleri silindi. Fontlar kullanılan alfabe ve sembol bloklarına indirgendi (1,9 MB → 0,27 MB). arm64 APK 29,9 MB.
+10. **Doğrulama:** 61 test. Yeni testler her mekânın parçasını kurar, engel boyutlarının mekândan bağımsız olduğunu ve Tüki'nin bütün pozlarının modelde bulunduğunu doğrular. Denge botu 15 level'da yeni mekânlarda da hatasız 100 aldı.

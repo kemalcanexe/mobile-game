@@ -35,6 +35,8 @@ var shield_radius := 1.25
 
 ## Tema bölgesi: "" | "gravity" (ay yerçekimi, kontroller ters) | "ice" (kayarak şerit değişimi).
 var zone := ""
+## Sınav sonu gibi anlarda koşu pozlarının yerine oynatılır ("victory", "sad").
+var emote_override := ""
 var gravity_scale := 1.0
 var ice_lane_factor := 2.6
 var zone_gravity_scale := 0.55
@@ -268,7 +270,9 @@ func _physics_process(delta: float) -> void:
 	model.run_speed = clampf(forward_speed / 15.0, 0.6, 1.8)
 	var dx := lane_x(target_lane) - position.x
 	model.lean = clampf(dx / lane_w, -1.0, 1.0) if _lane_t < 1.0 else 0.0
-	if forward_speed <= 0.0:
+	if emote_override != "" and forward_speed < 2.0:
+		model.pose = emote_override
+	elif forward_speed <= 0.0:
 		model.pose = "idle"
 	elif _stumble_left > 0.0:
 		model.pose = "stumble"

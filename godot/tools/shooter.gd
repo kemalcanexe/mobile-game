@@ -61,6 +61,12 @@ func _ready() -> void:
 		var reached: bool = (run_now != null and run_now.distance >= shots[n]) if by_distance else el >= shots[n]
 		if by_distance and el > float(OS.get_environment("TIMEOUT_S") if OS.get_environment("TIMEOUT_S") != "" else "170"):
 			break
+		if reached and OS.get_environment("PERF") == "1":
+			print("PERF draw=%d objects=%d prims=%d fps=%d" % [
+				Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+				Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
+				Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
+				Performance.get_monitor(Performance.TIME_FPS)])
 		if reached:
 			await RenderingServer.frame_post_draw
 			get_viewport().get_texture().get_image().save_png("%s_%d.png" % [OS.get_environment("OUT"), n])

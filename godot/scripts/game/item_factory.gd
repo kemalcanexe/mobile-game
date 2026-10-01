@@ -14,6 +14,10 @@ const INK_DARK := Color("#1E2A3A")
 ## Görsel düğüm + çarpışma kutusu boyutu ve konumu.
 static func build(item: Dictionary, lane_w: float, extra: Dictionary = {}) -> Dictionary:
 	var art: String = item["art"]
+	# Faz 5 görselleri (mekâna göre engeller); tanımlı değilse aşağıdaki eski görsel
+	var built := ItemArt.build(art, lane_w, extra)
+	if not built.is_empty():
+		return built
 	var n := Node3D.new()
 	var size := Vector3(1.2, 3.2, 1.0)  # toplanabilirler: zıplarken de toplanır
 	var center := Vector3(0, 1.6, 0)

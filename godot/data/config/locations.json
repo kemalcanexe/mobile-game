@@ -1,0 +1,132 @@
+{
+  "_comment": "Kampüs mekânları. Her sınav türü bir mekânda geçer (assessmentLocations). Işık, sis ve gökyüzü ön ayarları burada; dersin rengi (accent) world3d.json → themes'ten gelir.",
+  "assessmentLocations": {
+    "quiz1": "quad",
+    "midterm": "library",
+    "quiz2": "cafeteria",
+    "project": "lab",
+    "final": "gym"
+  },
+  "locations": {
+    "quad": {
+      "name": "Kampüs Meydanı",
+      "short": "Meydan",
+      "sign": "KAMPÜS MEYDANI",
+      "indoor": false,
+      "skyTop": "#3E86E6",
+      "skyHorizon": "#CFE6FF",
+      "background": "",
+      "ambient": "#EEF4FF",
+      "ambientEnergy": 0.42,
+      "sunColor": "#FFF0D2",
+      "sunEnergy": 1.2,
+      "sunRot": [
+        -46,
+        38
+      ],
+      "fog": "#D6E6F7",
+      "fogDensity": 0.0028,
+      "exposure": 1.02,
+      "glow": 0.25,
+      "saturation": 1.2,
+      "far": "#63B04E",
+      "trail": "#1F3A93"
+    },
+    "library": {
+      "name": "Merkez Kütüphane",
+      "short": "Kütüphane",
+      "sign": "MERKEZ KÜTÜPHANE",
+      "indoor": true,
+      "skyTop": "#2A1E33",
+      "skyHorizon": "#7A5A4A",
+      "background": "#2A1E33",
+      "ambient": "#FFE0BF",
+      "ambientEnergy": 0.36,
+      "sunColor": "#FFD29A",
+      "sunEnergy": 1.1,
+      "sunRot": [
+        -32,
+        62
+      ],
+      "fog": "#3A2A26",
+      "fogDensity": 0.016,
+      "exposure": 1.05,
+      "glow": 0.35,
+      "saturation": 1.1,
+      "far": "#2A1A12",
+      "trail": "#1F3A93"
+    },
+    "cafeteria": {
+      "name": "Yemekhane",
+      "short": "Yemekhane",
+      "sign": "YEMEKHANE",
+      "indoor": true,
+      "skyTop": "#F6E7C8",
+      "skyHorizon": "#FFF4DE",
+      "background": "#EDE3CF",
+      "ambient": "#FFF6E6",
+      "ambientEnergy": 0.5,
+      "sunColor": "#FFF3DC",
+      "sunEnergy": 1.05,
+      "sunRot": [
+        -52,
+        -30
+      ],
+      "fog": "#E9DEC8",
+      "fogDensity": 0.01,
+      "exposure": 1.0,
+      "glow": 0.25,
+      "saturation": 1.15,
+      "far": "#D8CDB8",
+      "trail": "#1F3A93"
+    },
+    "lab": {
+      "name": "Fen Laboratuvarı",
+      "short": "Laboratuvar",
+      "sign": "FEN LABORATUVARI",
+      "indoor": true,
+      "skyTop": "#10202E",
+      "skyHorizon": "#2C5363",
+      "background": "#13222E",
+      "ambient": "#DFF5FF",
+      "ambientEnergy": 0.42,
+      "sunColor": "#E6F7FF",
+      "sunEnergy": 0.95,
+      "sunRot": [
+        -60,
+        20
+      ],
+      "fog": "#1C3440",
+      "fogDensity": 0.014,
+      "exposure": 1.05,
+      "glow": 0.55,
+      "saturation": 1.1,
+      "far": "#1A2A33",
+      "trail": "#12A36B"
+    },
+    "gym": {
+      "name": "Spor Salonu",
+      "short": "Spor Salonu",
+      "sign": "SPOR SALONU",
+      "indoor": true,
+      "skyTop": "#1B2238",
+      "skyHorizon": "#39456B",
+      "background": "#1B2238",
+      "ambient": "#E6EEFF",
+      "ambientEnergy": 0.5,
+      "sunColor": "#FFFFFF",
+      "sunEnergy": 0.9,
+      "sunRot": [
+        -70,
+        20
+      ],
+      "fog": "#222B45",
+      "fogDensity": 0.01,
+      "exposure": 1.0,
+      "glow": 0.4,
+      "saturation": 1.1,
+      "far": "#161B2C",
+      "trail": "#1F3A93"
+    }
+  }
+}

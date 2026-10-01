@@ -7,6 +7,10 @@ var course_id := "calc101"
 func _init() -> void:
 	course_id = Game.params.get("course", "calc101")
 	theme_id = course_id
+	# arka planda sıradaki sınavın mekânı
+	var run := Game.progress.run_for(course_id)
+	var next := run.next_assessment() if run != null else "quiz1"
+	location_id = Game.content.location_for(next if next != "" else "quiz1")
 	hero_space = 0.0
 
 

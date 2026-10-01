@@ -38,11 +38,13 @@
   },
   "modelScale": {
     "roads": 10,
-    "commercial": 12,
-    "suburban": 9,
-    "nature": 4.2,
     "furniture": 4.5,
-    "food": 5
+    "food": 5,
+    "kk_furniture": 0.85,
+    "kk_restaurant": 0.85,
+    "fantasy": 2.1,
+    "mini_forest": 2.6,
+    "students": 2.1
   },
   "themes": {
     "calc101": {

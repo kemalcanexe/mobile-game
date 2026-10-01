@@ -15,6 +15,8 @@ const MUTED := Color("#6B7A90")
 const PANEL := Color("#FFFFFF")
 const PANEL_SOFT := Color("#F2F6FF")
 const GOLD := Color("#F5B700")
+## Beyaz paneller defter kâğıdı tonunda çizilir.
+const PAPER := Color("#FFFCF3")
 
 static var _font: FontFile
 static var _bold: FontVariation
@@ -95,7 +97,15 @@ static func style(bg: Color, radius := 28, shadow := 0.18, border := Color(0, 0,
 
 static func panel(bg := PANEL, radius := 32) -> PanelContainer:
 	var p := PanelContainer.new()
-	p.add_theme_stylebox_override("panel", style(bg, radius))
+	if bg == Color.WHITE:
+		bg = PAPER
+	var st := style(bg, radius, 0.16)
+	# alt kenar koyu: kart elle tutulur bir nesne gibi durur
+	st.border_width_bottom = 7
+	st.border_color = bg.darkened(0.14) if bg.a > 0.99 else Color(0, 0, 0, 0.12)
+	st.shadow_size = 14
+	st.shadow_offset = Vector2(0, 8)
+	p.add_theme_stylebox_override("panel", st)
 	return p
 
 
